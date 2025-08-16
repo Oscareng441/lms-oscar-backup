@@ -18,6 +18,10 @@ class ProblemController extends Controller
 {
     public function saveProblem(ProblemUpdateRequest $request)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $data = $request->all();
         $p = $data['problem'];
         if (empty($p['display_type'])) {
@@ -82,6 +86,10 @@ class ProblemController extends Controller
 
     public function duplicateProblem(Request $request, $id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $p1 = Problem::find($id);
         $p = new Problem();
         $p->name = '';
@@ -115,12 +123,16 @@ class ProblemController extends Controller
             }
         }
         $score = $prob->getUserScore($request->user()->id);
-OmniHelper::log($score);
+
         return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr, 'score' => $score]);
     }
 
     public function editProblem($id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $p = Problem::find($id);
         if ($p === null) {
             $p = new Problem();

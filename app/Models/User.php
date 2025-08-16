@@ -63,6 +63,21 @@ class User extends Authenticatable
         return false;
     }
 
+    public function canAccessGroup($groupId)
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+        $sql = '
+        SELECT *
+        FROM student_group_owner
+        WHERE student_group_id = ? && user_id = ?';
+
+        $recs = DB::select($sql, [$groupId, $this->id]);
+
+        return count($recs) >= 1;
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -210,17 +225,20 @@ class User extends Authenticatable
         return $progress;
     }
 
-    public static function allStudentsWithGroupMembership($groupId)
+    public static function allUsersWithGroupMembership($groupId, $role='student')
     {
+        $joinTable = $role === 'student' ? 'student_group_user' : 'student_group_owner';
+        $joinType = $role === 'student' ? 'LEFT' : 'INNER';
         $sql = '
         SELECT S.*, IFNULL(SGU.user_id, 0) AS is_member
-        FROM users S
-        LEFT JOIN role_user RU ON RU.user_id = S.id
-        LEFT JOIN roles R ON R.id = RU.role_id
-        LEFT JOIN student_group_user SGU ON SGU.user_id = S.id AND student_group_id = ?
-        WHERE role = "student" OR ISNULL(role)
+        FROM users S ' .
+        $joinType . ' JOIN role_user RU ON RU.user_id = S.id ' .
+        $joinType . ' JOIN roles R ON R.id = RU.role_id
+        LEFT JOIN ' . $joinTable . ' SGU ON SGU.user_id = S.id AND student_group_id = ?
+        WHERE role = ? OR ISNULL(role)
         ';
-        $recs = DB::select($sql, [$groupId]);
+
+        $recs = DB::select($sql, [$groupId, $role]);
 
         return $recs;
     }

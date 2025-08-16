@@ -9,18 +9,24 @@ import { useForm, Link, Head } from '@inertiajs/react';
 import { MdClear } from "react-icons/md";
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Groups = ({ auth, course, group, allStudents }) => {  
+const Groups = ({ auth, course, group, allStudents, teachersThisGroup }) => {  
     const [filter, setFilter] = useState('')
     const [students, setStudents] = useState(allStudents)
     const [inGroup, setInGroup] = useState([])
     const [notInGroup, setNotInGroup] = useState([])
+    const [teachers, setTeachers] = useState(teachersThisGroup)
+    const [owners, setOwners] = useState([])
+    const [availableTeachers, setAvailableTeachers] = useState([])
     const [inGroupFiltered, setInGroupFiltered] = useState([])
     const [notInGroupFiltered, setNotInGroupFiltered] = useState([])
+    const [tchrsInGroupFiltered, setTchrsInGroupFiltered] = useState([])
+    const [tchrsNotInGroupFiltered, setTchrsNotInGroupFiltered] = useState([])
     const { data, setData, post } = useForm({
             name: group ? group.name : '',
             id: group ? group.id : null,
             course_id: group ? group.course_id : course.id,
-            students: inGroup
+            students: [],
+            teachers: [],
     })
 
     const submit = (e) => {
@@ -52,10 +58,23 @@ const Groups = ({ auth, course, group, allStudents }) => {
                 notInGp.push(s)
             }
         })
+        let inOwnerGp = []
+        let availableTchrs = []
+        teachersThisGroup.forEach(s =>{
+            if (s.is_member > 0) {
+                inOwnerGp.push(s)
+            } else {
+                availableTchrs.push(s)
+            }
+        })
         setInGroup(inGp)
         setNotInGroup(notInGp)
+        setOwners(inOwnerGp)
+        setAvailableTeachers(availableTchrs)
         setInGroupFiltered(inGp)
         setNotInGroupFiltered(notInGp)
+        setTchrsInGroupFiltered(inOwnerGp)
+        setTchrsNotInGroupFiltered(availableTchrs)
     }, [])
 
     useEffect(() => {
@@ -65,8 +84,13 @@ const Groups = ({ auth, course, group, allStudents }) => {
         setNotInGroupFiltered(b)
         let d = { ...data }
         d.students = a
+        let y = filter.length ? [ ...owners ].filter(x => { return x.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0}) : [ ...owners ]
+        let z = filter.length ? [ ...availableTeachers ].filter(x => { return x.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0}) : [ ...availableTeachers ]
+        setTchrsInGroupFiltered(y)
+        setTchrsNotInGroupFiltered(z)
+        d.teachers = y
         setData(d)
-    }, [filter, inGroup, notInGroup])
+    }, [filter, inGroup, notInGroup, owners, availableTeachers])
 
     const breadcrumbs = buildBreadCrumbs({course}, 2)
 
@@ -98,6 +122,26 @@ const Groups = ({ auth, course, group, allStudents }) => {
         setInGroup(a)
         let c = removeFromGroup(nw[0], b)
         setNotInGroup(c)
+    }
+
+    const removeT = (id) => {
+        let a = [ ...availableTeachers ];
+        let b = [ ...owners ];
+        let nw = b.filter(x => {return x.id === id})
+        a.push(nw[0])
+        setAvailableTeachers(a)
+        let c = removeFromGroup(nw[0], b)
+        setOwners(c)
+    }
+
+    const addT = (id) => {
+        let a = [ ...owners ]
+        let b = [ ...availableTeachers ]
+        let nw = b.filter(x => {return x.id === id})
+        a.push(nw[0])
+        setOwners(a)
+        let c = removeFromGroup(nw[0], b)
+        setAvailableTeachers(c)
     }
 
     const removeFromGroup= (student, gp) => {
@@ -133,17 +177,35 @@ const Groups = ({ auth, course, group, allStudents }) => {
                         Miembros
                     </div>
                     <div className="mx-auto w-full pt-5 flex flex-row justify-center">
-                        <ObjContainer data={ inGroupFiltered } title="Miembros" xxx={ remove } />
+                        <ObjContainer data={ inGroupFiltered } title="Miembros" onDblClk={ remove } />
                         <div className="flex flex-row">
                             <input
                                 className="h-6"
                                 value={filter}
-                                onChange={(e) => {console.log(e.target.value);setFilter(e.target.value)}}
+                                onChange={(e) => {setFilter(e.target.value)}}
                                 placeholder="Filtrar Nombres..."
                             />
                             <MdClear onClick={ () => setFilter('') }/>
                         </div>
-                        <ObjContainer data={ notInGroupFiltered } title="No Miembros" xxx={ add } />
+                        <ObjContainer data={ notInGroupFiltered } title="No Miembros" onDblClk={ add } />
+                    </div>
+                </div>
+                <div className="text-center max-w-7xl bg-white rounded-md my-2 mx-auto shadow">
+                    <div>
+                        Maestros
+                    </div>
+                    <div className="mx-auto w-full pt-5 flex flex-row justify-center">
+                        <ObjContainer data={ tchrsInGroupFiltered } title="Maestros" onDblClk={ removeT } />
+                        <div className="flex flex-row">
+                            <input
+                                className="h-6"
+                                value={filter}
+                                onChange={(e) => {setFilter(e.target.value)}}
+                                placeholder="Filtrar Nombres..."
+                            />
+                            <MdClear onClick={ () => setFilter('') }/>
+                        </div>
+                        <ObjContainer data={ tchrsNotInGroupFiltered } title="Maestros Disponibles" onDblClk={ addT } />
                     </div>
                 </div>
             </div>

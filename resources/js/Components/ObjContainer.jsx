@@ -1,7 +1,7 @@
 export default function ObjContainer (props) {
 	let f = props.data.map((d,k) => {
 		return (
-			<div className="cursor-pointer" key={ k } onDoubleClick={ () => props.xxx(d.id) }>{d.name}</div>
+			<div className="cursor-pointer" key={ k } onDoubleClick={ () => props.onDblClk(d.id) }>{d.name}</div>
 		)
 	})
 	return (

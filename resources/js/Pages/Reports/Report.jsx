@@ -25,7 +25,7 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
             auth={auth}
             title={ title }
             courseId={ course.id }
-            show={['home', 'course']}
+            show={['home', 'course', 'group-mg']}
             breadcrumbs={ breadcrumbs }
         />
     )
@@ -98,10 +98,10 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
-            <div className="p-8 border border-black rounded-md max-w-7xl mx-auto">
+            <div className="p-8 border border-black rounded-md max-w-7xl mx-auto shadow-xl shadow-indigo-200">
                 <div className="py-2">
                     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-row">
-                        <div className="w-1/2 ">
+                        <div className="w-1/2 rounded-s-sm">
                             <StudentSelect 
                                 students={students}
                                 selected={studentId}
@@ -117,11 +117,13 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
                         </div>
                     </div>
                 </div>
-                <div className="text-centermax-w-3xl sm:px-6 lg:px-8">
-                    <div className="text-center bg-white mx-auto max-w-3xl sm:px-6 lg:px-8">
-                        <Link href={ route('group.report', {groupId: group.id, agg: newAgg, unit: level, unitId: unitId, studentId: student})}>Ir</Link>
+                <Link 
+                    href={ route('group.report', {groupId: group.id, agg: newAgg, unit: level, unitId: unitId, studentId: student})}
+                >
+                    <div className="mx-auto text-center w-[100px] sm:px-6 lg:px-8 border border-black rounded-md shadow-lg shadow-indigo-200 bg-white">
+                        <div className="">Ir</div>
                     </div>
-                </div>
+                </Link>
             </div>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">

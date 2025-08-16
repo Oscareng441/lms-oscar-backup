@@ -64,8 +64,12 @@ class LessonController extends Controller
         return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
     }
 
-    public function addProblem($id)
+    public function addProblem(Request $request, $id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $p = new Problem();
         $p->name = '';
         $p->lesson_id = $id;
@@ -81,8 +85,12 @@ class LessonController extends Controller
         return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => []]);
     }
 
-    public function editLesson($id)
+    public function editLesson(Request $request, $id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         // $lesson = Lesson::find($id);
         extract($this->getHierarchy($id));
         if ($lesson === null) {
@@ -95,6 +103,9 @@ class LessonController extends Controller
 
     public function saveLesson(Request $request)
     {
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $data = $request->all();
         $c = $data['lesson'];
         if (empty($c['id'])) {

@@ -30,12 +30,25 @@ class StudentGroup extends Model
         }
         $valuesClause = implode(",", $vals);
         $sql = "DELETE FROM student_group_user WHERE student_group_id = ?";
-        OmniHelper::log($sql);
         DB::delete($sql, [$this->id]);
         if (!empty($arr)) {
             $sql = "INSERT IGNORE INTO student_group_user (student_group_id, user_id) VALUES {$valuesClause}";
-            OmniHelper::log($sql);
-            DB::insert($sql, []);
+                DB::insert($sql, []);
+        }
+    }
+
+    public function saveOwners($arr)
+    {
+        $vals = [];
+        foreach($arr as $teacher) {
+            $vals[] = "({$this->id}, {$teacher['id']})";
+        }
+        $valuesClause = implode(",", $vals);
+        $sql = "DELETE FROM student_group_owner WHERE student_group_id = ?";
+        DB::delete($sql, [$this->id]);
+        if (!empty($arr)) {
+            $sql = "INSERT IGNORE INTO student_group_owner (student_group_id, user_id) VALUES {$valuesClause}";
+                DB::insert($sql, []);
         }
     }
 
@@ -65,9 +78,7 @@ class StudentGroup extends Model
         $joinType.' JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = U.id
         WHERE G.id = ? ' . $whereUser . $whereUnit . ' AND P.active = 1 AND LS.active = 1 AND L.active = 1
         GROUP BY ' . $agg . '.id,' . $agg . '.name, U.id, U.name, G.id';
-OmniHelper::log($sql);
-OmniHelper::log($params);
-OmniHelper::log($scoreParams);
+
         $recs = DB::select($sql, $params);
 
         return $recs;

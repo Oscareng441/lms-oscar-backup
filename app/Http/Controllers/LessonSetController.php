@@ -37,6 +37,10 @@ class LessonSetController extends Controller
 
     public function editChapter(Request $request, $id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         extract($this->getHierarchy($id));
         if ($chapter === null) {
             $chapter = new LessonSet();
@@ -60,6 +64,10 @@ class LessonSetController extends Controller
 
     public function saveChapter(Request $request)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $data = $request->all();
         $c = $data['chapter'];
         if (empty($c['id'])) {

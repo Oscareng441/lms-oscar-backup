@@ -1,6 +1,7 @@
 import StudentCourseProgress from '@/Components/StudentCourseProgress';
 import { Link } from '@inertiajs/react';
 import { FaBook } from 'react-icons/fa';
+import { FaUserGroup } from "react-icons/fa6";
 
 export default function CourseDescription(props) {
     let progressComponent = ''
@@ -19,6 +20,7 @@ export default function CourseDescription(props) {
                         </div>
                         { progressComponent }
                         <Link href={`/course/${ props.course.id }`} className="pt-2"><FaBook title="ir al curso"/></Link>
+                        <Link href={`/course/${ props.course.id }/groups`} className="pt-2"><FaUserGroup title="ir al curso"/></Link>
                     </div>
                     <div className="m-1 ">
                         { props.course.description }

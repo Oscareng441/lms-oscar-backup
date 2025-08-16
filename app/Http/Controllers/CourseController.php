@@ -69,6 +69,9 @@ class CourseController extends Controller
     public function groups(Request $request, $id)
     {
         $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $course = Course::find($id);
         $groups = $course->getGroups($user->isAdmin() ? null : $user->id);
 
@@ -78,23 +81,35 @@ class CourseController extends Controller
     public function addGroup(Request $request, $id)
     {
         $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $course = Course::find($id);
         $students = User::allStudentsWithGroupMembership(0);
-        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null, 'allStudents' => $students]);
+        $teachersThisGroup = User::allStudentsWithGroupMembership(0, 'teacher');
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null, 'allStudents' => $students, 'teachersThisGroup' => $teachersThisGroup]);
     }
 
     public function groupShow(Request $request, $id)
     {
         $user = $request->user();
+        if (!$user->canAccessGroup($id)) {
+            abort(403);
+        }
         $group = StudentGroup::find($id);
         $course = Course::find($group->course_id);
-        $students = User::allStudentsWithGroupMembership($id);
+        $students = User::allUsersWithGroupMembership($id);
+        $teachersThisGroup = User::allUsersWithGroupMembership($id, 'teacher');
 
-        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group, 'allStudents' => $students]);
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group, 'allStudents' => $students, 'teachersThisGroup' => $teachersThisGroup]);
     }
 
     public function groupReport(Request $request, $groupId, $unit, $unitId, $agg, $studentId)
     {
+        $user = $request->user();
+        if (!$user->canAccessGroup($groupId)) {
+            abort(403);
+        }
         $group = StudentGroup::find($groupId);
         $course = Course::find($group->course_id);
         $chapter = null;
@@ -122,6 +137,7 @@ class CourseController extends Controller
 
     public function studentReport(Request $request, $courseId, $studentId)
     {
+        // DELETE
         $course = Course::find($courseId);
         $scores = $course->getStudentScores($studentId);
 
@@ -131,6 +147,9 @@ class CourseController extends Controller
     public function saveGroup(Request $request)
     {
         $user = $request->user();
+        if (!$user->canAccessGroup($groupId)) {
+            abort(403);
+        }
         $request->validate([
             'id' => 'nullable|integer',
             'name' => 'required|string|max:255',
@@ -149,12 +168,17 @@ class CourseController extends Controller
         }
 
         $group->saveUsers($request->students);
+        $group->saveOwners($request->teachers);
 
         return to_route('course.groups', [$group->course_id]);
     }
 
     public function editCourse(Request $request, $id)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $course = Course::find($id);
         if ($course === null) {
             $course = new Course();
@@ -169,6 +193,10 @@ class CourseController extends Controller
 
     public function saveCourse(Request $request)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $data = $request->all();
         $c = $data['course'];
         if (empty($c['id'])) {
@@ -216,6 +244,10 @@ class CourseController extends Controller
 
     public function uploadImage(Request $request)
     {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
         $data = $request->all();
         $courseId = $data['courseId'];
         $f = $data['file'];

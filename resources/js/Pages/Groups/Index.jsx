@@ -36,7 +36,7 @@ const Groups = ({ auth, course, groups }) => {
             {groups.map ((gp, k) => {
                 return (
                     <div key={ k } className="flex flex-row justify-center mx-10">
-                        <div className="m-1 px-20 py-1 w-1/4">
+                        <div className="m-1 px-20 py-1 w-1/2">
                             <Link href={`/group/${gp.id}`}>{ gp.name }</Link>
                         </div>
                         <div className="m-1 p-1 cursor-pointer" >
