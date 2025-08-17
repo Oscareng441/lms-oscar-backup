@@ -127,7 +127,7 @@ class ProblemController extends Controller
         return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr, 'score' => $score]);
     }
 
-    public function editProblem($id)
+    public function editProblem(Request $request, $id)
     {
         $user = $request->user();
         if (!$user->isAdmin() && !$user->isTeacher()) {
