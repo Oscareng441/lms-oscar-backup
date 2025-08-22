@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}/edit', [LessonController::class, 'editLesson'])->name('lesson.edit');
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
-    Route::get('/report/{groupId}/{unit}/{unitId}/{agg}/{studentId}', [CourseController::class, 'groupReport'])->name('group.report');
+    Route::get('/report/{groupId}/{unit}/{unitId}/{agg}/{studentId}', [ReportController::class, 'groupReport'])->name('group.report');
     Route::get('/export-csv', [ReportController::class, 'exportCsv'])->name('exportCsv');
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
     Route::post('/image/upload', [CourseController::class, 'uploadImage'])->name('image.upload');

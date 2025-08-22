@@ -67,7 +67,7 @@ class StudentGroup extends Model
         }
         $joinType = $agg === 'P' ? 'INNER' : 'LEFT';
         $sql = '
-        SELECT G.id as groupId, U.id as userId, ' . $agg . '.name as unit, ' . $agg . '.id as unitId, U.name as userName, avg(score) as userScore, sum(IF(S.id IS NULL, 0, 1)) as problemsDone, count(P.id) as numProblems
+        SELECT G.id as groupId, U.id as userId, ' . $agg . '.name as unit, ' . $agg . '.id as unitId, U.name as userName, avg(score) as userScore, count(S.id) as problemsDone, count(P.id) as numProblems
         FROM student_groups G
         INNER JOIN student_group_user GU ON GU.student_group_id = G.id
         INNER JOIN users U ON U.id = GU.user_id

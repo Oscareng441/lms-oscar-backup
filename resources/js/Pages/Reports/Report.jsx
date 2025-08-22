@@ -29,7 +29,7 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
             breadcrumbs={ breadcrumbs }
         />
     )
-
+console.log(scores)
     function formatStudent(data) {
         if (agg === 'P') {
             return data.userName

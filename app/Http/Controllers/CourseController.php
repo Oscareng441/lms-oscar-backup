@@ -104,38 +104,6 @@ class CourseController extends Controller
         return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group, 'allStudents' => $students, 'teachersThisGroup' => $teachersThisGroup]);
     }
 
-    public function groupReport(Request $request, $groupId, $unit, $unitId, $agg, $studentId)
-    {
-        $user = $request->user();
-        OmniHelper::log('ok');
-        if (!$user->canAccessGroup($groupId)) {
-            abort(403);
-        }
-        $group = StudentGroup::find($groupId);
-        $course = Course::find($group->course_id);
-        $chapter = null;
-        $lesson = null;
-        switch($unit) {
-            case 'chapter':
-                $chapter = LessonSet::find($unitId);
-                // $scores = $group->getScores($studentId);
-                break;
-            case 'lesson':
-                $lesson = Lesson::find($unitId);
-                $chapter = LessonSet::find($lesson->lesson_set_id);
-                // $scores = $lesson->getScores($studentId);
-                break;
-            default:
-                // $scores = $group->getScores($studentId);
-                // $unit = $studentId ? 'chapter' : 'course';
-
-        }
-        $scores = $group->getScores(['studentId' => $studentId, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, ]);
-        $students = $group->getGroupMembers();
-
-        return Inertia::render('Reports/Report', ['course' => $course, 'group' => $group, 'scores' => $scores, 'students' => $students, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, 'studentId' => $studentId]);
-    }
-
     public function saveGroup(Request $request)
     {
         $user = $request->user();
