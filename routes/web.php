@@ -7,6 +7,7 @@ use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\LessonSetController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
     Route::get('/report/{groupId}/{unit}/{unitId}/{agg}/{studentId}', [CourseController::class, 'groupReport'])->name('group.report');
+    Route::get('/export-csv', [ReportController::class, 'exportCsv'])->name('exportCsv');
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
     Route::post('/image/upload', [CourseController::class, 'uploadImage'])->name('image.upload');
     Route::post('/course/save', [CourseController::class, 'saveCourse'])->name('course.save');

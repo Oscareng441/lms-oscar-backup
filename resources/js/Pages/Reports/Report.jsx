@@ -131,6 +131,13 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
                         columns={columns}
                         data={scores}
                         initialSort={initialSort}
+                        downloadLink="/export-csv"
+                        downloadParams={[ 
+                            {key: 'g', val: group.id},
+                            {key: 'agg', val: agg},
+                            {key: 's', val: studentId},
+                            {key: 'type', val: "report"}
+                        ]}
                     />
                 </div>
             </div>

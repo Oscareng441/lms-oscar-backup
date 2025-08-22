@@ -107,6 +107,7 @@ class CourseController extends Controller
     public function groupReport(Request $request, $groupId, $unit, $unitId, $agg, $studentId)
     {
         $user = $request->user();
+        OmniHelper::log('ok');
         if (!$user->canAccessGroup($groupId)) {
             abort(403);
         }
@@ -133,15 +134,6 @@ class CourseController extends Controller
         $students = $group->getGroupMembers();
 
         return Inertia::render('Reports/Report', ['course' => $course, 'group' => $group, 'scores' => $scores, 'students' => $students, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, 'studentId' => $studentId]);
-    }
-
-    public function studentReport(Request $request, $courseId, $studentId)
-    {
-        // DELETE
-        $course = Course::find($courseId);
-        $scores = $course->getStudentScores($studentId);
-
-        return Inertia::render('Courses/StudentReport', ['course' => $course, 'scores' => $scores]);
     }
 
     public function saveGroup(Request $request)

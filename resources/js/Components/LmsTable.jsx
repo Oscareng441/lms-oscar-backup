@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { PiMagnifyingGlassThin } from "react-icons/pi";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdSave } from "react-icons/md";
 import TableCellContents from '@/Components/TableCellContents';
 import Pagination from '@/Components/Pagination';
 import ColumnSort from '@/Components/ColumnSort';
+import { useForm, Link } from '@inertiajs/react';
 
 export default function LmsTable(props) {
 	const [currentPage, setCurrentPage] = useState(1)
@@ -11,6 +12,10 @@ export default function LmsTable(props) {
 	const [recordsPerPage, setRecordsPerPage] = useState(10)
 	const [sortCol, setSortCol] = useState(props.initialSort)
 	const [sortDir, setSortDir]= useState(props.initialSortDir || 1) // 1 or -1
+
+	const { data, setData, post } = useForm({
+        tds: props.data,
+    }) 
 
 	const filterAndOrderData = () => {
 		let data = props.data
@@ -76,9 +81,27 @@ export default function LmsTable(props) {
 		)
 	})
 
+	let downloadLink = ''
+	if (props.downloadLink) {
+		let flds = ''
+		if (props.downloadParams) {
+			flds = props.downloadParams.map((p,k) => {
+				return <input key={ k } type="hidden" name={ p.key } value={ p.val } />
+			})
+		}
+		downloadLink = (
+            <form action={ props.downloadLink } method="GET" target="_blank">
+            	{ flds }
+            	<button type="submit">
+                    <MdSave className="size-6 text-muted-foreground" />
+                </button>
+            </form>
+		)
+	}
+
 	return (
 		<div className="p-2">
-	        <div className="flex flex-row justify-end">
+	        <div className="flex flex-row justify-end pb-2">
 	            <div className="relative w-full max-w-sm items-center">
 	                <input
 	                	type="text" 
@@ -91,9 +114,13 @@ export default function LmsTable(props) {
 	                    <PiMagnifyingGlassThin className="size-6 text-muted-foreground" />
 	                </span>
 	            </div>
-                <div className="pt-1 cursor-pointer" onClick={() => { setFilterStr('') }} >
-                    <MdClose className="size-6 text-muted-foreground" />
-                </div>
+	            {
+	            	filterStr &&
+	                <div className="pt-1 cursor-pointer" title="Borrar" onClick={() => { setFilterStr('') }} >
+	                    <MdClose className="size-6 text-muted-foreground" />
+	                </div>
+	            }
+                { downloadLink }
 	        </div>
 	        <table className="w-full">
 	            <thead>
