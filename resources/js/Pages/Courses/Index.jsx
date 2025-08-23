@@ -9,7 +9,7 @@ const Index = ({ auth, courses, myProgress }) => {
     const title = 'Cursos'
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } show={['home', 'course-add']} />
+        <TopMenu auth={auth} title={ title } show={['course-add']} />
     )
 
     return (

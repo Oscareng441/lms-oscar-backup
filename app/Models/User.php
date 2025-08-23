@@ -78,17 +78,25 @@ class User extends Authenticatable
         return count($recs) >= 1;
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function getForUsersView()
+    {
+        $sql = '
+        SELECT U.id, U.name, U.email, IFNULL(R.role, "student") as role
+        FROM users U 
+        LEFT JOIN role_user RU ON RU.user_id = U.id
+        LEFT JOIN roles R ON RU.role_id = R.id';
+
+        $recs = DB::select($sql, []);
+
+        return $recs;
     }
 
     public function getCourseProgress($courseId)

@@ -8,6 +8,7 @@ use App\Http\Controllers\LessonSetController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -58,11 +59,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/chapter/save', [LessonSetController::class, 'saveChapter'])->name('chapter.save');
     Route::post('/lesson/save', [LessonController::class, 'saveLesson'])->name('lesson.save');
     Route::post('/group/save', [CourseController::class, 'saveGroup'])->name('group.save');
+    Route::post('/admin/user/save', [AdminController::class, 'userSave'])->name('user.save');
     Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
     Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');
     Route::get('/chapter/{id}/lessons', [LessonSetController::class, 'lessons'])->name('chapter.lessons');
     Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
     Route::get('/reset/{lessonId}', [ResultController::class, 'reset'])->name('results.reset');
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/user/{id}', [AdminController::class, 'userEdit'])->name('user.edit');
 });
 
 require __DIR__.'/auth.php';
