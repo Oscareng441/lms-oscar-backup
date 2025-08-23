@@ -65,7 +65,7 @@ export default function Edit(props) {
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="active" className="mr-2">active</label>
+                        <label htmlFor="active" className="mr-2">Vigente</label>
                         <Checkbox
                             name="active"
                             checked={data.active}
