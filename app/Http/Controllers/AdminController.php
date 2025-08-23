@@ -40,6 +40,7 @@ class AdminController extends Controller implements HasMiddleware
             'id' => 'nullable|integer',
             'name' => 'required|string|max:255',
             'email' => 'required|string|max:255',
+            'active' => 'nullable|boolean',
         ]);
 
         $user = User::find($request->id);
@@ -47,6 +48,7 @@ class AdminController extends Controller implements HasMiddleware
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'active' => $request->active || false,
         ]);
         
         return redirect()->route(

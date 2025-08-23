@@ -20,9 +20,16 @@ const Index = ({ auth, users }) => {
             sortable: true,
         },
         {
+            title: 'Vigente',
+            field: 'active',
+            sortable: false,
+            displayFormatter: yy
+        },
+        {
             title: 'Role',
             field: 'role',
             sortable: true,
+            displayFormatter: zz
         },
         {
             title: 'Acciones',
@@ -31,6 +38,21 @@ const Index = ({ auth, users }) => {
             displayFormatter: xx
         },
     ]
+
+    function yy(data) {
+        return data.active ? 'sí' : 'no'
+    }
+
+    function zz(data) {
+        switch (data.role) {
+        case 'admin':
+            return 'admin'
+        case 'teacher':
+            return 'maestr@'
+        default:
+            return 'estudiante'
+        }
+    }
 
     function xx(data) {
         return (<Link href={route('user.edit', { id: data.id })}>editar</Link>)

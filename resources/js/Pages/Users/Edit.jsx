@@ -1,4 +1,5 @@
 // import { useState, useEffect } from 'react';
+import Checkbox from '@/Components/Checkbox';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TopMenu from '@/Components/TopMenu';
 import { useForm } from '@inertiajs/react';
@@ -8,12 +9,20 @@ export default function Edit(props) {
         id: props.user.id,
         name: props.user.name,
         email: props.user.email,
+        active: props.user.active,
     })
     const title = 'Usuario'
 
     let topMenu = (
         <TopMenu auth={ props.auth } title={ title } show={['home', 'user-add']} />
     )
+
+    function toggleActive() {
+        const d = { ...data }
+        d.active = !d.active
+
+        setData(d)
+    }
 
     function updateForm(e, field) {
         const d = { ...data }
@@ -53,6 +62,14 @@ export default function Edit(props) {
                             onChange={ (e) => updateForm(e, 'email') }
                             className="w-1/2"
                             placeholder="email"
+                        />
+                    </div>
+                    <div className="">
+                        <label htmlFor="active" className="mr-2">active</label>
+                        <Checkbox
+                            name="active"
+                            checked={data.active}
+                            onChange={ toggleActive }
                         />
                     </div>
                     <div className="">

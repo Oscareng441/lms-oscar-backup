@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'active',
     ];
 
     /**
@@ -89,7 +90,7 @@ class User extends Authenticatable
     public static function getForUsersView()
     {
         $sql = '
-        SELECT U.id, U.name, U.email, IFNULL(R.role, "student") as role
+        SELECT U.id, U.name, U.email, IFNULL(R.role, "student") as role, U.active
         FROM users U 
         LEFT JOIN role_user RU ON RU.user_id = U.id
         LEFT JOIN roles R ON RU.role_id = R.id';
