@@ -3,6 +3,7 @@ import Checkbox from '@/Components/Checkbox';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TopMenu from '@/Components/TopMenu';
 import { useForm } from '@inertiajs/react';
+import Select from 'react-select';
 
 export default function Edit(props) {
     const { data, setData, post } = useForm({
@@ -10,6 +11,7 @@ export default function Edit(props) {
         name: props.user.name,
         email: props.user.email,
         active: props.user.active,
+        roles: props.userRoles,
     })
     const title = 'Usuario'
 
@@ -27,6 +29,13 @@ export default function Edit(props) {
     function updateForm(e, field) {
         const d = { ...data }
         d[field] = e.target.value
+
+        setData(d)
+    }
+
+    function updateRoles(e) {
+        const d = { ...data }
+        d.roles = e
 
         setData(d)
     }
@@ -73,10 +82,19 @@ export default function Edit(props) {
                         />
                     </div>
                     <div className="">
+                        <Select
+                            value={ data.roles }
+                            className="w-full"
+                            isMulti
+                            onChange={ updateRoles }
+                            options={ props.roles }
+                        />
+                    </div>
+                    <div className="">
                         <button
                             type="submit"
                             onClick={ submit }
-                            className="border border-black shadow rounded-lg p-2 bg-blue-400"
+                            className="mx-2 btn btn-primary"
                         >
                             GUARDAR
                         </button>

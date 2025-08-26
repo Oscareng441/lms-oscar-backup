@@ -31,7 +31,7 @@ class LessonController extends Controller
         return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
     }
 
-    public function showProblemSet($id)
+    public function showEditProblemSet($id)
     {
         $problems = Problem::where(['lesson_id' => $id, 'active' => 1])->get();
         $lesson = Lesson::find($id);
@@ -45,10 +45,10 @@ class LessonController extends Controller
             $hints[$p->id] = $p->getHints();
         }
 
-        return Inertia::render('ProblemSets/ShowAlt', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/EditProblemSet', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
 
-    public function showAltProblemSet(Request $request, $id)
+    public function showStudentProblemSet(Request $request, $id)
     {
         $problems = Problem::where(['lesson_id' => $id])->get();
         extract($this->getHierarchy($id));
@@ -61,7 +61,7 @@ class LessonController extends Controller
             $userScores[$p->id] = $p->getUserScore($request->user()->id);
         }
 
-        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
+        return Inertia::render('ProblemSets/StudentProblemSet', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
     }
 
     public function addProblem(Request $request, $id)

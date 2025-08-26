@@ -90,10 +90,14 @@ class User extends Authenticatable
     public static function getForUsersView()
     {
         $sql = '
-        SELECT U.id, U.name, U.email, IFNULL(R.role, "student") as role, U.active
+        SELECT U.id, U.name, U.email, IFNULL(R.roles, "none") as roles, U.active
         FROM users U 
-        LEFT JOIN role_user RU ON RU.user_id = U.id
-        LEFT JOIN roles R ON RU.role_id = R.id';
+        LEFT JOIN (
+        SELECT RU.user_id, group_concat(R.role) as roles
+        FROM role_user RU 
+        LEFT JOIN roles R ON RU.role_id = R.id
+        group by RU.user_id
+        ) R ON R.user_id = U.id';
 
         $recs = DB::select($sql, []);
 

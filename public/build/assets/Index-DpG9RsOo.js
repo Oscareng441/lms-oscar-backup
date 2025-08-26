@@ -1,1 +1,0 @@
-import{j as r,B as s}from"./app-Bm9vZYrO.js";import{A as o}from"./AuthenticatedLayout-B5bVp4wi.js";import"./ApplicationLogo-BZaqU6UT.js";import"./transition-BtvYn4UE.js";const p=({auth:t,data:a})=>{const e="Problems";return r.jsx(o,{auth:t,user:t.user,header:e,children:r.jsx(s,{title:e})})};export{p as default};

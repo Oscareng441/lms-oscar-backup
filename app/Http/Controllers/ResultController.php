@@ -41,7 +41,7 @@ class ResultController extends Controller
         Result::reset($request->user()->id, $lessonId);
 
         return redirect()->route(
-            'problemset.altshowset', ['id' => $lessonId]
+            'problemset.student', ['id' => $lessonId]
         );
     }
 }

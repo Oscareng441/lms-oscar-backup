@@ -43,6 +43,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         let p = { ...problem }
         let d = { ...data }
         p.problem_text = probTxt
+        p.problem_type_id = probType
+        p.display_type = probDisplayType
+        p.active = probPublished
+        p.lesson_id = lessonId
         setProblem(p)
         d.problem = p
         setData(d)
@@ -187,6 +191,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const changeProblemType = (t) => {
         setProbType(t)
+        console.log(t)
         // let p = { ...problem }
         // p.problem_type_id = t
         // setProblem(p)

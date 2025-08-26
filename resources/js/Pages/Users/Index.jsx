@@ -29,7 +29,7 @@ const Index = ({ auth, users }) => {
             title: 'Role',
             field: 'role',
             sortable: true,
-            displayFormatter: zz
+            displayFormatter: ww
         },
         {
             title: 'Acciones',
@@ -43,15 +43,8 @@ const Index = ({ auth, users }) => {
         return data.active ? 'sí' : 'no'
     }
 
-    function zz(data) {
-        switch (data.role) {
-        case 'admin':
-            return 'admin'
-        case 'teacher':
-            return 'maestr@'
-        default:
-            return 'estudiante'
-        }
+    function ww(data) {
+        return data.roles.replace('student', 'estudiante').replace('teacher', 'maestr@').split(',').join('; ')
     }
 
     function xx(data) {
