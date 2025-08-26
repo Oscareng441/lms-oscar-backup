@@ -40,8 +40,18 @@ class ResultController extends Controller
     {
         Result::reset($request->user()->id, $lessonId);
 
-        return redirect()->route(
-            'problemset.student', ['id' => $lessonId]
-        );
+        $problems = Problem::where(['lesson_id' => $lessonId])->get();
+        // $answers = [];
+        // $hints = [];
+        $userScores = [];
+        foreach ($problems as $p) {
+        //     $answers[$p->id] = $p->getAnswers();
+        //     $hints[$p->id] = $p->getHints();
+            $userScores[$p->id] = $p->getUserScore($request->user()->id);
+        }
+        return $userScores;
+        // return redirect()->route(
+        //     'problemset.student', ['id' => $lessonId]
+        // );
     }
 }

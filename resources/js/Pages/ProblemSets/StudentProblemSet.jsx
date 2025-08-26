@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
@@ -6,11 +6,9 @@ import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
-import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
-import { router, Link, Head } from '@inertiajs/react';
-import Checkbox from '@/Components/Checkbox';
+import { Link, Head } from '@inertiajs/react';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 import { LuListRestart } from "react-icons/lu";
 
@@ -23,7 +21,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
     const [showEndOfSet, setShowEndOfSet] = useState(false)
-    const [okToReset, setOkToReset] = useState(false)
+    const [scores, setScores] = useState(userScores)
 
     const title = `${ lesson.name } Ejercicios`
     const breadcrumbs = buildBreadCrumbs({lesson, chapter, course}, 4)
@@ -42,7 +40,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
 
     let userScore, bgCol, txtCol
     const probList = problems.map((p, k) => {
-        userScore = userScores[p.id]
+        userScore = scores[p.id]
         bgCol = userScore === null ? 'bg-white' : (userScore >= 90 ? 'bg-green-100' : (userScore >= 50 ? 'bg-yellow-200' : 'bg-red-200'))
         txtCol = userScore === null ? 'text-black' : 'text-slate-400'
         
@@ -81,15 +79,15 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
         )
     })
 
-    const confirmOkToReset = () => {
+    const confirmAndReset = () => {
         if (confirm('Quieres resetear tus resultados de esta lección?')) {
             // alert("Enlace armado. Haz clic una vez más.");
             // setOkToReset(true)
             fetch(route('results.reset', { lessonId: lesson.id}))
-                .then(res => res.json())
+            .then(res => res.json())
             .then(
                 (results) => {
-                    window.location.reload()
+                    setScores(results)
                 },
                 (error) => {
                     console.log('error', error)
@@ -112,14 +110,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
                             </p>
                         }
                         <div className="float-right" title="reiniciar problemas">
-                            {
-                                !okToReset &&
-                                <div onClick={ confirmOkToReset } className="text-slate-400"><LuListRestart /></div>
-                            }
-                            {
-                                okToReset &&
-                                <Link href={ route('results.reset', lesson.id) } className="text-red-500"><LuListRestart /></Link>
-                            }
+                            <div onClick={ confirmAndReset } className="text-slate-400"><LuListRestart /></div>
                         </div>
                     </div>
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
