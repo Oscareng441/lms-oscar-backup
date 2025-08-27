@@ -7,7 +7,7 @@ import { handleFraction } from '@/Helpers/Utilities';
 export default function OpenAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(props.answered)
-
+    const autoFocus = !('noFocus' in props) || !props.noFocus
     const validateAnswer = (e) => {
         let ans = e.target.value
         setAnswer(handleFraction(ans))
@@ -38,7 +38,7 @@ console.log(props, hasAnswered)
                             name="myAnswer"
                             value={answer}
                             className="mt-1 block w-full"
-                            isFocused={true}
+                            isFocused={autoFocus}
                             onChange={(e) => setAnswer(e.target.value)}
                             onBlur={validateAnswer}
                             disabled={hasAnswered}

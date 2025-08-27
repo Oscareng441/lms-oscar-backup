@@ -14,7 +14,8 @@ export default function ShowProblem(props) {
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-console.log(props.problem.problem_text)
+    const noFocus = 'noFocus' in props && props.noFocus
+
     const multiAnswerSelect = (ans) => {
         let numCorr = props.numberCorrect
         let score = 0, total = 0
@@ -153,7 +154,7 @@ console.log(props.problem.problem_text)
     }
     if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
         answerComponent = (
-            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } />
+            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } noFocus={ noFocus } />
         )
     }
     if (props.answered) {

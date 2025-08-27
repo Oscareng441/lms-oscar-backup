@@ -64,7 +64,7 @@ class ProblemController extends Controller
                 break;
             case 3:
             case 4:
-                $problem->saveOpenAnswer($answers[0]['answer_text']);
+                $problem->saveOpenAnswer($answers[0]);
                 break;
             default:
                 throw new \Exception("unknown answer type in save prob");

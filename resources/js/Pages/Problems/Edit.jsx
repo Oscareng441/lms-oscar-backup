@@ -31,6 +31,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const [showHint, setShowHint] = useState(false)
     const [showGallery, setShowGallery] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
+    const [tolerance, setTolerance] = useState(origAnswers[0]?.pct_tolerance || 0)
     const { data, setData, post, errors } = useForm({
         problem: problem,
         answers: answers,
@@ -173,40 +174,39 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const selectLesson = (e) => {
         setLessonId(e.value)
-        // let p = { ...problem }
-        // p.lesson_id = e.value
-        // setProblem(p)
-        // data.problem = p
-        // setData(data)
     }
 
     const changeProblemDisplayType = (t) => {
         setProbDisplayType(t)
-        // let p = { ...problem }
-        // p.display_type = t
-        // setProblem(p)
-        // data.problem = p
-        // setData(data)
     }
 
     const changeProblemType = (t) => {
         setProbType(t)
-        console.log(t)
-        // let p = { ...problem }
-        // p.problem_type_id = t
-        // setProblem(p)
-        // data.problem = p
-        // setData(data)
     }
 
     const togglePublish = () => {
         setProbPublished(!probPublished)
-        // let p = { ...problem }
-        // // console.log(p.active)
-        // p.active = !p.active
-        // setProblem(p)
-        // data.problem = p
-        // setData(data)
+    }
+
+    const chgTolerance = (e) => {
+        setTolerance(e.target.value)
+    }
+
+    const validateTolerance = () => {
+        let t = tolerance
+        if (t > 1) {
+            t = t / 100
+        }
+        if (t > 1 || t < 0) {
+            t = 0
+        }
+        setTolerance(t)
+        let a = [ ...answers ]
+        a[0].pct_tolerance = t
+        setAnswers(a)
+        let d = { ...data }
+        d.answers = a
+        setData(d)
     }
 
     const toggleShowGallery = () => {
@@ -245,6 +245,27 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemType(key)}>{t}</div>
         )
     })
+
+    const toleranceSelection = (
+        <div className="py-2">
+            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                    <div className="flex items-center"> 
+                        Tolerance:
+                        <input
+                            placeholder="Tolerancia (.01 por ejemplo, si la respuesta cuenta como correcto si está adentro de 1%)"
+                            type="text"
+                            onChange={chgTolerance}
+                            onBlur={validateTolerance}
+                            value={tolerance}
+                            className="w-full"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    )
 
     const addImageToProb = (imgU) => {
         let prob = {...problem}
@@ -368,6 +389,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     </div>
                 </div>
             </div>
+            {
+                probType === 4 && toleranceSelection
+            }
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
@@ -390,6 +414,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         prev={() => {}}
                         hasNextProblem={false}
                         hasPrevProblem={false}
+                        noFocus={true}
                     />
                 )
             }

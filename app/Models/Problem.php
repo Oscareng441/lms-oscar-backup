@@ -195,13 +195,14 @@ class Problem extends Model
     {
         $sql = '
         INSERT INTO open_answers_numeric
-        (problem_id, answer)
+        (problem_id, answer, pct_tolerance)
         VALUES 
-        (?, ?)
+        (?, ?, ?)
         ON DUPLICATE KEY UPDATE
-        answer = VALUES(answer)
+        answer = VALUES(answer),
+        pct_tolerance = VALUES(pct_tolerance)
         ;';
 
-        DB::insert($sql, [$this->id, $ans]);
+        DB::insert($sql, [$this->id, $ans['answer_text'], $ans['pct_tolerance']]);
     }
 }
