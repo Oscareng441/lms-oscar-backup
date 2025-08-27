@@ -21,6 +21,31 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     const [feedbackMessage, setFeedbackMessage] = useState('right')
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
+
+    const handleKeyDown = (event) => {
+        console.log(event)
+        switch(event.key) {
+            case 'n':
+            case 'ArrowRight':
+                nextProblem()
+                break
+            case 'ArrowLeft':
+            case 'p':
+                prevProblem()
+                break
+            default:
+                // nothing
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
     const title = `${ lesson.name }`
 
     const handleAnswer = (id, points, msg) => {
