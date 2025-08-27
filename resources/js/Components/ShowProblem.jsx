@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { PiSteps } from "react-icons/pi";
-import { IoPlaySkipBack, IoCaretBack, IoCaretForward } from "react-icons/io5";
+import { IoCaretBack, IoCaretForward } from "react-icons/io5";
+import { MdSkipPrevious } from "react-icons/md";
+import { BsFillSkipStartFill } from "react-icons/bs";
 
 import AnswersComponent from '@/Components/AnswersComponent';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
@@ -104,22 +106,22 @@ export default function ShowProblem(props) {
     let colr = disabled ? 'text-slate-400' : ''
     let pointer = disabled ? '' : 'cursor-pointer'
     let clik = disabled ? () => {} : props.hint
-    let hintLink = <PiSteps className={`${pointer} ${colr}`} onClick={clik} title="enséñame los pasos" />
+    let hintLink = <PiSteps className={`${pointer} ${colr} mx-1`} onClick={clik} title="enséñame los pasos" />
 
     colr = props.hasNextProblem ? '' : 'text-slate-400'
     pointer = props.hasNextProblem ? 'cursor-pointer' : ''
     clik = props.hasNextProblem ? props.next : () => {}
-    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr}`} onClick={clik} title="próximo problema" />
+    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr} mx-1`} onClick={clik} title="próximo problema" />
 
     colr = props.hasPrevProblem ? '' : 'text-slate-400'
     pointer = props.hasPrevProblem ? 'cursor-pointer' : ''
     clik = props.hasPrevProblem ? props.prev : () => {}
-    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr}`} onClick={clik} title="problema anterior" />
+    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr} mx-1`} onClick={clik} title="problema anterior" />
 
     colr = props.problem != null ? '' : 'text-slate-400'
     pointer = props.problem != null ? 'cursor-pointer' : ''
     clik = props.problem != null ? props.restart : () => {}
-    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm37`} onClick={clik} title="reiniciar" />
+    let restartLink = props.hints === null ? '' : <BsFillSkipStartFill className={`${pointer} ${colr} mx-1`} onClick={clik} title="reiniciar" />
 
     if (props.problem.display_type === 'text') {
         problemSection = (
@@ -167,10 +169,12 @@ export default function ShowProblem(props) {
         <div className="py-2" >
             <div className="mx-auto max-w-7xl space-y-1 sm:px-6 lg:px-8">
                 <div className="bg-white px-4 shadow sm:rounded-lg sm:px-8 sm:py-2">
-                    { hintLink }
-                    { nextLink }
-                    { prevLink }
-                    { restartLink }
+                    <div className="flex flex-row w-fit">
+                        { hintLink }
+                        { nextLink }
+                        { prevLink }
+                        { restartLink } 
+                    </div>
                     <div className="py-2">
                         <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                             <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
