@@ -7,7 +7,7 @@ import AggSelect from '@/Components/AggSelect';
 import { Link } from '@inertiajs/react';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
-export default function Report({ auth, course, group, chapter, lessons, scores, students, unit, unitId, agg, studentId }) {
+export default function Report({ auth, course, group, chapter, lesson, scores, students, unit, unitId, agg, studentId }) {
     const [level, setLevel] = useState(unit) // course, chapter, lesson
     const [levelId, setLevelId] = useState(unitId) // id of course, chapter, lesson
     const [newAgg, setNewAgg] = useState(agg)
@@ -31,10 +31,18 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
     )
 
     function formatStudent(data) {
-        if (agg === 'P') {
+        if (student == data.userId) {
             return data.userName
         }
-        return (<Link href={ route('group.report', {groupId: group.id, agg: nextAgg, unit: level, unitId: unitId, studentId: data.userId})}>{data.userName}</Link>)
+        return (<Link href={ route('group.report', {groupId: group.id, agg: agg, unit: level, unitId: unitId, studentId: data.userId})}>{data.userName}</Link>)
+    }
+
+    function formatEducationalUnit(data) {
+        console.log(data)
+        if (agg == 'P') {
+            return data.unit
+        }
+        return (<Link href={ route('group.report', {groupId: group.id, agg: nextAgg, unit: agg, unitId: data.unitId, studentId: studentId})}>{data.unit}</Link>)
     }
 
     function problemLink(data) {
@@ -52,6 +60,7 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
             title: 'Unidad',
             field: 'unit',
             sortable: true,
+            displayFormatter: formatEducationalUnit,
         },
         {
             title: '# Problemas',
@@ -71,6 +80,18 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
     ];
 
     let initialSort = "name"
+
+    if (agg === 'C') {
+        columns[1].title = 'Curso'
+    }
+
+    if (agg === 'LS') {
+        columns[1].title = 'Capítulo'
+    }
+
+    if (agg === 'L') {
+        columns[1].title = 'Lección'
+    }
 
     if (agg === 'P') {
         columns[1].title = 'id de Problema'
@@ -95,11 +116,52 @@ export default function Report({ auth, course, group, chapter, lessons, scores, 
         { name: 'Lección', id: 'L'},
         { name: 'Problema', id: 'P'},
     ]
+console.log(lesson, unit)
+    let orientation = (
+        <>
+            <div className="">
+                Curso: 
+                <Link 
+                    href={route('group.report', {groupId: group.id, agg: 'C', unit: 'C', unitId: course.id, studentId: student})}
+                    className="ml-2"
+                >
+                    { course.name }
+                </Link>
+            </div>
+            {
+                unit !== 'C' &&
+                <div className="pl-6">
+                    Capítulo: 
+                    <Link 
+                        href={route('group.report', {groupId: group.id, agg: 'LS', unit: 'LS', unitId: chapter.id, studentId: student})}
+                        className="ml-2"
+                    >
+                        { chapter.name }
+                    </Link>
+                </div>
+            }
+            {
+                unit !== 'C' && unit !== 'LS' &&
+                <div className="pl-6">
+                    Lección: 
+                    <Link 
+                        href={route('group.report', {groupId: group.id, agg: 'L', unit: 'L', unitId: lesson.id, studentId: student})}
+                        className="ml-2"
+                    >
+                        { lesson.name }
+                    </Link>
+                </div>
+            }
+        </>
+    )
 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <div className="p-8 border border-black rounded-md max-w-7xl mx-auto shadow-xl shadow-indigo-200">
                 <div className="py-2">
+                    <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-row">
+                        { orientation }
+                    </div>
                     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-row">
                         <div className="w-1/2 rounded-s-sm">
                             <StudentSelect 

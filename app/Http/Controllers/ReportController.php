@@ -27,11 +27,11 @@ class ReportController extends Controller
         $chapter = null;
         $lesson = null;
         switch($unit) {
-            case 'chapter':
+            case 'LS':
                 $chapter = LessonSet::find($unitId);
                 // $scores = $group->getScores($studentId);
                 break;
-            case 'lesson':
+            case 'L':
                 $lesson = Lesson::find($unitId);
                 $chapter = LessonSet::find($lesson->lesson_set_id);
                 // $scores = $lesson->getScores($studentId);
@@ -44,7 +44,7 @@ class ReportController extends Controller
         $scores = $group->getScores(['studentId' => $studentId, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, ]);
         $students = $group->getGroupMembers();
 
-        return Inertia::render('Reports/Report', ['course' => $course, 'group' => $group, 'scores' => $scores, 'students' => $students, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, 'studentId' => $studentId]);
+        return Inertia::render('Reports/Report', ['course' => $course, 'group' => $group, 'scores' => $scores, 'students' => $students, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, 'chapter' => $chapter, 'lesson' => $lesson, 'studentId' => $studentId]);
     }
 
     public function exportCsv(Request $request)

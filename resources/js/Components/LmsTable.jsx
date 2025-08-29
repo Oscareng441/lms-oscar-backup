@@ -101,7 +101,7 @@ export default function LmsTable(props) {
 
 	return (
 		<div className="p-2">
-	        <div className="flex flex-row justify-end pb-2">
+	        <div className="flex flex-row justify-between pb-2">
 	            <div className="relative w-full max-w-sm items-center">
 	                <input
 	                	type="text" 
@@ -120,7 +120,9 @@ export default function LmsTable(props) {
 	                    <MdClose className="size-6 text-muted-foreground" />
 	                </div>
 	            }
-                { downloadLink }
+	            <div className="flex">
+	                { downloadLink }
+		        </div>
 	        </div>
 	        <table className="w-full">
 	            <thead>
