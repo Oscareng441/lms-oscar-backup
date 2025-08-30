@@ -55,11 +55,16 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const title = 'id' in problem ?`${ problem.id }` : 'New Problem'
 
+    const genericAnswer = (a) => {
+        return {problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text:'', is_correct: 0, display_type: 'latex'}
+    }
+
     const nextProblem = () => {
         setProblem(problem)
         setShowFeedback(false)
         setShowHint(false)
     }
+
     const prevProblem = () => {
         setProblem(problem)
         setShowFeedback(false)
@@ -134,7 +139,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         if (probType === 4 && a.length > 0) {
             return
         }
-        a.push({problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text:'', is_correct: 0, display_type: 'latex'})
+        a.push(genericAnswer(a))
         setAnswers(a)
         data.answers = a
         setData(data)
@@ -195,6 +200,15 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const changeProblemType = (t) => {
         setProbType(t)
+        if (t === 4) {
+            let a = [ ...answers ]
+            a.push(genericAnswer(a))
+            a = [a[0]]
+            setAnswers(a)
+            let d = { ...data }
+            d.answers = a
+            setData(d)
+        }
     }
 
     const togglePublish = () => {
