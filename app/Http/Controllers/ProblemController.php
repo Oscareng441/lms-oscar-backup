@@ -23,6 +23,10 @@ class ProblemController extends Controller
             abort(403);
         }
         $data = $request->all();
+        
+        //*** VALIDATION HERE
+
+
         $p = $data['problem'];
         if (empty($p['display_type'])) {
             $p['display_type'] = 'latex';
@@ -63,6 +67,8 @@ class ProblemController extends Controller
                 }
                 break;
             case 3:
+                $problem->saveOpenAlphaAnswers($answers);
+                break;
             case 4:
                 $problem->saveOpenAnswer($answers[0]);
                 break;

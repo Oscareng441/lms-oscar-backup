@@ -116,7 +116,7 @@ export default function Report({ auth, course, group, chapter, lesson, scores, s
         { name: 'Lección', id: 'L'},
         { name: 'Problema', id: 'P'},
     ]
-console.log(lesson, unit)
+
     let orientation = (
         <>
             <div className="">

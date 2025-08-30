@@ -20,14 +20,26 @@ class Problem extends Model
 
     public function getAnswers()
     {
-        if (in_array($this->problem_type_id,[1,2])) {
-            $sql = '
-            SELECT * FROM answer_sets
-            WHERE problem_id = ? and active = 1';
-        } else {
-            $sql = '
-            SELECT id, TRIM(TRAILING "0" FROM answer) AS answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_numeric
-            WHERE problem_id = ?';
+        switch ($this->problem_type_id) {
+            case 1:
+            case 2:
+                $sql = '
+                SELECT * FROM answer_sets
+                WHERE problem_id = ? and active = 1';
+                break;
+            case 3:
+                $sql = '
+                SELECT id, answer AS answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_alpha
+                WHERE problem_id = ?';
+                break;
+            case 4:
+                $sql = '
+                SELECT id, TRIM(TRAILING "0" FROM answer) AS answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_numeric
+                WHERE problem_id = ?';
+                break;
+            default:
+                throw new Exception("UNKNOWN PROBLEM_TYPE_ID");
+            
         }
         $rec = DB::select($sql, [$this->id]);
         if (empty($rec)) {
@@ -204,5 +216,35 @@ class Problem extends Model
         ;';
 
         DB::insert($sql, [$this->id, $ans['answer_text'], $ans['pct_tolerance']]);
+    }
+
+    public function saveOpenAlphaAnswers($answers)
+    {
+        $sql = '
+        DELETE FROM open_answers_alpha
+        WHERE problem_id = ?';
+        $rec = DB::delete($sql, [$this->id]);
+
+        $params = [];
+        $placeholders = [];
+        $placeholder = '(?,?,?)';
+
+        foreach ($answers as $ans) {
+            if (!array_key_exists('pct_tolerance', $ans)) {
+                $ans['pct_tolerance'] = .25;
+            }
+            $placeholders[] = $placeholder;
+            $params[] = $this->id;
+            $params[] = $ans['answer_text'];
+            $params[] = $ans['pct_tolerance'];
+        }
+
+        $sql = '
+        INSERT INTO open_answers_alpha
+        (problem_id, answer, pct_tolerance)
+        VALUES ' .
+        implode(',', $placeholders) . ';';
+
+        DB::insert($sql, $params);
     }
 }

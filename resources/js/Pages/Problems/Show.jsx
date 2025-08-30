@@ -23,14 +23,13 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     const [hintsToShow, setHintsToShow] = useState(1)
 
     const handleKeyDown = (event) => {
-        console.log(event)
         switch(event.key) {
-            case 'n':
+            // case 'n':
             case 'ArrowRight':
                 nextProblem()
                 break
             case 'ArrowLeft':
-            case 'p':
+            // case 'p':
                 prevProblem()
                 break
             default:

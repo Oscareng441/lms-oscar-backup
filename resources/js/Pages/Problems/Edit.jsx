@@ -110,6 +110,16 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(data)
     }
 
+    const autoCheckCorrect = (k) => {
+        if (probType === 3 || probType === 4) {
+            let a = [...answers]
+            a[k].is_correct = true
+            setAnswers(a)
+            data.answers = a
+            setData(data)
+        }
+    }
+
     const chgAnsCorrect = (e, k) => {
         let txt = e.target.value
         let a = [...answers]
@@ -121,6 +131,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const addAns = () => {
         let a = [...answers]
+        if (probType === 4 && a.length > 0) {
+            return
+        }
         a.push({problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text:'', is_correct: 0, display_type: 'latex'})
         setAnswers(a)
         data.answers = a
@@ -290,18 +303,31 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         errMsg = errMsg + errors[i]
     }
 
+    let answerBlurbMsg = ''
+    switch (probType) {
+        case 3:
+            answerBlurbMsg = "Ingresa todas las formas que aceptas como correctos. Por ejemplo, una respuesta de JLo, otra de Jennifer Lopez si aceptas los 2"
+            break
+        case 4:
+            answerBlurbMsg = "Solo una respuesta"
+            break
+        default:
+    }
+    let answerBlurb = answerBlurbMsg === '' ? '' : (
+        <div className="">
+            {answerBlurbMsg}
+        </div>
+    )
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="flex items-center"> 
-                        <div className=""> Question:</div>
+                        <div className=""> Texto de la Pregunta:</div>
                         <div className="flex items-center mx-2">
                             {problemDisplayTypeSelector}
-                        </div>
-                        <div className="flex items-center mx-2">
-                            {problemTypeSelector}
                         </div>
                         <div className="flex items-center mx-2">
                             <Checkbox
@@ -336,38 +362,54 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center"> Answers: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} /></div>
-                    {
-                        answers.map((a, k) => {
-                            let ansTxt = a.answer_text
-                            let isRight =  a.is_correct 
-                            return (
-                                <div key={k} className="flex">
-                                <input
-                                    key={k}
-                                    type="text"
-                                    onChange={(e) => chgAnsTxt(e, k)}
-                                    value={ansTxt}
-                                    className="w-full"
-                                />
-                                <Checkbox
-                                    checked={ isRight }
-                                    onChange={(e) => chgAnsCorrect(e, k)}
-                                    className='border border-black border-1'
-                                />
-                                <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delAns(e, k)} />
-                                </div>
-                            )
+                        <div className="flex items-center"> 
+                            <div className=""> Respuestas/Distractores:</div>
+                            <div className="flex items-center mx-2">
+                                {problemTypeSelector}
+                            </div>
+                            {
+                                (probType !== 4 || answers.length) < 2 &&
+                                <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} />
+                            }
+                        </div>
+                        <div className="text-sm">
+                            {answerBlurb}
+                        </div>
+                        {
+                            answers.map((a, k) => {
+                                let ansTxt = a.answer_text
+                                let isRight =  a.is_correct 
+                                return (
+                                    <div key={k} className="flex">
+                                    <input
+                                        key={k}
+                                        type="text"
+                                        onChange={(e) => chgAnsTxt(e, k)}
+                                        onBlur={(e) => autoCheckCorrect(k)}
+                                        value={ansTxt}
+                                        className="w-full"
+                                    />
+                                    {
+                                        (probType === 1 || probType === 2) &&
+                                        <Checkbox
+                                            checked={ isRight }
+                                            onChange={(e) => chgAnsCorrect(e, k)}
+                                            className='border border-black border-1'
+                                        />
+                                    }
+                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delAns(e, k)} />
+                                    </div>
+                                )
 
-                        })
-                    }
+                            })
+                        }
                     </div>
                 </div>
             </div>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center"> Hints: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
+                    <div className="flex items-center"> Pistas: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
                     {
                         hints.map((h, k) => {
                             let hintTxt = h.hint

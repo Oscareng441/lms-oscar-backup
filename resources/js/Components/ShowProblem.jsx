@@ -3,13 +3,15 @@ import { PiSteps } from "react-icons/pi";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { MdSkipPrevious } from "react-icons/md";
 import { BsFillSkipStartFill } from "react-icons/bs";
-
 import AnswersComponent from '@/Components/AnswersComponent';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import OpenAnswerComponent from '@/Components/OpenAnswerComponent';
+import OpenAlphaAnswerComponent from '@/Components/OpenAlphaAnswerComponent';
 import HybridDisplay from '@/Components/HybridDisplay';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import levenshtein from 'js-levenshtein';
+// const levenshtein = require('js-levenshtein');
 
 export default function ShowProblem(props) {
     const [htmlContent, setHtmlContent] = useState(props.problem.problem_text)
@@ -45,10 +47,10 @@ export default function ShowProblem(props) {
         let pts, msg
         if (ans.is_correct) {
             pts = 100
-             msg = getPositiveFeedback()
+            msg = getPositiveFeedback()
         } else {
             pts = 0
-             msg = getNegativeFeedback()
+            msg = getNegativeFeedback()
         }
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
@@ -97,6 +99,33 @@ export default function ShowProblem(props) {
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
         console.log(pts, msg)
+        props.handleAnswer(props.problem.id, pts, msg)
+    }
+
+    const openAlphaAnswerSubmit = (ans) => {
+        let pts, msg, corr, regx, dist
+        props.answers.forEach(a => {
+            dist = levenshtein(a.answer_text, ans)
+            console.log(a)
+            console.log(dist)
+            console.log(dist/a.answer_text.length)
+            if (dist/a.answer_text.length < a.pct_tolerance) {
+                corr = true
+            }
+            regx = new RegExp(a.answer_text, "i")
+            if(regx.test(ans.toLowerCase())) {
+                corr = true
+            }
+        })
+        if (corr) {
+            pts = 100
+            msg = getPositiveFeedback()
+        } else {
+            pts = 0
+            msg = getNegativeFeedback()
+        }
+        setPoints(pts)
+        fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -154,9 +183,14 @@ export default function ShowProblem(props) {
             <MultiAnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect}/>
         )
     }
-    if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
+    if (props.problem.problem_type_id === 4) {
         answerComponent = (
             <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } noFocus={ noFocus } />
+        )
+    }
+    if (props.problem.problem_type_id === 3) {
+        answerComponent = (
+            <OpenAlphaAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAlphaAnswerSubmit } noFocus={ noFocus } />
         )
     }
     if (props.answered) {
