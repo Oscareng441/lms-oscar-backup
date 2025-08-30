@@ -2,7 +2,6 @@ import { useState } from 'react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
-import { handleFraction } from '@/Helpers/Utilities';
 
 export default function OpenAlphaAnswerComponent(props) {
     const [answer, setAnswer] = useState('')

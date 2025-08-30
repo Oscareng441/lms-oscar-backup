@@ -13,18 +13,6 @@ export default function OpenAnswerComponent(props) {
         setAnswer(handleFraction(ans))
     }
 
-    const chgAnsTxt = (e, k) => {
-        let txt = e.target.value
-        if (problem.problem_type_id === 4) {
-            txt = handleFraction(txt)
-        }
-        let a = [...answers]
-        a[k].answer_text = txt
-        setAnswers(a)
-        data.answers = a
-        setData(data)
-    }
-console.log(props, hasAnswered)
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">

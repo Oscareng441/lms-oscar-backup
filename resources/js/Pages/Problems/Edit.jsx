@@ -100,9 +100,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const chgAnsTxt = (e, k) => {
         let txt = e.target.value
-        if (probType === 4) {
-            txt = handleFraction(txt)
-        }
         let a = [...answers]
         a[k].answer_text = txt
         setAnswers(a)
@@ -110,10 +107,13 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(data)
     }
 
-    const autoCheckCorrect = (k) => {
+    const handleAnswerBlur = (e, k) => {
         if (probType === 3 || probType === 4) {
             let a = [...answers]
             a[k].is_correct = true
+            if (probType === 4) {
+                a[k].answer_text = handleFraction(e.target.value)
+            }
             setAnswers(a)
             data.answers = a
             setData(data)
@@ -385,7 +385,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                         key={k}
                                         type="text"
                                         onChange={(e) => chgAnsTxt(e, k)}
-                                        onBlur={(e) => autoCheckCorrect(k)}
+                                        onBlur={(e) => handleAnswerBlur(e, k)}
                                         value={ansTxt}
                                         className="w-full"
                                     />

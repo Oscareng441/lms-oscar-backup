@@ -205,6 +205,10 @@ class Problem extends Model
 
     public function saveOpenAnswer($ans)
     {
+        if (!array_key_exists('pct_tolerance', $ans)) {
+            $ans['pct_tolerance'] = .05;
+        }
+
         $sql = '
         INSERT INTO open_answers_numeric
         (problem_id, answer, pct_tolerance)

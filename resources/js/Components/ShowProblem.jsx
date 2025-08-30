@@ -88,7 +88,6 @@ export default function ShowProblem(props) {
             ansMax = ansMin
             ansMin  = tmp
         }
-        console.log(ans, houseAnswer, tolerance, ansMax, ansMin)
         if (ans >= ansMin && ans <= ansMax) {
             pts = 100
             msg = getPositiveFeedback()
@@ -98,7 +97,6 @@ export default function ShowProblem(props) {
         }
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
-        console.log(pts, msg)
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -106,9 +104,6 @@ export default function ShowProblem(props) {
         let pts, msg, corr, regx, dist
         props.answers.forEach(a => {
             dist = levenshtein(a.answer_text, ans)
-            console.log(a)
-            console.log(dist)
-            console.log(dist/a.answer_text.length)
             if (dist/a.answer_text.length < a.pct_tolerance) {
                 corr = true
             }

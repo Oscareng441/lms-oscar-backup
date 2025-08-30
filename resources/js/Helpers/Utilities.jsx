@@ -1,4 +1,5 @@
 export function handleFraction(ans) {
+    console.log(ans)
     if (ans == parseFloat(ans)) {
         return ans
     }
