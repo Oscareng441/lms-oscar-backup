@@ -11,14 +11,13 @@ import HybridDisplay from '@/Components/HybridDisplay';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import levenshtein from 'js-levenshtein';
-// const levenshtein = require('js-levenshtein');
 
 export default function ShowProblem(props) {
     const [htmlContent, setHtmlContent] = useState(props.problem.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-    const noFocus = 'noFocus' in props && props.noFocus
+    const editMode = 'editMode' in props && props.editMode
 
     const multiAnswerSelect = (ans) => {
         let numCorr = props.numberCorrect
@@ -35,7 +34,9 @@ export default function ShowProblem(props) {
         let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
         setPoints(pts)
         let msg = (score + ' correctos de ' + total + ' para ' + pts + '%')
-        fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
+        if (!editMode) {
+            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
+        }
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -53,7 +54,9 @@ export default function ShowProblem(props) {
             msg = getNegativeFeedback()
         }
         setPoints(pts)
-        fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
+        if (!editMode) {
+            fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
+        }
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -96,7 +99,9 @@ export default function ShowProblem(props) {
             msg = getNegativeFeedback()
         }
         setPoints(pts)
-        fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+        if (!editMode) {
+            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+        }
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -120,7 +125,9 @@ export default function ShowProblem(props) {
             msg = getNegativeFeedback()
         }
         setPoints(pts)
-        fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+        if (!editMode) {
+            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+        }
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
@@ -170,25 +177,25 @@ export default function ShowProblem(props) {
 
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
-            <AnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ answerSelect } />
+            <AnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ answerSelect } editMode={ editMode }  />
         )
     }
     if (props.problem.problem_type_id === 2) {
         answerComponent = (
-            <MultiAnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect}/>
+            <MultiAnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect} editMode={ editMode } />
         )
     }
     if (props.problem.problem_type_id === 4) {
         answerComponent = (
-            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } noFocus={ noFocus } />
+            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } editMode={ editMode } />
         )
     }
     if (props.problem.problem_type_id === 3) {
         answerComponent = (
-            <OpenAlphaAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAlphaAnswerSubmit } noFocus={ noFocus } />
+            <OpenAlphaAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAlphaAnswerSubmit } editMode={ editMode } />
         )
     }
-    if (props.answered) {
+    if (props.answered && !props.editMode) {
         answerComponent = (
             <div className="mx-auto w-full text-center bg-slate-500/50">Ya contestaste este problema</div>
         )

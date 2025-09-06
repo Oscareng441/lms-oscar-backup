@@ -23,9 +23,6 @@ class ProblemController extends Controller
             abort(403);
         }
         $data = $request->all();
-        
-        //*** VALIDATION HERE
-
 
         $p = $data['problem'];
         if (empty($p['display_type'])) {
@@ -39,11 +36,24 @@ class ProblemController extends Controller
         } else {
             $problem = new Problem();
         }
+
+        //*** VALIDATION HERE
         $request->validate([
             'problem.problem_text' => 'required|string',
+            'answers' => [
+                'required',
+                'array', 
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->problem['problem_type_id'] == 4 && count($value) > 1) {
+                        $fail("No puede haber más que una respuesta con tipo numérico.");
+                    }
+                },
+            ],
         ],[
-            'problem.problem_text.required' => 'El texto del problema no puede estar vacío',
+            'problem.problem_text.required' => ' El texto del problema no puede estar vacío. ',
+            'answers.required' => ' Tiene que haber a lo menos una respuesta. ',
         ]);
+
         $problem->name = '';
         $problem->lesson_id = $p['lesson_id'];
         $problem->problem_type_id = $p['problem_type_id'];

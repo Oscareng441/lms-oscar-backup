@@ -5,7 +5,7 @@ import Latex from 'react-latex-next';
 
 export default function MultiAnswersComponent(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([])
-    const [hasAnswered, setHasAnswered] = useState(props.answered)
+    const [hasAnswered, setHasAnswered] = useState(props.answered && !props.editMode)
     const pluralizer = props.numCorrect > 1 ? 's' : ''
     const selectAnswer = ( ans ) => {
         let ansrs = [ ...selectedAnswers ]

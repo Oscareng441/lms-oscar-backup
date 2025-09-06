@@ -5,9 +5,14 @@ import InputError from '@/Components/InputError';
 
 export default function OpenAlphaAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
-    const [hasAnswered, setHasAnswered] = useState(props.answered)
-    const autoFocus = !('noFocus' in props) || !props.noFocus
+    const [hasAnswered, setHasAnswered] = useState(props.answered && !props.editMode)
+    const autoFocus = !('editMode' in props) || !props.editMode
+console.log(props)
+console.log(hasAnswered)
 
+    function handleAnswer() {
+
+    }
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
@@ -24,7 +29,7 @@ export default function OpenAlphaAnswerComponent(props) {
                             isFocused={autoFocus}
                             onChange={(e) => setAnswer(e.target.value)}
                             disabled={hasAnswered}
-                            onKeyDown={e => {if (e.key === 'Enter') {props.answerSelect(answer); setHasAnswered(true)}}}
+                            onKeyDown={e => {if (e.key === 'Enter') {props.answerSelect(answer); setHasAnswered(!props.editMode)}}}
                         />
 
                         <InputError message='' className="mt-2" />
@@ -33,7 +38,7 @@ export default function OpenAlphaAnswerComponent(props) {
             </div>
             {
                 !hasAnswered &&
-                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setAnswer(''); setHasAnswered(true)}}>
+                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setAnswer(''); setHasAnswered(!props.editMode)}}>
                     <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
                         Submit
                     </div>

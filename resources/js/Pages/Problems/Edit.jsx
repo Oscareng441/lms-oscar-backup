@@ -470,7 +470,8 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         prev={() => {}}
                         hasNextProblem={false}
                         hasPrevProblem={false}
-                        noFocus={true}
+                        editMode={true}
+                        answered={false}
                     />
                 )
             }
