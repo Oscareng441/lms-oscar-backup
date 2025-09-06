@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
     Route::get('/reset/{lessonId}', [ResultController::class, 'reset'])->name('results.reset');
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups');
     Route::get('/admin/user/{id}', [AdminController::class, 'userEdit'])->name('user.edit');
 });
 

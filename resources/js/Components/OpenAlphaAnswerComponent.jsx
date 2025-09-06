@@ -7,8 +7,6 @@ export default function OpenAlphaAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(props.answered && !props.editMode)
     const autoFocus = !('editMode' in props) || !props.editMode
-console.log(props)
-console.log(hasAnswered)
 
     function handleAnswer() {
 

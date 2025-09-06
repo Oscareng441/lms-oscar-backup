@@ -39,7 +39,7 @@ export default function MultiAnswersComponent(props) {
             </div>
             {
                 !hasAnswered &&
-                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(selectedAnswers); setHasAnswered(false)}}>
+                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(selectedAnswers); setHasAnswered(true)}}>
                     <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
                         Enviar
                     </div>

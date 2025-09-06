@@ -40,7 +40,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     })
 
     useEffect(() => {
-        console.log('prob', problem)
+        console.log('prob', problem, data, origLessonId)
         let p = { ...problem }
         let d = { ...data }
         p.problem_text = probTxt
@@ -258,7 +258,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         />
     )
 
-    let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {
+    let problemDisplayTypeSelector = ['latex', 'html', 'hybrid'].map(t => {
         let sel = t === probDisplayType ? 'font-bold' : 'text-slate-500'
         return (
             <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
@@ -446,7 +446,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 </div>
             </div>
             {
-                probType === 4 && toleranceSelection
+               ( probType === 3 || probType === 4) && toleranceSelection
             }
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">

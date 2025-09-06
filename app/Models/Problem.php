@@ -139,7 +139,7 @@ class Problem extends Model
         FROM problems P
         LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
         WHERE S.id IS NULL
-            AND  (sequence_id < ? OR sequence_id = ? AND P.id < ?)
+            AND  (sequence_id < ? OR (sequence_id = ? AND P.id < ?))
             AND lesson_id = ? and active = 1
         ORDER BY sequence_id desc, id desc';
         $rec = DB::select($sql, [$userId, $this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
@@ -159,10 +159,10 @@ class Problem extends Model
         FROM problems P
         LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
         WHERE S.id IS NULL
-            AND lesson_id = ? and active = 1
+            AND lesson_id = ? and active = 1 AND P.id != ?
         ORDER BY sequence_id, id
         ';
-        $rec = DB::select($sql, [$userId, $this->lesson_id]);
+        $rec = DB::select($sql, [$userId, $this->lesson_id, $this->id]);
         return empty($rec) ? null :  $rec[0]->id;
     }
 
@@ -173,10 +173,10 @@ class Problem extends Model
         FROM problems P
         LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
         WHERE S.id IS NULL
-            AND lesson_id = ? and active = 1
+            AND lesson_id = ? and active = 1 AND P.id != ?
         ORDER BY sequence_id DESC, id DESC
         ';
-        $rec = DB::select($sql, [$userId, $this->lesson_id]);
+        $rec = DB::select($sql, [$userId, $this->lesson_id, $this->id]);
         return empty($rec) ? null :  $rec[0]->id;
     }
 

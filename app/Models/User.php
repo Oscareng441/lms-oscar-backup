@@ -90,7 +90,7 @@ class User extends Authenticatable
     public static function getForUsersView()
     {
         $sql = '
-        SELECT U.id, U.name, U.email, IFNULL(R.roles, "none") as roles, U.active
+        SELECT U.id, U.name, U.email, IFNULL(R.roles, "estudiante") as roles, U.active
         FROM users U 
         LEFT JOIN (
         SELECT RU.user_id, group_concat(R.role) as roles

@@ -154,7 +154,12 @@ export default function ShowProblem(props) {
     clik = props.problem != null ? props.restart : () => {}
     let restartLink = props.hints === null ? '' : <BsFillSkipStartFill className={`${pointer} ${colr} mx-1`} onClick={clik} title="reiniciar" />
 
-    if (props.problem.display_type === 'text') {
+    if (props.problem.display_type === 'text') { // deprecate
+        problemSection = (
+            <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
+        )
+    }
+    if (props.problem.display_type === 'html') {
         problemSection = (
             <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
         )

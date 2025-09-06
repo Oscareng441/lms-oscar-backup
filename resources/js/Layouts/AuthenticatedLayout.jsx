@@ -46,6 +46,15 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                         Usuarios
                                     </NavLink>
                                 }
+                                {
+                                    auth.is_admin &&
+                                    <NavLink
+                                        href={route('admin.groups')}
+                                        active={route().current('admin.groups')}
+                                    >
+                                        Grupos
+                                    </NavLink>
+                                }
                             </div>
                         </div>
 

@@ -5,7 +5,12 @@ import Latex from 'react-latex-next';
 export default function TProblemComponentopMenu(props) {
     let problemSection
 
-    if (props.problem.display_type === 'text') {
+    if (props.problem.display_type === 'text') { // deprecate
+        problemSection = (
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        )
+    }
+    if (props.problem.display_type === 'html') {
         problemSection = (
             <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
         )

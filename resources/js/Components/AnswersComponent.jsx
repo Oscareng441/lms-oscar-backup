@@ -9,6 +9,7 @@ export default function AnswersComponent(props) {
     const selectAnswer = ( ans ) => {
         if (!hasAnswered) {
             setSelectedAnswer(ans.id)
+            setHasAnswered(true)
             props.answerSelect(ans)
         }
     }

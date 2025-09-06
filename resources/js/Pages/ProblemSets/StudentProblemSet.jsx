@@ -48,7 +48,12 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
             return null
         }
         let problemSection
-        if (p.display_type === 'text') {
+        if (p.display_type === 'text') { // deprecate
+            problemSection = (
+                <div key={k} dangerouslySetInnerHTML={{ __html: p.problem_text }} />
+            )
+        }
+        if (p.display_type === 'html') {
             problemSection = (
                 <div key={k} dangerouslySetInnerHTML={{ __html: p.problem_text }} />
             )
@@ -110,7 +115,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
                             </p>
                         }
                         <div className="float-right" title="reiniciar problemas">
-                            <div onClick={ confirmAndReset } className="text-slate-400"><LuListRestart /></div>
+                            <div onClick={ confirmAndReset } className="text-slate-600"><LuListRestart /></div>
                         </div>
                     </div>
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">

@@ -31,9 +31,13 @@ class LessonController extends Controller
         return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
     }
 
-    public function showEditProblemSet($id)
+    public function showEditProblemSet(Request $request, $id)
     {
-        $problems = Problem::where(['lesson_id' => $id, 'active' => 1])->get();
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $problems = Problem::where(['lesson_id' => $id,])->get();
         $lesson = Lesson::find($id);
         $problems->shuffle();
         $answers = [];

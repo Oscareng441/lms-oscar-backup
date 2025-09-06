@@ -46,6 +46,14 @@ class AdminController extends Controller implements HasMiddleware
         return Inertia::render('Users/Edit', ['user' => $user, 'userRoles' => $userRoles, 'roles' => array_values($roles)]);
     }
 
+    public function groups(Request $request)
+    {
+        $user = $request->user();
+        $users = User::getForUsersView();
+ 
+        return Inertia::render('Users/Index', ['users' => $users]);
+    }
+
     public function userSave(Request $request) : RedirectResponse
     {
         $request->validate([

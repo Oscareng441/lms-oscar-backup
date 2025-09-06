@@ -38,7 +38,12 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
 
     const probList = problems.map((p, k) => {
         let problemSection
-        if (p.display_type === 'text') {
+        if (p.display_type === 'text') { //deprecate
+            problemSection = (
+                <div dangerouslySetInnerHTML={{ __html: p.problem_text }} />
+            )
+        }
+        if (p.display_type === 'html') {
             problemSection = (
                 <div dangerouslySetInnerHTML={{ __html: p.problem_text }} />
             )
