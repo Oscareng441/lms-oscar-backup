@@ -251,4 +251,16 @@ class Problem extends Model
 
         DB::insert($sql, $params);
     }
+
+    public function okToDelete()
+    {
+        $sql = '
+        SELECT count(*) as ct
+        from results
+        WHERE problem_id = ?';
+
+        $recs = DB::select($sql, [$this->id]);
+
+        return $recs[0]->ct == 0;
+    }
 }

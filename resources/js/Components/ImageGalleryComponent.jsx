@@ -41,7 +41,7 @@ export default function ImageGalleryComponent(props) {
     })
 
     return (
-        <div className="mx-auto my-6 w-7xl space-y-6 sm:px-6 lg:px-8 h-screen">
+        <div className="mx-auto my-6 w-7xl space-y-6 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} >
                 <div className={`bg-white p-4 shadow sm:rounded-lg`}>
                     <MdClear className="float-right cursor-pointer" onClick={ props.onClose }/>

@@ -9,6 +9,7 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SourceController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -68,6 +69,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups');
     Route::get('/admin/user/{id}', [AdminController::class, 'userEdit'])->name('user.edit');
+    Route::get('/problem/{id}/publish', [ProblemController::class, 'publish'])->name('problem.publish');
+    Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
+    Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
+    Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');
 });
 
 require __DIR__.'/auth.php';

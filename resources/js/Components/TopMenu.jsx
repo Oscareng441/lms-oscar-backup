@@ -2,6 +2,7 @@ import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen, FaReg
 import { FaUserGroup } from "react-icons/fa6";
 import { BiMath } from 'react-icons/bi';
 import { RiBookShelfLine } from "react-icons/ri";
+import { CgAdd } from "react-icons/cg";
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
 import ChapterNav from '@/Components/ChapterNav';
@@ -138,6 +139,13 @@ export default function TopMenu(props) {
             </a>
         </div>
     )
+    let sourceAdd = (
+        <div className="mx-1 cursor-pointer" title="Agregar Fuente">
+            <div onClick={props.sourceAdd}>
+                <CgAdd />
+            </div>
+        </div>
+    )
 
     return (
         <div className="flex justify-between w-full">
@@ -161,6 +169,7 @@ export default function TopMenu(props) {
                 {/*{ props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters  && chapterNav }*/}
                 { props.show.indexOf('group-mg') >= 0 && props.courseId && editMode && groupMg }
                 { props.show.indexOf('add-group') >= 0 && props.courseId && editMode && groupAdd }
+                { props.show.indexOf('source-add') >= 0 && props.sourceAdd && editMode && sourceAdd }
             </div>
             <BreadcrumbsComponent data={ props.breadcrumbs } />
         </div>

@@ -15,7 +15,7 @@ export default function HintComponent(props) {
         }
     })
     let xxx = jsxParts.map((p,k) => {
-        let cls = k > 0 ? 'text-slate-400' : 'text-slate-600'
+        let cls = k > 0 ? 'text-slate-300' : 'text-slate-600 bg-red-100 rounded-lg p-2 mx-2'
         return (
             <div key={ k } className={`my-4 ${cls}`}>
                 { p }
@@ -31,6 +31,10 @@ export default function HintComponent(props) {
         props.nextHint();
     }
 
+    function prevHint() {
+        props.prevHint();
+    }
+
     let moreHints = props.hintsToShow < hints.length
     let onClk = nextHint
     let nextHntCls = 'cursor-pointer text-black'
@@ -39,12 +43,21 @@ export default function HintComponent(props) {
         nextHntCls = 'text-slate-200'
     }
 
+    let moreHintsP = props.hintsToShow > 1
+    let onClkP = prevHint
+    let prevHntCls = 'cursor-pointer text-black'
+    if (!moreHintsP) {
+        onClkP = () => {}
+        prevHntCls = 'text-slate-200'
+    }
+
     return (
         <div className="mx-auto my-6 max-w-5xl space-y-6 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} maxWidth="5xl">
                 <div className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl overflow-y-auto h-[90lvh] py-4 my-4`}>
                     <div className="flex flex-col min-w-[20%]">
                         <div className={`${nextHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`} onClick={ onClk }>siguiente paso</div>
+                        <div className={`${prevHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`} onClick={ onClkP }>paso anterior</div>
                         <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>cerrar</div>
                     </div>
                     <div className="w-full">

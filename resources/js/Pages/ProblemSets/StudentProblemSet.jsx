@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
 import FeedbackComponent from '@/Components/FeedbackComponent';
-import HintComponent from '@/Components/HintComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
 import 'katex/dist/katex.min.css';

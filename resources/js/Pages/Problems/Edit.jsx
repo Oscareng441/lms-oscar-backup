@@ -11,10 +11,11 @@ import CourseSelect from '@/Components/CourseSelect';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 import InputError from '@/Components/InputError';
+import CreditsComponent from '@/Components/CreditsComponent';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images }) => {
+const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images, credits }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [probDisplayType, setProbDisplayType] = useState(origProblem.display_type)
     const [probType, setProbType] = useState(origProblem.problem_type_id)
@@ -78,6 +79,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const nextHint = () => {
         setHintsToShow(hintsToShow + 1)
+    }
+
+    const prevHint = () => {
+        setHintsToShow(hintsToShow - 1)
     }
 
     const handleAnswer = (id, points, msg) => {
@@ -449,9 +454,20 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                ( probType === 3 || probType === 4) && toleranceSelection
             }
             <div className="py-2">
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-xs sm:rounded-lg sm:p-8">
+                        <CreditsComponent
+                            credits={ credits }
+                            selected={ problem.credit_id }
+                            onChange={ (e) => {console.log(e)} }
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
-                        SAVE
+                        GUARDAR
                     </div>
                 </div>
             </div>
@@ -497,6 +513,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         onClose={closeHintModal}
                         hintsToShow={hintsToShow}
                         nextHint={nextHint}
+                        prevHint={prevHint}
                     />
                 )
             }

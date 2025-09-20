@@ -55,6 +55,15 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                         Grupos
                                     </NavLink>
                                 }
+                                {
+                                    auth.is_admin &&
+                                    <NavLink
+                                        href={route('source.index')}
+                                        active={route().current('source.index')}
+                                    >
+                                        Fuentes
+                                    </NavLink>
+                                }
                             </div>
                         </div>
 

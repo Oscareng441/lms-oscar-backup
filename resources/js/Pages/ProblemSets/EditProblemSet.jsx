@@ -3,40 +3,50 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
 import FeedbackComponent from '@/Components/FeedbackComponent';
-import HintComponent from '@/Components/HintComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
-import { router, Link, Head } from '@inertiajs/react';
+import { usePage, Link, Head } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 
 const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
-    const [currentProblem, setCurrentProblem] = useState(null)
-    const [currentProblemIdx, setCurrentProblemIdx] = useState(-1)
-    const [feedbackMessage, setFeedbackMessage] = useState('')
-    const [showFeedback, setShowFeedback] = useState(false)
-    const [points, setPoints] = useState(0)
-    const [showHint, setShowHint] = useState(false)
-    const [hintsToShow, setHintsToShow] = useState(1)
-    const [showEndOfSet, setShowEndOfSet] = useState(false)
+    const [probs, setProbs] = useState(problems)
+    let { flash } = usePage().props;
 
     const title = `${ lesson.name } Ejercicios`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit', 'prob-add']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } show={['home', 'lesson', 'prob-add']} />
     )
 
-    const deleteProblem = () => {
-            console.log('tbi')
+    const deleteProblem = (p, k) => {
+        fetch(route('problem.delete', { id: p.id}))
+        .then(res => res.json())
+        .then(
+            (success) => {
+                console.log(success)
+                flash = success
+            },
+            (error) => {
+                console.log('error', error)
+                flash = error
+            }
+        )        
+        let probsTmp = [ ...probs ]
+        probsTmp.splice(k, 1)
+        setProbs(probsTmp)    
     }
 
-    const togglePublish = () => {
-            console.log('tbi')
+    const togglePublish = (p, k) => {
+        fetch(route('problem.publish', { id: p.id, deactivate: p.active}))
+        let probsTmp = [ ...probs ]
+        probsTmp[k].active = !probsTmp[k].active
+        setProbs(probsTmp)
     }
 
-    const probList = problems.map((p, k) => {
+    const probList = probs.map((p, k) => {
         let problemSection
         if (p.display_type === 'text') { //deprecate
             problemSection = (
@@ -64,7 +74,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             )
         }
         return (
-            <div className="flex flex-row justify-space">
+            <div key={ k } className="flex flex-row justify-space">
                 <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
                     <Link href={ route('problem.show', p.id) }>{ problemSection }</Link>
                 </div>
@@ -74,13 +84,13 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
                     </Link>
                     <Checkbox
                         checked={ p.active }
-                        onChange={ togglePublish }
+                        onChange={ () => togglePublish(p, k) }
                         className='border border-black border-1'
                     />
                     <div className="text-sm ml-1 mr-2">
                         Publicar
                     </div>
-                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} />
+                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={ () => deleteProblem(p, k) } />
                 </div>
             </div>
         )
@@ -89,6 +99,8 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } >
             <Head title={title} />
+            { flash.success && flash.success}
+            { flash.error && flash.error}
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="italic text-2xl">

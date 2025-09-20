@@ -62,6 +62,10 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
         setHintsToShow(hintsToShow + 1)
     }
 
+    const prevHint = () => {
+        setHintsToShow(hintsToShow - 1)
+    }
+
     const nextProblem = () => {
         window.location.href = '/problem/' + problemIds.siguiente
     }
@@ -132,6 +136,7 @@ console.log(problemIds)
                 onClose={closeHintModal}
                 hintsToShow={hintsToShow}
                 nextHint={nextHint}
+                prevHint={prevHint}
             />
         </AuthenticatedLayout>
     )

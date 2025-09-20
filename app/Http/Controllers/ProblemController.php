@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\LessonSet;
 use App\Models\Course;
 use App\Models\AnswerSet;
+use App\Models\SourceReference;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
@@ -178,12 +179,13 @@ class ProblemController extends Controller
         $answers = $p->getAnswers();
         $hints = $p->getHints();
         $courses = Course::where(['active' => 1])->get();
+        $sources = SourceReference::where(['active' => 1])->get();
         $filePaths = Storage::disk('public')->files($courseId . '/thumbs');
         $imageUrls = [];
         foreach ($filePaths as $path) {
             $imageUrls[] = '/storage/' . $path;
         }
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls, 'credits' => $sources]);
     }
 
     public function getHierarchy($id) {
@@ -196,5 +198,40 @@ class ProblemController extends Controller
             'chapter' => $chapter,
             'course' => $course,
         ];
+    }
+
+    public function publish(Request $request, $id)
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $p = Problem::find($id);
+        $unPublish = $request->get('deactivate');
+        $p->active = !$unPublish;
+        $p->save();
+
+        return redirect()->back()->with(['success' => 'Success',]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $p = Problem::find($id);
+
+        $okToDelete = $p->okToDelete();
+        $msg = 'exitoso';
+        $cat = 'success';
+        if ($okToDelete) {
+            $msg = 'no se puede';
+            $cat = 'error';
+            $p->delete();
+        }
+
+        $request->session()->flash($cat, $msg);
+        return redirect()->back();
     }
 }
