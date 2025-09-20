@@ -20,6 +20,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const [probDisplayType, setProbDisplayType] = useState(origProblem.display_type)
     const [probType, setProbType] = useState(origProblem.problem_type_id)
     const [probPublished, setProbPublished] = useState(origProblem.active)
+    const [creditId, setCreditId] = useState(origProblem.credit_id)
     const [problem, setProblem] = useState(origProblem)
     const [answers, setAnswers] = useState(origAnswers)
     const [hints, setHints] = useState(origHints || [])
@@ -41,7 +42,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     })
 
     useEffect(() => {
-        console.log('prob', problem, data, origLessonId)
+        console.log('prob', problem, data, origLessonId, creditId)
         let p = { ...problem }
         let d = { ...data }
         p.problem_text = probTxt
@@ -49,10 +50,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         p.display_type = probDisplayType
         p.active = probPublished
         p.lesson_id = lessonId
+        p.credit_id = creditId
         setProblem(p)
         d.problem = p
         setData(d)
-    }, [probTxt, probDisplayType, probType, probPublished, lessonId])
+    }, [probTxt, probDisplayType, probType, probPublished, lessonId, creditId])
 
     const title = 'id' in problem ?`${ problem.id }` : 'New Problem'
 
@@ -239,6 +241,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         let d = { ...data }
         d.answers = a
         setData(d)
+        console.log(p, d)
+    }
+
+    const updateCredit = (credId) => {
+        setCreditId(credId)
     }
 
     const toggleShowGallery = () => {
@@ -458,15 +465,15 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     <div className="text-center bg-white p-1 shadow text-xs sm:rounded-lg sm:p-8">
                         <CreditsComponent
                             credits={ credits }
-                            selected={ problem.credit_id }
-                            onChange={ (e) => {console.log(e)} }
+                            selected={ creditId }
+                            onChange={ updateCredit }
                         />
                     </div>
                 </div>
             </div>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={ save }>
                         GUARDAR
                     </div>
                 </div>

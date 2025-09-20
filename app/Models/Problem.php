@@ -15,6 +15,7 @@ class Problem extends Model
         'sequence_id',
         'problem_text',
         'display_type',
+        'credit_id',
         'active',
     ];
 

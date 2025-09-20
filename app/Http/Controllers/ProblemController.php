@@ -61,6 +61,7 @@ class ProblemController extends Controller
         $problem->display_type = $p['display_type'];
         $problem->sequence_id = $p['sequence_id'];
         $problem->problem_text = $p['problem_text'];
+        $problem->credit_id = $p['credit_id'];
         $problem->active = $p['active'];
         $problem->save();
         $answers = $data['answers'];

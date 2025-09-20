@@ -27,7 +27,7 @@ export default function CreditsComponent(props) {
         })
         setOptions(opts)
         setSelectedOption(sel)
-    }, [])
+    }, [creditsId])
 
     const toggleShowForm = () => {
         setShowForm(!showForm)
@@ -48,12 +48,19 @@ export default function CreditsComponent(props) {
         setSelectedOption(newOpt)
     }
 
+    const handleChange = (e) => {
+        let id = e.value
+        setCreditsId(id)
+        console.log('handleChange',id)
+        props.onChange(id)
+    }
+
     return (
         <div className="mx-auto my-6 w-7xl space-y-6 sm:px-6 lg:px-8">
             <Select
                 options={options}
                 placeholder='Selecciona una fuente (opcional)...'
-                onChange={() => {}}
+                onChange={ handleChange }
                 isClearable={ true }
                 value={ selectedOption }
             />
