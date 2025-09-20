@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SourceReference;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -58,5 +59,14 @@ class SourceController extends Controller
         $source->save();
 
         return back()->with('success', $source);
+    }
+
+    public function destroy(Request $request, $id): RedirectResponse
+    {
+        $source = SourceReference::find($id);
+        $source->delete();
+
+        return Redirect::to('source.index');
+        // return back()->with('success', 'success!');
     }
 }

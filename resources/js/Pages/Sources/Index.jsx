@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import LmsTable from '@/Components/LmsTable';
 import TopMenu from '@/Components/TopMenu';
+import { FaPencilAlt ,FaTrash} from 'react-icons/fa';
 import { router, Link, Head } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import SourceForm from '@/Components/SourceForm';
@@ -34,6 +35,12 @@ const Index = ({ auth, sources }) => {
             sortable: true,
         },
         {
+            title: 'Vigente',
+            field: 'active',
+            sortable: true,
+            displayFormatter: displayActive,
+        },
+        {
             title: 'Acciones',
             field: '',
             sortable: false,
@@ -54,8 +61,24 @@ const Index = ({ auth, sources }) => {
         toggleShowForm()
     }
 
+    const trash = (s) => {
+        if (confirm("Eliminar la fuente " + s.name + "? De veras?")) {
+            fetch(route('source.destroy', { id: s.id }))
+            .then(r => window.location.reload())
+        }
+    }
+
+    function displayActive(data) {
+        return data.active === 1 ? 'Sí' : 'No'
+    }
+
     function editSource(data) {
-        return (<button onClick={ () => edit(data) }>editar</button>)
+        return (
+            <div className="flex">
+                <button className="mx-1" onClick={ () => edit(data) }><FaPencilAlt /></button>
+                <button className="mx-1" onClick={ () => trash(data) }><FaTrash /></button>
+            </div>
+        )
     }
 
     let topMenu = (

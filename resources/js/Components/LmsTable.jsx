@@ -101,7 +101,7 @@ export default function LmsTable(props) {
 
 	return (
 		<div className="p-2">
-	        <div className="flex flex-row justify-between pb-2">
+	        <div className="flex flex-row justify-start pb-2">
 	            <div className="relative w-full max-w-sm items-center">
 	                <input
 	                	type="text" 

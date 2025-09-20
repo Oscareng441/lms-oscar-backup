@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
     Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
     Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');
+    Route::get('/source/{id}', [SourceController::class, 'destroy'])->name('source.destroy');
 });
 
 require __DIR__.'/auth.php';
