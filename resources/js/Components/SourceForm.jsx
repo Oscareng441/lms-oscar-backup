@@ -30,7 +30,7 @@ export default function SourceForm({source, afterSubmit}) {
     function submit(e) {
         post(route('source.save'), {
             onSuccess: (c) => {
-                addToOpts(c)
+                // addToOpts(c)
                 afterSubmit(c.props.flash.success)
             }
         });
