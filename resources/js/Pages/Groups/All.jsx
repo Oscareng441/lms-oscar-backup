@@ -38,8 +38,16 @@ const Index = ({ auth, groups }) => {
             sortable: false,
         },
         {
+            title: 'Vigente',
+            field: 'active',
+            css: 'w-[5%]',
+            sortable: false,
+            displayFormatter: displayActive,
+        },
+        {
             title: 'Acciones',
             field: '',
+            css: 'w-[5%]',
             sortable: false,
             displayFormatter: actions
         },
