@@ -6,6 +6,7 @@ use App\Models\Lesson;
 use App\Models\LessonSet;
 use App\Models\Problem;
 use App\Models\Course;
+use App\Models\SourceReference;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -86,7 +87,8 @@ class LessonController extends Controller
         $chapterId = $lesson->lesson_set_id;
         $chapter = LessonSet::find($chapterId);
         $courseId = $chapter->course_id;
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => []]);
+        $sources = SourceReference::where(['active' => 1])->get();
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => [], 'credits' => $sources]);
     }
 
     public function editLesson(Request $request, $id)

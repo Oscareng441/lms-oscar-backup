@@ -15,7 +15,7 @@ import CreditsComponent from '@/Components/CreditsComponent';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images, credits }) => {
+const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images, credits = [] }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [probDisplayType, setProbDisplayType] = useState(origProblem.display_type)
     const [probType, setProbType] = useState(origProblem.problem_type_id)

@@ -123,11 +123,12 @@ class ProblemController extends Controller
         $chapterId = $lesson->lesson_set_id;
         $courseId = $chapter->course_id;
         $filePaths = Storage::disk('public')->files($courseId . '/thumbs');
+        $sources = SourceReference::where(['active' => 1])->get();
         $imageUrls = [];
         foreach ($filePaths as $path) {
             $imageUrls[] = '/storage/' . $path;
         }
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $p->lesson_id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $p->lesson_id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls, 'credits' => $sources]);
     }
     
     public function show(Request $request, $id)

@@ -19,6 +19,7 @@ const Index = ({ auth, groups }) => {
         {
             title: 'Curso',
             field: 'course',
+            css: 'w-[20%]',
             sortable: true,
         },
         {
