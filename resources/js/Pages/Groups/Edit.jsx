@@ -164,7 +164,7 @@ const Groups = ({ auth, course, group, allStudents, teachersThisGroup }) => {
                 <div className="text-center max-w-7xl bg-white rounded-md my-2 mx-auto shadow">
                     <div>
                         <InputLabel value="Nombre del Grupo:"/>
-                        <input type = 'text' value={ data.name } onChange={ updateName } />
+                        <input className="w-1/2" type='text' value={ data.name } onChange={ updateName } />
                     </div>
                     <div>
                         <PrimaryButton onClick={ submit } className="my-2">

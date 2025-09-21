@@ -107,7 +107,7 @@ class CourseController extends Controller
     public function saveGroup(Request $request)
     {
         $user = $request->user();
-        if (!$user->canAccessGroup($groupId)) {
+        if (!$user->canAccessGroup($request->get('id'))) {
             abort(403);
         }
         $request->validate([

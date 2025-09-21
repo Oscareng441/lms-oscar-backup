@@ -95,4 +95,29 @@ class StudentGroup extends Model
 
         return $recs;
     }
+
+    public static function getAll()
+    {
+        $sql = '
+        SELECT G.name, S.name as school, C.name as course, G.id, owners, member_count
+        FROM lms.student_groups G
+        INNER JOIN lms.courses C ON C.id = G.course_id
+        LEFT JOIN lms.school S ON S.id = G.school_id
+        LEFT JOIN (
+            SELECT student_group_id, group_concat(U.name) as owners
+            FROM student_group_owner GO
+            INNER JOIN users U ON GO.user_id = U.id
+            GROUP BY student_group_id
+        ) T ON T.student_group_id = G.id
+        LEFT JOIN (
+            SELECT student_group_id, count(*) as member_count
+            FROM student_group_user GU
+            INNER JOIN users U ON GU.user_id = U.id
+            GROUP BY student_group_id
+        ) TMP ON TMP.student_group_id = G.id
+        ';
+        $recs = DB::select($sql, []);
+
+        return $recs;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\StudentGroup;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -49,9 +50,9 @@ class AdminController extends Controller implements HasMiddleware
     public function groups(Request $request)
     {
         $user = $request->user();
-        $users = User::getForUsersView();
+        $groups = StudentGroup::getAll();
  
-        return Inertia::render('Users/Index', ['users' => $users]);
+        return Inertia::render('Groups/All', ['groups' => $groups]);
     }
 
     public function userSave(Request $request) : RedirectResponse
