@@ -146,6 +146,13 @@ export default function TopMenu(props) {
             </div>
         </div>
     )
+    let schoolAdd = (
+        <div className="mx-1 cursor-pointer" title="Agregar Escuela">
+            <div onClick={props.schoolAdd}>
+                <CgAdd />
+            </div>
+        </div>
+    )
 
     return (
         <div className="flex justify-between w-full">
@@ -170,6 +177,7 @@ export default function TopMenu(props) {
                 { props.show.indexOf('group-mg') >= 0 && props.courseId && editMode && groupMg }
                 { props.show.indexOf('add-group') >= 0 && props.courseId && editMode && groupAdd }
                 { props.show.indexOf('source-add') >= 0 && props.sourceAdd && editMode && sourceAdd }
+                { props.show.indexOf('school-add') >= 0 && props.schoolAdd && editMode && schoolAdd }
             </div>
             <BreadcrumbsComponent data={ props.breadcrumbs } />
         </div>

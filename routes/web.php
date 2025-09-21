@@ -10,6 +10,7 @@ use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SourceController;
+use App\Http\Controllers\SchoolController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -72,8 +73,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem/{id}/publish', [ProblemController::class, 'publish'])->name('problem.publish');
     Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
     Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
-    Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');
     Route::get('/source/{id}', [SourceController::class, 'destroy'])->name('source.destroy');
+    Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');
+    Route::get('/schools', [SchoolController::class, 'index'])->name('school.index');
+    Route::get('/school/{id}/users', [SchoolController::class, 'users'])->name('school.users');
+    Route::post('/school/save', [SchoolController::class, 'store'])->name('school.save');
+    Route::get('/school/{id}', [SchoolController::class, 'destroy'])->name('school.destroy');
 });
 
 require __DIR__.'/auth.php';

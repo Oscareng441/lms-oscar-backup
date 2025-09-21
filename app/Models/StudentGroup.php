@@ -103,7 +103,7 @@ class StudentGroup extends Model
         SELECT G.name, S.name as school, C.name as course, G.id, owners, member_count, G.active
         FROM student_groups G
         INNER JOIN courses C ON C.id = G.course_id
-        LEFT JOIN school S ON S.id = G.school_id
+        LEFT JOIN schools S ON S.id = G.school_id
         LEFT JOIN (
             SELECT student_group_id, group_concat(U.name) as owners
             FROM student_group_owner GO

@@ -64,6 +64,15 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                         Fuentes
                                     </NavLink>
                                 }
+                                {
+                                    auth.is_admin &&
+                                    <NavLink
+                                        href={route('school.index')}
+                                        active={route().current('school.index')}
+                                    >
+                                        Escuelas
+                                    </NavLink>
+                                }
                             </div>
                         </div>
 
