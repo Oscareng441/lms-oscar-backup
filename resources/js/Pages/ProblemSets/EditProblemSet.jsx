@@ -22,21 +22,23 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     )
 
     const deleteProblem = (p, k) => {
-        fetch(route('problem.delete', { id: p.id}))
-        .then(res => res.json())
-        .then(
-            (success) => {
-                console.log(success)
-                flash = success
-            },
-            (error) => {
-                console.log('error', error)
-                flash = error
-            }
-        )        
-        let probsTmp = [ ...probs ]
-        probsTmp.splice(k, 1)
-        setProbs(probsTmp)    
+        if (confirm("Borrar de verdad?")) {
+            fetch(route('problem.delete', { id: p.id}))
+            .then(res => res.json())
+            .then(
+                (success) => {
+                    console.log(success)
+                    flash = success
+                },
+                (error) => {
+                    console.log('error', error)
+                    flash = error
+                }
+            )        
+            let probsTmp = [ ...probs ]
+            probsTmp.splice(k, 1)
+            setProbs(probsTmp)
+        }
     }
 
     const togglePublish = (p, k) => {

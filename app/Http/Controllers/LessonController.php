@@ -109,7 +109,7 @@ class LessonController extends Controller
 
     public function saveLesson(Request $request)
     {
-        if (!$user->isAdmin() && !$user->isTeacher()) {
+        if (!$request->user()->isAdmin() && !$request->user()->isTeacher()) {
             abort(403);
         }
         $data = $request->all();

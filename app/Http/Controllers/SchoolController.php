@@ -64,8 +64,6 @@ class SchoolController extends Controller
     {
         $user = $request->user();
         $school = School::find($id);
-        // $students = $school->allStudents();
-        // $teachers = $school->allTeachers();
         $students = $school->allUsers();
         $teachers = $school->allUsers("teacher");
 
