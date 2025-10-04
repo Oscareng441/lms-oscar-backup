@@ -40,6 +40,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         hints: hints || [],
         lessonId: lessonId
     })
+    const isAdd = window.location.pathname.split('/').pop() === 'add-problem';
 
     useEffect(() => {
         console.log('prob', problem, data, origLessonId, creditId)
@@ -56,7 +57,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(d)
     }, [probTxt, probDisplayType, probType, probPublished, lessonId, creditId])
 
-    const title = 'id' in problem ?`${ problem.id }` : 'New Problem'
+    const title = !isAdd ? `Editar #${ problem.id }` : 'Problema Nuevo'
 
     const genericAnswer = (a) => {
         return {problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text:'', is_correct: 0, display_type: 'latex'}
@@ -254,18 +255,25 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const deleteProblem = () => {
         if (confirm('Really delete this problem?')) {
-            alert('TBI')
+            fetch(route('problem.delete', { id: problem.id}))
         }
     }
 
     const breadcrumbs = buildBreadCrumbs({course, chapter, lesson}, 4)
+    let topMenuIcons = ['home', 'prob-set']
+    if (!isAdd) {
+        topMenuIcons.push('prob-add')
+        topMenuIcons.push('prob-dup')
+    } else {
+        topMenuIcons.push('prob-add-alt')
+    }
     let topMenu = (
         <TopMenu 
             auth={auth}
             title={ title }
             lessonId={lessonId}
             problemId={problem.id}
-            show={['home', 'prob-set', 'prob-add', 'prob-dup']}
+            show={ topMenuIcons }
             breadcrumbs={ breadcrumbs }
         />
     )

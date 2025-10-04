@@ -3,6 +3,7 @@ import { FaUserGroup } from "react-icons/fa6";
 import { BiMath } from 'react-icons/bi';
 import { RiBookShelfLine } from "react-icons/ri";
 import { CgAdd } from "react-icons/cg";
+import { MdOutlinePlaylistAddCircle } from "react-icons/md";
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
 import ChapterNav from '@/Components/ChapterNav';
@@ -66,6 +67,13 @@ export default function TopMenu(props) {
         <div className="mx-1" title="edita este problema">
             <a href={`/problem/${ props.problemId }/edit`}>
                 <FaPencilAlt />
+            </a>
+        </div>
+    )
+    let altAddProblemLink = (
+        <div className="mx-1" title="subir problema">
+            <a href={`/lesson/${ props.lessonId }/upload-problem`}>
+                <MdOutlinePlaylistAddCircle />
             </a>
         </div>
     )
@@ -167,6 +175,7 @@ export default function TopMenu(props) {
                 { props.show.indexOf('prob-add') >= 0 && props.lessonId && editMode && addProblemLink }
                 { props.show.indexOf('prob-dup') >= 0 && props.problemId && editMode && duplicateProblemLink }
                 { props.show.indexOf('prob-edit') >= 0 && props.problemId && editMode && editProblemLink }
+                { props.show.indexOf('prob-add-alt') >= 0 && props.lessonId && editMode && altAddProblemLink }
                 {/*{ props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems  && problemNav }*/}
                 { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }
                 { props.show.indexOf('course-edit') >= 0 && props.courseId && editMode && editCourseLink }

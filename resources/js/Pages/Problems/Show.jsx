@@ -98,7 +98,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
             breadcrumbs={ breadcrumbs }
         />
     )
-console.log(problemIds)
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={ title } />

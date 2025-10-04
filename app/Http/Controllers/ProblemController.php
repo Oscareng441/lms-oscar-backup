@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\AnswerSet;
 use App\Models\SourceReference;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
 use App\Http\Requests\ProblemUpdateRequest;
@@ -225,15 +226,19 @@ class ProblemController extends Controller
         $p = Problem::find($id);
 
         $okToDelete = $p->okToDelete();
-        $msg = 'exitoso';
-        $cat = 'success';
+        $msg = 'no se puede';
+        $cat = 'error';
         if ($okToDelete) {
-            $msg = 'no se puede';
-            $cat = 'error';
+            $cat = 'success';
+            $msg = 'exitoso';
+            $lessonId = $p->lesson_id;
             $p->delete();
+            return to_route('problemset.edit', ['id' => $lessonId]);
+            // return redirect()->route('problemset.edit', ['id' => $lessonId]);
         }
 
         $request->session()->flash($cat, $msg);
-        return redirect()->back();
+
+        return redirect()->back()->with([$cat => $msg]);
     }
 }

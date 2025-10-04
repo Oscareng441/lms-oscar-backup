@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
+use App\Helpers\UploadHelper;
 use Illuminate\Http\File;
+use App\Rules\ProblemUploadRule;
 
 class LessonController extends Controller
 {
@@ -89,6 +91,43 @@ class LessonController extends Controller
         $courseId = $chapter->course_id;
         $sources = SourceReference::where(['active' => 1])->get();
         return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => [], 'credits' => $sources]);
+    }
+
+    public function uploadProblem(Request $request, $id)
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $lesson = Lesson::find($id);
+        if ($request->method() === 'GET') {
+            return Inertia::render('Problems/Upload', ['lesson' => $lesson]);
+        }
+        $request->validate([
+            'problem' => ['required', new ProblemUploadRule()],
+        ]);
+        $p = new Problem();
+        $p->name = '';
+        $p->lesson_id = $id;
+        $p->sequence_id = 10;
+        $p->display_type = 'latex';
+        $h = new UploadHelper($request->problem);
+        $p = $h->build($p);     
+        // $p->save();
+        return redirect()->route('problem.edit', ['id' => $p->id]);
+        // extract($this->getHierarchy($id));
+        // if ($lesson === null) {
+        //     $lesson = new Lesson();
+        //     $lesson->name = '';
+        // }
+
+        // return Inertia::render('Problems/Upload', ['test' => 2]);
+        // $courses = Course::where(['active' => 1])->get(); 
+        // extract($this->getHierarchy($id));
+        // $chapterId = $lesson->lesson_set_id;
+        // $chapter = LessonSet::find($chapterId);
+        // $courseId = $chapter->course_id;
+        // $sources = SourceReference::where(['active' => 1])->get();
     }
 
     public function editLesson(Request $request, $id)
