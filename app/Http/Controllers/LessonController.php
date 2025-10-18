@@ -101,7 +101,8 @@ class LessonController extends Controller
         }
         $lesson = Lesson::find($id);
         if ($request->method() === 'GET') {
-            return Inertia::render('Problems/Upload', ['lesson' => $lesson]);
+            extract($this->getHierarchy($id));
+            return Inertia::render('Problems/Upload', ['lesson' => $lesson, 'chapter' => $chapter, 'course' => $course]);
         }
         $request->validate([
             'problem' => ['required', new ProblemUploadRule()],
