@@ -11,11 +11,10 @@ class CheckEditorPermission
     {
         $user = Auth::user();
 
-        if ($user && $user->isTeacher()) {
+        if ($user && ($user->isAdmin() || $user->isTeacher())) {
             return $next($request);
         }
 
-        // Redirect or abort if no permission
         abort(403, 'Unauthorized action.');
     }
 }

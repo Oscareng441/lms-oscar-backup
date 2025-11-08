@@ -9,6 +9,19 @@ import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAssets}) => {
     const [htmlContent, setHtmlContent] = useState(lesson.lesson_text);
+    const [videos, setVideos] = useState([]);
+    useEffect(() => {
+        fetch(route('lesson.videos', {id: lesson.id}))
+        .then(res => res.json())
+        .then(
+            (results) => {
+                setVideos(results)
+            },
+            (error) => {
+                console.log('error', error)
+            }
+        )
+    }, [])
     const title = `${ lesson.name }`
     let lessonSection, problemSection
     if (lesson.lesson_type === 'text') {
@@ -51,6 +64,23 @@ const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAsset
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={title} />
             <div className="py-12">
+                {
+                    videos.length > 0 &&
+                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                        <div className="">
+                            Videos
+                        </div>
+                            {videos.map(r => {
+                                return (
+                                    <div className="text-blue-800">
+                                        <a href={ r.url } target="_blank">
+                                            {r.name}
+                                        </a>
+                                    </div>
+                                )
+                            })}
+                    </div>
+                }
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                     { lessonSection }

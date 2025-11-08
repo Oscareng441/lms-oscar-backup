@@ -14,9 +14,19 @@ use App\Helpers\OmniHelper;
 use App\Helpers\UploadHelper;
 use Illuminate\Http\File;
 use App\Rules\ProblemUploadRule;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use App\Http\Middleware\CheckEditorPermission;
 
-class LessonController extends Controller
+class LessonController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(CheckEditorPermission::class, except:['show', 'showStudentProblemSet', 'videos', 'getHierarchy']),
+        ];
+    }
+
     public function show(Request $request, $id)
     {
         extract($this->getHierarchy($id));
@@ -71,6 +81,11 @@ class LessonController extends Controller
         return Inertia::render('ProblemSets/StudentProblemSet', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
     }
 
+    public function videos(Request $request, $id)
+    {
+        return Lesson::find($id)->videos();
+    }
+
     public function addProblem(Request $request, $id)
     {
         $user = $request->user();
@@ -113,22 +128,9 @@ class LessonController extends Controller
         $p->sequence_id = 10;
         $p->display_type = 'latex';
         $h = new UploadHelper($request->problem);
-        $p = $h->build($p);     
-        // $p->save();
-        return redirect()->route('problem.edit', ['id' => $p->id]);
-        // extract($this->getHierarchy($id));
-        // if ($lesson === null) {
-        //     $lesson = new Lesson();
-        //     $lesson->name = '';
-        // }
+        $p = $h->build($p);
 
-        // return Inertia::render('Problems/Upload', ['test' => 2]);
-        // $courses = Course::where(['active' => 1])->get(); 
-        // extract($this->getHierarchy($id));
-        // $chapterId = $lesson->lesson_set_id;
-        // $chapter = LessonSet::find($chapterId);
-        // $courseId = $chapter->course_id;
-        // $sources = SourceReference::where(['active' => 1])->get();
+        return redirect()->route('problem.edit', ['id' => $p->id]);
     }
 
     public function editLesson(Request $request, $id)
@@ -160,18 +162,20 @@ class LessonController extends Controller
             $lesson = Lesson::find($c['id']);
         }
         if (!empty($c['lesson_page'])) {
-            $chapter = LessonSet::find($c['lesson_set_id']);
-            $courseId = $chapter->course_id;
             $f = $data['file'];
-            $folder = $courseId . "/pdf";
-            $path = Storage::disk('public')->putFileAs($folder, new File($f), $c['lesson_page']);
+            if ($f) {
+                $chapter = LessonSet::find($c['lesson_set_id']);
+                $courseId = $chapter->course_id;
+                $folder = $courseId . "/pdf";
+                $path = Storage::disk('public')->putFileAs($folder, new File($f), $c['lesson_page']);
+                $lesson->lesson_page = $folder . '/' . str_replace('.pdf', '', $c['lesson_page']);
+            }
         }
         $lesson->name = $c['name'];
         $lesson->short_name = $c['short_name'];
         $lesson->lesson_set_id = $c['lesson_set_id'];
         $lesson->lesson_text = !empty($c['lesson_text']) ? $c['lesson_text'] : '';
         $lesson->lesson_type = $c['lesson_type'];
-        $lesson->lesson_page = !empty($c['lesson_page']) ? $folder . '/' . str_replace('.pdf', '', $c['lesson_page']) : '';
         $lesson->sequence_id = $c['sequence_id'];
         $lesson->active = !empty($c['active']) ? 1 : 0;
         $lesson->save();

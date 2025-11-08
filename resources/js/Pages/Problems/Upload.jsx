@@ -16,7 +16,7 @@ const Upload = ({ auth, lesson, chapter, course }) => {
     }
     const hlp = () => {
         let d = { ...data }
-        d.problem = "texto del problema, ejemplo 3 + 3\n\ntipo de respuesta(s=opción multiple sencillo, m=opción multiple, o=abierto, n=numérico )\n\nrespuesta1, 1 o 0 (1 significa correcto)\nrespuesta2\n...\n\npista1\npista2\n..."
+        d.problem = "texto del problema, ejemplo 3 + 3\ntipo de respuesta(s=opción multiple sencillo, m=opción multiple, o=abierto, n=numérico )\n\nrespuesta1, 1 o 0 (1 significa correcto)\nrespuesta2\n...\n\npista1\npista2\n..."
         setData(d)
     }
     const clean = () => {

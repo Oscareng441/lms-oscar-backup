@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chapter/{id}/edit', [LessonSetController::class, 'editChapter'])->name('chapter.edit');
     Route::get('/course/{id}/edit', [CourseController::class, 'editCourse'])->name('course.edit');
     Route::get('/lesson/{id}/edit', [LessonController::class, 'editLesson'])->name('lesson.edit');
+    Route::get('/lesson/{id}/videos', [LessonController::class, 'videos'])->name('lesson.videos');
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::get('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');
     Route::post('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');

@@ -5,6 +5,7 @@ import TopMenu from '@/Components/TopMenu';
 import Checkbox from '@/Components/Checkbox';
 import { router, Link, Head, useForm } from '@inertiajs/react';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origLesson, chapter, course }) => {
@@ -101,99 +102,119 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={title} />
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                        <div className="flex items-center"> 
-                            <div className=""> Nombre de Lección:</div>
-                                <div className="flex items-center mx-2">
-                                    <Checkbox
-                                        checked={ lesson.active }
-                                        onChange={ togglePublishLesson }
-                                        className='border border-black border-1'
-                                    />
-                                    <div className="text-sm ml-1 mr-2">
-                                        Publicar
+            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 py-2">
+                <TabGroup>
+                    <TabList className="flex gap-4">
+                        <Tab className="aria-selected:underline hover:bg-slate-300">Titulo</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300">Texto</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300">Recursos</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                           <div className="py-2">
+                                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                        <div className="flex items-center"> 
+                                            <div className=""> Nombre de Lección:</div>
+                                                <div className="flex items-center mx-2">
+                                                    <Checkbox
+                                                        checked={ lesson.active }
+                                                        onChange={ togglePublishLesson }
+                                                        className='border border-black border-1'
+                                                    />
+                                                    <div className="text-sm ml-1 mr-2">
+                                                        Publicar
+                                                    </div>
+                                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLesson} />
+                                                </div>
+                                            </div>
+                                        <div>
+                                            <input
+                                                type="text"
+                                                onChange={changeLessonName}
+                                                value={lesson.name}
+                                                className="w-full"
+                                            />
+                                        </div>
                                     </div>
-                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLesson} />
                                 </div>
                             </div>
-                        <div>
-                            <input
-                                type="text"
-                                onChange={changeLessonName}
-                                value={lesson.name}
-                                className="w-full"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                        Nombre Corto
-                        <div>
-                            <input
-                                type="text"
-                                onChange={changeLessonShortName}
-                                value={lesson.short_name}
-                                className="w-full"
-                                maxLength={30}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                        <div className="flex items-center"> 
-                            <div className="text-left"> Contenido:</div>
-                            <div className="flex items-center mx-2">
-                                { lessonDisplayTypeSelector }
+                            <div className="py-2">
+                                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                        Nombre Corto
+                                        <div>
+                                            <input
+                                                type="text"
+                                                onChange={changeLessonShortName}
+                                                value={lesson.short_name}
+                                                className="w-full"
+                                                maxLength={30}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="">
-                            {
-                                lesson.lesson_type !== 'pdf' &&
-                                <textarea
-                                    rows="15"
-                                    onChange={ changeLessonText }
-                                    className="w-full"
-                                    value={lesson.lesson_text}
-                                />
-                            }
-                            {
-                                lesson.lesson_type === 'pdf' && lesson.lesson_page &&
-                                <div className="flex flex-row justify-center">
-                                    <div>
-                                        { lesson.lesson_page }
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="py-2">
+                                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                        <div className="flex items-center"> 
+                                            <div className="text-left"> Contenido:</div>
+                                            <div className="flex items-center mx-2">
+                                                { lessonDisplayTypeSelector }
+                                            </div>
+                                        </div>
+                                        <div className="">
+                                            {
+                                                lesson.lesson_type !== 'pdf' &&
+                                                <textarea
+                                                    rows="15"
+                                                    onChange={ changeLessonText }
+                                                    className="w-full"
+                                                    value={lesson.lesson_text}
+                                                />
+                                            }
+                                            {
+                                                lesson.lesson_type === 'pdf' && lesson.lesson_page &&
+                                                <div className="flex flex-row justify-center">
+                                                    <div>
+                                                        { lesson.lesson_page }
+                                                    </div>
+                                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLessonPage} />
+                                                </div>
+                                            }
+                                            {
+                                                lesson.lesson_type === 'pdf' && !lesson.lesson_page &&
+                                                <div className="flex flex-row justify-center">
+                                                    <div>
+                                                        <input
+                                                            type="file"
+                                                            className="w-full"
+                                                            placeholder="pdf"
+                                                            onChange={ changeLessonFile }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLessonPage} />
                                 </div>
-                            }
-                            {
-                                lesson.lesson_type === 'pdf' && !lesson.lesson_page &&
-                                <div className="flex flex-row justify-center">
-                                    <div>
-                                        <input
-                                            type="file"
-                                            className="w-full"
-                                            placeholder="pdf"
-                                            onChange={ changeLessonFile }
-                                        />
-                                    </div>
-                                </div>
-                            }
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="py-2">
+                                coming
+                            </div>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
+                <div className="py-2">
+                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                        <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
+                            SAVE
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
-                        SAVE
                     </div>
                 </div>
             </div>

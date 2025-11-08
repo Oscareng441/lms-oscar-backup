@@ -11,7 +11,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Middleware\CheckEditorPermission;
 use App\Helpers\OmniHelper;
 
-class SourceController extends Controller
+class SourceController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
@@ -19,6 +19,7 @@ class SourceController extends Controller
             new Middleware(CheckEditorPermission::class),
         ];
     }
+
     public function index(Request $request)
     {
         $sources = SourceReference::all();

@@ -29,4 +29,11 @@ class Lesson extends Model
 
         return ['anterior' => $previousLessonId, 'siguiente' => $nextLessonId];
     }
+
+    function videos()
+    {
+        $sql = 'SELECT * FROM videos WHERE lesson_id = ?';
+        $vids = DB::select($sql, [$this->id]);
+        return $vids;
+    }
 }

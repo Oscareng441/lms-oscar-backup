@@ -359,7 +359,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="flex items-center"> 
-                        <div className=""> Texto de la Pregunta:</div>
+                        <div className="">La Pregunta:</div>
                         <div className="flex items-center mx-2">
                             {problemDisplayTypeSelector}
                         </div>
@@ -393,11 +393,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     <InputError message={ errMsg } className="mt-2" />
                 </div>
             </div>
-            <div className="py-2">
+            <div className="py-2 text-sm sm:text-md">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                         <div className="flex items-center"> 
-                            <div className=""> Respuestas/Distractores:</div>
+                            <div className="">Respuestas/Distractores:</div>
                             <div className="flex items-center mx-2">
                                 {problemTypeSelector}
                             </div>
