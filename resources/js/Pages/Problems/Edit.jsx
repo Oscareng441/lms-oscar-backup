@@ -281,7 +281,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     let problemDisplayTypeSelector = ['latex', 'html', 'hybrid'].map(t => {
         let sel = t === probDisplayType ? 'font-bold' : 'text-slate-500'
         return (
-            <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
+            <div key={t} className={`cursor-pointer text-xs sm:text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
         )
     })
 
@@ -289,7 +289,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         let key = k + 1
         let sel = key === probType ? 'font-bold' : 'text-slate-500'
         return (
-            <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemType(key)}>{t}</div>
+            <div key={t} className={`cursor-pointer text-xs sm:text-sm mx-1 ${sel}`} onClick={() => changeProblemType(key)}>{t}</div>
         )
     })
 
@@ -359,7 +359,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="flex items-center"> 
-                        <div className="">La Pregunta:</div>
+                        <div className="text-sm sm:text-md">La Pregunta:</div>
                         <div className="flex items-center mx-2">
                             {problemDisplayTypeSelector}
                         </div>
@@ -369,7 +369,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                 onChange={ togglePublish }
                                 className='border border-black border-1'
                             />
-                            <div className="text-sm ml-1 mr-2">
+                            <div className="text-xs sm:text-sm ml-1 mr-2">
                                 Publicar
                             </div>
 
@@ -393,11 +393,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     <InputError message={ errMsg } className="mt-2" />
                 </div>
             </div>
-            <div className="py-2 text-sm sm:text-md">
+            <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                         <div className="flex items-center"> 
-                            <div className="">Respuestas/Distractores:</div>
+                            <div className="text-sm sm:text-md">Distractores:</div>
                             <div className="flex items-center mx-2">
                                 {problemTypeSelector}
                             </div>
@@ -443,7 +443,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center"> Pistas: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
+                    <div className="flex items-center text-sm sm:text-md"> Pistas: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
                     {
                         hints.map((h, k) => {
                             let hintTxt = h.hint
@@ -481,7 +481,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             </div>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={ save }>
+                    <div className="text-center bg-white p-1 shadow text-md sm:text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={ save }>
                         GUARDAR
                     </div>
                 </div>

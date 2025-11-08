@@ -8,9 +8,9 @@ export default function Edit({ mustVerifyEmail, status }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                <div className="text-xl font-semibold leading-tight text-gray-800">
                     Perfil
-                </h2>
+                </div>
             }
         >
             <Head title="Profile" />
