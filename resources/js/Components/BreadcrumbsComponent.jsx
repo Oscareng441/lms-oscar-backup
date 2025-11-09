@@ -11,7 +11,7 @@ export default function BreadcrumbsComponent(props) {
     })
 
     return (
-        <div className="text-sm mx-3 flex text-nowrap overflow-x-scroll">
+        <div className="text-sm flex text-nowrap overflow-x-auto">
             { bc }
         </div>
     );

@@ -164,33 +164,33 @@ export default function TopMenu(props) {
 
     return (
         <>
-        <div className="flex justify-between w-full overflow-y-scroll" >
-            <div className="text-sm sm:text-md">{ props.title }</div>
-            <div className="flex justify-start w-full overflow-y-scroll">
-                { props.show.indexOf('home') >= 0 && courseListLink }
-                { props.show.indexOf('course') >= 0 && props.courseId && courseLink }
-                { props.show.indexOf('chapter') >= 0 && props.chapterId && chapterLink }
-                { props.show.indexOf('lesson') >= 0 && props.lessonId && lessonLink }
-                { props.show.indexOf('prob-set') >= 0 && props.lessonId && problemsLink }
-                { props.show.indexOf('prob-set-edit') >= 0 && props.lessonId && editProblemSetLink }
-                { props.show.indexOf('prob-add') >= 0 && props.lessonId && editMode && addProblemLink }
-                { props.show.indexOf('prob-dup') >= 0 && props.problemId && editMode && duplicateProblemLink }
-                { props.show.indexOf('prob-edit') >= 0 && props.problemId && editMode && editProblemLink }
-                { props.show.indexOf('prob-add-alt') >= 0 && props.lessonId && editMode && altAddProblemLink }
-                {/*{ props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems  && problemNav }*/}
-                { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }
-                { props.show.indexOf('course-edit') >= 0 && props.courseId && editMode && editCourseLink }
-                { props.show.indexOf('chapter-edit') >= 0 && props.chapterId && editMode && editChapterLink }
-                { props.show.indexOf('lesson-edit') >= 0 && props.lessonId && editMode && editLessonLink }
-                {/*{ props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons  && lessonNav }*/}
-                {/*{ props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters  && chapterNav }*/}
-                { props.show.indexOf('group-mg') >= 0 && props.courseId && editMode && groupMg }
-                { props.show.indexOf('add-group') >= 0 && props.courseId && editMode && groupAdd }
-                { props.show.indexOf('source-add') >= 0 && props.sourceAdd && editMode && sourceAdd }
-                { props.show.indexOf('school-add') >= 0 && props.schoolAdd && editMode && schoolAdd }
+            <div className="flex justify-between w-full" >
+                <div className="text-sm sm:text-md">{ props.title }</div>
+                <div className="flex justify-start w-full">
+                    { props.show.indexOf('home') >= 0 && courseListLink }
+                    { props.show.indexOf('course') >= 0 && props.courseId && courseLink }
+                    { props.show.indexOf('chapter') >= 0 && props.chapterId && chapterLink }
+                    { props.show.indexOf('lesson') >= 0 && props.lessonId && lessonLink }
+                    { props.show.indexOf('prob-set') >= 0 && props.lessonId && problemsLink }
+                    { props.show.indexOf('prob-set-edit') >= 0 && props.lessonId && editProblemSetLink }
+                    { props.show.indexOf('prob-add') >= 0 && props.lessonId && editMode && addProblemLink }
+                    { props.show.indexOf('prob-dup') >= 0 && props.problemId && editMode && duplicateProblemLink }
+                    { props.show.indexOf('prob-edit') >= 0 && props.problemId && editMode && editProblemLink }
+                    { props.show.indexOf('prob-add-alt') >= 0 && props.lessonId && editMode && altAddProblemLink }
+                    {/*{ props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems  && problemNav }*/}
+                    { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }
+                    { props.show.indexOf('course-edit') >= 0 && props.courseId && editMode && editCourseLink }
+                    { props.show.indexOf('chapter-edit') >= 0 && props.chapterId && editMode && editChapterLink }
+                    { props.show.indexOf('lesson-edit') >= 0 && props.lessonId && editMode && editLessonLink }
+                    {/*{ props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons  && lessonNav }*/}
+                    {/*{ props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters  && chapterNav }*/}
+                    { props.show.indexOf('group-mg') >= 0 && props.courseId && editMode && groupMg }
+                    { props.show.indexOf('add-group') >= 0 && props.courseId && editMode && groupAdd }
+                    { props.show.indexOf('source-add') >= 0 && props.sourceAdd && editMode && sourceAdd }
+                    { props.show.indexOf('school-add') >= 0 && props.schoolAdd && editMode && schoolAdd }
+                </div>
             </div>
-        </div>
-        <BreadcrumbsComponent data={ props.breadcrumbs } />
+            <BreadcrumbsComponent data={ props.breadcrumbs } />
         </>
     );
 }
