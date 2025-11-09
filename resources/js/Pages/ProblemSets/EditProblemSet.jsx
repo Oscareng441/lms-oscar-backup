@@ -103,11 +103,11 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             <Head title={title} />
             { flash.success && flash.success}
             { flash.error && flash.error}
-            <div className="py-2">
+            <div className="py-2 px-4">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="italic text-2xl">
+                    <div className="italic text-sm sm:text-md">
                         Haz clic en un problema para contestarlo.
-                        <p className="not-italic text-lg text-green-600">
+                        <p className="not-italic text-sm sm:text-md text-green-600">
                             <Link href={route("problemset.student", lesson.id)}>Go to student mode</Link>
                         </p>
                     </div>

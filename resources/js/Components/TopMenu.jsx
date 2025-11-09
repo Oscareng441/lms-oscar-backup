@@ -163,9 +163,10 @@ export default function TopMenu(props) {
     )
 
     return (
-        <div className="flex justify-between w-full">
-            <div className="flex justify-start w-full">
-                <h2>{ props.title }</h2>
+        <>
+        <div className="flex justify-between w-full overflow-y-scroll" >
+            <div className="text-sm sm:text-md">{ props.title }</div>
+            <div className="flex justify-start w-full overflow-y-scroll">
                 { props.show.indexOf('home') >= 0 && courseListLink }
                 { props.show.indexOf('course') >= 0 && props.courseId && courseLink }
                 { props.show.indexOf('chapter') >= 0 && props.chapterId && chapterLink }
@@ -188,8 +189,9 @@ export default function TopMenu(props) {
                 { props.show.indexOf('source-add') >= 0 && props.sourceAdd && editMode && sourceAdd }
                 { props.show.indexOf('school-add') >= 0 && props.schoolAdd && editMode && schoolAdd }
             </div>
-            <BreadcrumbsComponent data={ props.breadcrumbs } />
         </div>
+        <BreadcrumbsComponent data={ props.breadcrumbs } />
+        </>
     );
 }
  

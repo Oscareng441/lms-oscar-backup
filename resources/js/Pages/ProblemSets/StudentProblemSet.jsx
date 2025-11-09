@@ -22,7 +22,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
     const [showEndOfSet, setShowEndOfSet] = useState(false)
     const [scores, setScores] = useState(userScores)
 
-    const title = `${ lesson.name } Ejercicios`
+    const title = `Ejercicios`
     const breadcrumbs = buildBreadCrumbs({lesson, chapter, course}, 4)
 
     let topMenu = (
@@ -103,13 +103,13 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } >
             <Head title={title} />
-            <div className="py-2">
+            <div className="py-2 px-4">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="italic text-2xl">
+                    <div className="italic text-sm sm:text-md flex justify-between ">
                         Haz clic en un problema para contestarlo:
                         {
                             (auth.is_admin || auth.is_teacher) &&
-                            <p className="not-italic text-lg text-green-600">
+                            <p className="not-italic text-sm sm:text-md text-green-600">
                                 <Link href={route("problemset.edit", lesson.id)}>Go to edit mode</Link>
                             </p>
                         }
