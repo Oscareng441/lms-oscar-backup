@@ -164,9 +164,9 @@ export default function TopMenu(props) {
 
     return (
         <>
-            <div className="flex justify-between w-full" >
-                <div className="text-sm sm:text-md">{ props.title }</div>
-                <div className="flex justify-start w-full">
+            <div className="flex justify-start w-full" >
+                <div className="text-sm sm:text-md mr-4">{ props.title }</div>
+                <div className="flex justify-start">
                     { props.show.indexOf('home') >= 0 && courseListLink }
                     { props.show.indexOf('course') >= 0 && props.courseId && courseLink }
                     { props.show.indexOf('chapter') >= 0 && props.chapterId && chapterLink }

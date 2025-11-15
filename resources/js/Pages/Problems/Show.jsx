@@ -102,22 +102,24 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={ title } />
-            <ShowProblem
-                problem={prob}
-                answers={answers}
-                handleAnswer={handleAnswer}
-                showHint={showHint} 
-                hint={toggleShowHint}
-                hintsToShow={hintsToShow}
-                nextHint={nextHint}
-                totalHints={!hints ? 0 : hints.length}
-                next={nextProblem}
-                prev={prevProblem}
-                numberCorrect={numberCorrect}
-                answered={score !== null}
-                hasNextProblem={problemIds.siguiente !== null}
-                hasPrevProblem={problemIds.anterior !== null}
-            />
+            <div className="py-2">
+                <ShowProblem
+                    problem={prob}
+                    answers={answers}
+                    handleAnswer={handleAnswer}
+                    showHint={showHint} 
+                    hint={toggleShowHint}
+                    hintsToShow={hintsToShow}
+                    nextHint={nextHint}
+                    totalHints={!hints ? 0 : hints.length}
+                    next={nextProblem}
+                    prev={prevProblem}
+                    numberCorrect={numberCorrect}
+                    answered={score !== null}
+                    hasNextProblem={problemIds.siguiente !== null}
+                    hasPrevProblem={problemIds.anterior !== null}
+                />
+            </div>
             <FeedbackComponent
                 show={showFeedback}
                 feedback={feedbackMessage}

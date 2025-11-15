@@ -207,8 +207,8 @@ export default function ShowProblem(props) {
     }
 
     return (
-        <div className="py-2" >
-            <div className="mx-auto max-w-7xl space-y-1 sm:px-6 lg:px-8">
+        <>
+            <div className="mx-auto max-w-7xl space-y-1">
                 <div className="bg-white px-4 shadow sm:rounded-lg sm:px-8 sm:py-2">
                     <div className="flex flex-row w-fit">
                         { hintLink }
@@ -217,7 +217,7 @@ export default function ShowProblem(props) {
                         { restartLink } 
                     </div>
                     <div className="py-2">
-                        <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
+                        <div className="mx-auto space-y-6">
                             <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                                 { problemSection }
                             </div>
@@ -226,6 +226,6 @@ export default function ShowProblem(props) {
                     { answerComponent }
                 </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -22,8 +22,8 @@ export default function LessonSelect (props) {
     } 
 
     return (
-        <div className="py-2">
-            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+        <>
+            <div className="mx-auto max-w-7xl space-y-6">
                 <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex">
                 <div className="w-50%">Lesson:</div>
                 {
@@ -40,6 +40,6 @@ export default function LessonSelect (props) {
                 }
                 </div>
             </div>
-        </div>
+        </>
     )
 }

@@ -5,6 +5,7 @@ import { useForm, Link, Head } from '@inertiajs/react';
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import Checkbox from '@/Components/Checkbox';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
 import CourseSelect from '@/Components/CourseSelect';
@@ -278,7 +279,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         />
     )
 
-    let problemDisplayTypeSelector = ['latex', 'html', 'hybrid'].map(t => {
+    let problemDisplayTypeSelector = ['latex', 'html', 'híbrido', 'espacios en blanco'].map(t => {
         let sel = t === probDisplayType ? 'font-bold' : 'text-slate-500'
         return (
             <div key={t} className={`cursor-pointer text-xs sm:text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
@@ -355,129 +356,182 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center"> 
-                        <div className="text-sm sm:text-md">La Pregunta:</div>
-                        <div className="flex items-center mx-2">
-                            {problemDisplayTypeSelector}
-                        </div>
-                        <div className="flex items-center mx-2">
-                            <Checkbox
-                                checked={ probPublished }
-                                onChange={ togglePublish }
-                                className='border border-black border-1'
-                            />
-                            <div className="text-xs sm:text-sm ml-1 mr-2">
-                                Publicar
-                            </div>
+            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 py-2">
+                <TabGroup className="mx-auto w-full">
+                    <TabList className="flex gap-4 bg-white">
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Presentación del Problema</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Respuestas</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Pistas</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Recursos</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Vista Estudiantil</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <div className="">
+                                <div className="mx-auto max-w-7xl space-y-6 ">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                    <div className="flex items-center"> 
+                                        <div className="text-sm sm:text-md">La Pregunta:</div>
+                                        <div className="flex items-center mx-2">
+                                            {problemDisplayTypeSelector}
+                                        </div>
+                                        <div className="flex items-center mx-2">
+                                            <Checkbox
+                                                checked={ probPublished }
+                                                onChange={ togglePublish }
+                                                className='border border-black border-1'
+                                            />
+                                            <div className="text-xs sm:text-sm ml-1 mr-2">
+                                                Publicar
+                                            </div>
 
-                            <GrGallery 
-                                className="text-base mx-2 cursor-pointer"
-                                onClick={toggleShowGallery} title="galería de imágenes"
-                            />
-                            <FaTrash 
-                                className="text-base ml-2 cursor-pointer"
-                                onClick={deleteProblem} title="borrar problema"
-                            />
-                        </div>
-                    </div>
-                        <input
-                            type="text"
-                            onChange={chgProbTxt}
-                            value={probTxt}
-                            className="w-full"
-                        />
-                    </div>
-                    <InputError message={ errMsg } className="mt-2" />
-                </div>
-            </div>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                        <div className="flex items-center"> 
-                            <div className="text-sm sm:text-md">Distractores:</div>
-                            <div className="flex items-center mx-2">
-                                {problemTypeSelector}
+                                            <GrGallery 
+                                                className="text-base mx-2 cursor-pointer"
+                                                onClick={toggleShowGallery} title="galería de imágenes"
+                                            />
+                                            <FaTrash 
+                                                className="text-base ml-2 cursor-pointer"
+                                                onClick={deleteProblem} title="borrar problema"
+                                            />
+                                        </div>
+                                    </div>
+                                        <textarea
+                                            type="text"
+                                            onChange={chgProbTxt}
+                                            value={probTxt}
+                                            className="w-full h-fit"
+                                            rows={10}
+                                        />
+                                    </div>
+                                    <InputError message={ errMsg } className="mt-2" />
+                                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="">
+                                <div className="mx-auto max-w-7xl space-y-6 ">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                        <div className="flex items-center"> 
+                                            <div className="text-sm sm:text-md">Distractores:</div>
+                                            <div className="flex items-center mx-2">
+                                                {problemTypeSelector}
+                                            </div>
+                                            {
+                                                (probType !== 4 || answers.length) < 2 &&
+                                                <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} />
+                                            }
+                                        </div>
+                                        <div className="text-sm">
+                                            {answerBlurb}
+                                        </div>
+                                        {
+                                            answers.map((a, k) => {
+                                                let ansTxt = a.answer_text
+                                                let isRight =  a.is_correct 
+                                                return (
+                                                    <div key={k} className="flex">
+                                                    <input
+                                                        key={k}
+                                                        type="text"
+                                                        onChange={(e) => chgAnsTxt(e, k)}
+                                                        onBlur={(e) => handleAnswerBlur(e, k)}
+                                                        value={ansTxt}
+                                                        className="w-full"
+                                                    />
+                                                    {
+                                                        (probType === 1 || probType === 2) &&
+                                                        <Checkbox
+                                                            checked={ isRight }
+                                                            onChange={(e) => chgAnsCorrect(e, k)}
+                                                            className='border border-black border-1'
+                                                        />
+                                                    }
+                                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delAns(e, k)} />
+                                                    </div>
+                                                )
+
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="">
+                                <div className="mx-auto max-w-7xl space-y-6 ">
+                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                                    <div className="flex items-center text-sm sm:text-md"> Pistas: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
+                                    {
+                                        hints.map((h, k) => {
+                                            let hintTxt = h.hint
+                                            return (
+                                                <div key={`hnt_${k}`} className="flex">
+                                                <input
+                                                    key={k}
+                                                    type="text"
+                                                    onChange={(e) => chgHintTxt(e, k)}
+                                                    value={hintTxt}
+                                                    className="w-full"
+                                                />
+                                                <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delHint(e, k)} />
+                                                </div>
+                                            )
+
+                                        })
+                                    }
+                                    </div>
+                                </div>
                             </div>
                             {
-                                (probType !== 4 || answers.length) < 2 &&
-                                <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} />
+                               ( probType === 3 || probType === 4) && toleranceSelection
                             }
-                        </div>
-                        <div className="text-sm">
-                            {answerBlurb}
-                        </div>
-                        {
-                            answers.map((a, k) => {
-                                let ansTxt = a.answer_text
-                                let isRight =  a.is_correct 
-                                return (
-                                    <div key={k} className="flex">
-                                    <input
-                                        key={k}
-                                        type="text"
-                                        onChange={(e) => chgAnsTxt(e, k)}
-                                        onBlur={(e) => handleAnswerBlur(e, k)}
-                                        value={ansTxt}
-                                        className="w-full"
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="">
+                                <div className="mx-auto max-w-7xl ">
+                                    <CourseSelect
+                                        courses={courses}
+                                        selected={courseId}
+                                        onSelectCourse={selectCourse}
+                                        onSelectChapter={selectChapter}
+                                        onSelectLesson={selectLesson}
+                                        chapterId={chapterId}
+                                        lessonId={lessonId}
                                     />
-                                    {
-                                        (probType === 1 || probType === 2) &&
-                                        <Checkbox
-                                            checked={ isRight }
-                                            onChange={(e) => chgAnsCorrect(e, k)}
-                                            className='border border-black border-1'
+                                    <div className="text-center bg-white p-1 shadow text-xs sm:rounded-lg sm:p-8">
+                                        <CreditsComponent
+                                            credits={ credits }
+                                            selected={ creditId }
+                                            onChange={ updateCredit }
                                         />
-                                    }
-                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delAns(e, k)} />
                                     </div>
-                                )
-
-                            })
-                        }
-                    </div>
-                </div>
-            </div>
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center text-sm sm:text-md"> Pistas: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addHint} /></div>
-                    {
-                        hints.map((h, k) => {
-                            let hintTxt = h.hint
-                            return (
-                                <div key={`hnt_${k}`} className="flex">
-                                <input
-                                    key={k}
-                                    type="text"
-                                    onChange={(e) => chgHintTxt(e, k)}
-                                    value={hintTxt}
-                                    className="w-full"
-                                />
-                                <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => delHint(e, k)} />
                                 </div>
-                            )
-
-                        })
-                    }
-                    </div>
-                </div>
-            </div>
-            {
-               ( probType === 3 || probType === 4) && toleranceSelection
-            }
-            <div className="py-2">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-xs sm:rounded-lg sm:p-8">
-                        <CreditsComponent
-                            credits={ credits }
-                            selected={ creditId }
-                            onChange={ updateCredit }
-                        />
-                    </div>
-                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            {
+                                problem !== null && (
+                                    <ShowProblem
+                                        problem={problem}
+                                        answers={answers}
+                                        handleAnswer={handleAnswer}
+                                        showHint={showHint} 
+                                        hint={toggleShowHint}
+                                        totalHints={hints.length}
+                                        hintsToShow={hintsToShow}
+                                        nextHint={nextHint}
+                                        next={() => {}}
+                                        prev={() => {}}
+                                        hasNextProblem={false}
+                                        hasPrevProblem={false}
+                                        editMode={true}
+                                        answered={false}
+                                    />
+                                )
+                            }
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
             </div>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
@@ -486,26 +540,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     </div>
                 </div>
             </div>
-            {
-                problem !== null && (
-                    <ShowProblem
-                        problem={problem}
-                        answers={answers}
-                        handleAnswer={handleAnswer}
-                        showHint={showHint} 
-                        hint={toggleShowHint}
-                        totalHints={hints.length}
-                        hintsToShow={hintsToShow}
-                        nextHint={nextHint}
-                        next={() => {}}
-                        prev={() => {}}
-                        hasNextProblem={false}
-                        hasPrevProblem={false}
-                        editMode={true}
-                        answered={false}
-                    />
-                )
-            }
             {
                 problem !== null && (
                     <FeedbackComponent
@@ -538,15 +572,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 course={course}
                 images={images}
                 addImageToProb={addImageToProb}
-            />
-            <CourseSelect
-                courses={courses}
-                selected={courseId}
-                onSelectCourse={selectCourse}
-                onSelectChapter={selectChapter}
-                onSelectLesson={selectLesson}
-                chapterId={chapterId}
-                lessonId={lessonId}
             />
         </AuthenticatedLayout>
     )

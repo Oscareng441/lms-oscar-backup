@@ -99,7 +99,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     })
 
     return (
-        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } >
+        <AuthenticatedLayout auth={ auth } user={ auth.user } header={ false } topMenu={ topMenu } >
             <Head title={title} />
             { flash.success && flash.success}
             { flash.error && flash.error}
