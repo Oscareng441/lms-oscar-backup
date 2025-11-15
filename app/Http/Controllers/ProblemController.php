@@ -20,6 +20,7 @@ class ProblemController extends Controller
 {
     public function saveProblem(ProblemUpdateRequest $request)
     {
+            OmniHelper::log("saveProblem, user " . $user->name);
         $user = $request->user();
         if (!$user->isAdmin() && !$user->isTeacher()) {
             // abort(403);
