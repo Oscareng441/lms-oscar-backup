@@ -20,8 +20,8 @@ class ProblemController extends Controller
 {
     public function saveProblem(ProblemUpdateRequest $request)
     {
-            OmniHelper::log("saveProblem, user " . $user->name);
         $user = $request->user();
+            OmniHelper::log("saveProblem, user " . $user->name);
         if (!$user->isAdmin() && !$user->isTeacher()) {
             // abort(403);
             OmniHelper::log("403 error bypassed, user " . $user->name);
