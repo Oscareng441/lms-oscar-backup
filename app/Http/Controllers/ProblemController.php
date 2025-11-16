@@ -94,6 +94,7 @@ class ProblemController extends Controller
             $hint = new ProblemHint();
             $hint->problem_id = $problem->id;
             $hint->sequence_id = $h['sequence_id'];
+            OmniHelper::log($h);
             $hint->hint = $h['hint'];
             $hint->save();
         }
