@@ -11,6 +11,7 @@ import TopMenu from '@/Components/TopMenu';
 import CourseSelect from '@/Components/CourseSelect';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
+import AnswerTypeSelector from '@/Components/AnswerTypeSelector';
 import InputError from '@/Components/InputError';
 import CreditsComponent from '@/Components/CreditsComponent';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
@@ -44,7 +45,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const isAdd = window.location.pathname.split('/').pop() === 'add-problem';
 
     useEffect(() => {
-        console.log('prob', problem, data, origLessonId, creditId)
         let p = { ...problem }
         let d = { ...data }
         p.problem_text = probTxt
@@ -57,6 +57,12 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         d.problem = p
         setData(d)
     }, [probTxt, probDisplayType, probType, probPublished, lessonId, creditId])
+
+    useEffect(() => {
+        if (probDisplayType == 5) {
+            setProbType('ranuras')
+        }
+    }, [probDisplayType])
 
     const title = !isAdd ? `Editar #${ problem.id }` : 'Problema Nuevo'
 
@@ -108,8 +114,46 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     }
 
     const chgProbTxt = (e) => {
-        let txt = e.target.value
-        setProbTxt(txt)
+        setProbTxt(e.target.value)
+    }
+
+    const blurProbTxt = (e) => {
+        if (probType === 5) {
+            let arr = e.target.value.split('_')
+            let orderedAnswers = []
+            arr.forEach((a,k) => {
+                if (k % 2) {
+                    orderedAnswers.push(a)
+                }
+            })
+            console.log(orderedAnswers)
+            handleRanuraRightAnswers(orderedAnswers)
+        }
+    }
+
+    function handleRanuraRightAnswers(arr) {
+        let ansrs = []
+        answers.forEach(a => {
+            if (!(a.is_auto && a.is_auto == 1)) {
+                ansrs.push(a)
+            }
+        })
+        arr.some(autoAnswer => {
+            let addMe = true
+            ansrs.forEach(a => {
+                if (a.answer_text === autoAnswer) {
+                    addMe = false
+                    return true
+                }
+                return false
+            })
+            if (addMe) {
+                let ans = { problem_id: problem.id, answer_text:autoAnswer, is_auto: 1, display_type: 'latex' }
+                ansrs.push(ans)
+            }
+        })
+
+        setAnswers(ansrs)
     }
 
     const chgAnsTxt = (e, k) => {
@@ -205,6 +249,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const changeProblemDisplayType = (t) => {
         setProbDisplayType(t)
+        if (t === 'ranuras') {
+            setProbType(5)
+        }
     }
 
     const changeProblemType = (t) => {
@@ -279,14 +326,14 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         />
     )
 
-    let problemDisplayTypeSelector = ['latex', 'html', 'híbrido', 'espacios en blanco'].map(t => {
+    let problemDisplayTypeSelector = ['latex', 'html', 'híbrido', 'ranuras'].map(t => {
         let sel = t === probDisplayType ? 'font-bold' : 'text-slate-500'
         return (
             <div key={t} className={`cursor-pointer text-xs sm:text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
         )
     })
 
-    let problemTypeSelector = ['single MC', 'multiple MC', 'text', 'numeric'].map((t,k) => {
+    let problemTypeSelector = ['single MC', 'multiple MC', 'text', 'numeric', 'ranuras'].map((t,k) => {
         let key = k + 1
         let sel = key === probType ? 'font-bold' : 'text-slate-500'
         return (
@@ -299,7 +346,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                 <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="flex items-center"> 
-                        Tolerance:
+                        Tolerancia:
                         <input
                             placeholder="Tolerancia (.01 por ejemplo, si la respuesta cuenta como correcto si está adentro de 1%)"
                             type="text"
@@ -338,6 +385,20 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         errMsg = errMsg + errors[i]
     }
 
+    let probTextInstructionsTxt = ''
+    switch (probDisplayType) {
+        case "ranuras":
+            probTextInstructionsTxt = "tecla dos o más guiones bajos para una ranura"
+            break
+        default:
+            probTextInstructionsTxt = ""
+    }
+    let probTextInstructions = (
+        <div className="">
+            { probTextInstructionsTxt }
+        </div>
+    )
+
     let answerBlurbMsg = ''
     switch (probType) {
         case 3:
@@ -345,6 +406,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             break
         case 4:
             answerBlurbMsg = "Solo una respuesta"
+            break
+        case 5:
+            answerBlurbMsg = "Solo agrega distractores. Las respuestas no"
             break
         default:
     }
@@ -370,34 +434,38 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                             <div className="">
                                 <div className="mx-auto max-w-7xl space-y-6 ">
                                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                                    <div className="flex items-center"> 
-                                        <div className="text-sm sm:text-md">La Pregunta:</div>
-                                        <div className="flex items-center mx-2">
-                                            {problemDisplayTypeSelector}
-                                        </div>
-                                        <div className="flex items-center mx-2">
-                                            <Checkbox
-                                                checked={ probPublished }
-                                                onChange={ togglePublish }
-                                                className='border border-black border-1'
-                                            />
-                                            <div className="text-xs sm:text-sm ml-1 mr-2">
-                                                Publicar
+                                        <div className="flex items-center"> 
+                                            <div className="text-sm sm:text-md">La Pregunta:</div>
+                                            <div className="flex items-center mx-2">
+                                                {problemDisplayTypeSelector}
                                             </div>
+                                            <div className="flex items-center mx-2">
+                                                <Checkbox
+                                                    checked={ probPublished }
+                                                    onChange={ togglePublish }
+                                                    className='border border-black border-1'
+                                                />
+                                                <div className="text-xs sm:text-sm ml-1 mr-2">
+                                                    Publicar
+                                                </div>
 
-                                            <GrGallery 
-                                                className="text-base mx-2 cursor-pointer"
-                                                onClick={toggleShowGallery} title="galería de imágenes"
-                                            />
-                                            <FaTrash 
-                                                className="text-base ml-2 cursor-pointer"
-                                                onClick={deleteProblem} title="borrar problema"
-                                            />
+                                                <GrGallery 
+                                                    className="text-base mx-2 cursor-pointer"
+                                                    onClick={toggleShowGallery} title="galería de imágenes"
+                                                />
+                                                <FaTrash 
+                                                    className="text-base ml-2 cursor-pointer"
+                                                    onClick={deleteProblem} title="borrar problema"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div className="text-sm">
+                                            { probTextInstructions }
+                                        </div>
                                         <textarea
                                             type="text"
-                                            onChange={chgProbTxt}
+                                            onChange={ chgProbTxt }
+                                            onBlur={ blurProbTxt }
                                             value={probTxt}
                                             className="w-full h-fit"
                                             rows={10}
@@ -414,7 +482,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                         <div className="flex items-center"> 
                                             <div className="text-sm sm:text-md">Distractores:</div>
                                             <div className="flex items-center mx-2">
-                                                {problemTypeSelector}
+                                                <AnswerTypeSelector probType={ probType } changeProblemType={ changeProblemType } />
                                             </div>
                                             {
                                                 (probType !== 4 || answers.length) < 2 &&
@@ -455,6 +523,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                     </div>
                                 </div>
                             </div>
+                            <div className="">
+                            {
+                               ( probType === 3 || probType === 4) && toleranceSelection
+                            }
+                            </div>
                         </TabPanel>
                         <TabPanel>
                             <div className="">
@@ -482,9 +555,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                     </div>
                                 </div>
                             </div>
-                            {
-                               ( probType === 3 || probType === 4) && toleranceSelection
-                            }
                         </TabPanel>
                         <TabPanel>
                             <div className="">

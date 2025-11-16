@@ -16,7 +16,7 @@ export default function HybridDisplay(props) {
             parts.push({ c: p2[1], t: 'H'})
         }
     })
-    let s = ''
+    let s = ''  
     parts.forEach(p => {
         if (p.t === 'L') {
             jsxParts.push(<Latex>{ p.c }</Latex>)

@@ -7,17 +7,22 @@ import AnswersComponent from '@/Components/AnswersComponent';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import OpenAnswerComponent from '@/Components/OpenAnswerComponent';
 import OpenAlphaAnswerComponent from '@/Components/OpenAlphaAnswerComponent';
+import FillInTheBlanksAnswerComponent from '@/Components/FillInTheBlanksAnswerComponent';
 import HybridDisplay from '@/Components/HybridDisplay';
+import FillInTheBlanksDisplay from '@/Components/FillInTheBlanksDisplay';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import levenshtein from 'js-levenshtein';
 
 export default function ShowProblem(props) {
+    const [selectedAnswers, setSelectedAnswers] = useState([])
     const [htmlContent, setHtmlContent] = useState(props.problem.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
     const editMode = 'editMode' in props && props.editMode
+
+    const fillInTheBlankAnswerSelect = (ans) => {}
 
     const multiAnswerSelect = (ans) => {
         let numCorr = props.numberCorrect
@@ -154,7 +159,7 @@ export default function ShowProblem(props) {
     clik = props.problem != null ? props.restart : () => {}
     let restartLink = props.hints === null ? '' : <BsFillSkipStartFill className={`${pointer} ${colr} mx-1`} onClick={clik} title="reiniciar" />
 
-    if (props.problem.display_type === 'text') { // deprecate
+    if (props.problem.display_type === 'text') { // deprecate; use html
         problemSection = (
             <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
         )
@@ -179,6 +184,11 @@ export default function ShowProblem(props) {
             <HybridDisplay content={ props.problem.problem_text } />
         )
     }
+    if (props.problem.display_type === 'ranuras') {
+        problemSection = (
+            <FillInTheBlanksDisplay content={ props.problem.problem_text } chosenAnswers={ selectedAnswers } />
+        )
+    }
 
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
@@ -198,6 +208,18 @@ export default function ShowProblem(props) {
     if (props.problem.problem_type_id === 3) {
         answerComponent = (
             <OpenAlphaAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAlphaAnswerSubmit } editMode={ editMode } />
+        )
+    }
+    if (props.problem.problem_type_id === 5) {
+        answerComponent = (
+            <FillInTheBlanksAnswerComponent
+                answers={ props.answers }
+                answered={ props.answered }
+                answerSelect={ fillInTheBlankAnswerSelect }
+                setSelectedAnswers={ setSelectedAnswers }
+                selectedAnswers={ selectedAnswers }
+                editMode={ editMode }
+            />
         )
     }
     if (props.answered && !props.editMode) {
