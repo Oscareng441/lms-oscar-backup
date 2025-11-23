@@ -29,7 +29,6 @@ export default function FillInTheBlanksAnswerComponent(props) {
                     </div>
                     <div className="flex justify-center flex-wrap">
                     { props.answers.map((r, k) => {
-        console.log('props', r, props)
                         let isSelected = false
                         selectedAnswers.some(a => {
                             if (r.answer_text === a.answer_text) {
