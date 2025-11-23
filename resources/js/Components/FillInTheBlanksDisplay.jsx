@@ -2,7 +2,11 @@ import { useState, useEffect, Fragment } from 'react';
 import FillInTheBlanksBox from '@/Components/FillInTheBlanksBox';
 
 export default function FillInTheBlanksDisplay(props) {
-    const [theDisplay, setTheDisplay] = useState(parseBlanks(props.content))
+    const [theDisplay, setTheDisplay] = useState('')
+
+    useEffect(() => {
+        setTheDisplay(parseBlanks(props.content))
+    }, [props.content, props.chosenAnswers])
 
     function parseBlanks(txt) {
         let arr = txt.split('_')
@@ -10,9 +14,7 @@ export default function FillInTheBlanksDisplay(props) {
         let ret1 = []
         arr.forEach((r,k) => {
             if (k % 2) {
-                console.log(props.chosenAnswers, (k-1)/2)
                 let textToShow = props.chosenAnswers.length > (k-1)/2 ? props.chosenAnswers[(k-1)/2]['answer_text'] : ''
-                console.log(textToShow)
                 ret1.push(<FillInTheBlanksBox answer={ r } showText={ textToShow } />)
             } else {
                 ret1.push(<div className="bg-white px-2">{ r }</div>)

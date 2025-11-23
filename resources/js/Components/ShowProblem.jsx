@@ -22,10 +22,37 @@ export default function ShowProblem(props) {
     const [feedbackMessage, setFeedbackMessage] = useState('right')
     const editMode = 'editMode' in props && props.editMode
 
-    const fillInTheBlankAnswerSelect = (ans) => {}
+    const fillInTheBlankAnswerSelect = (ans) => {
+        let score = 0, total = 0
+        let answerTextArr = ans.map(a=>{
+            return a.answer_text
+        })
+        let submitted = {}
+        let correct = {}
+        ans.forEach(a => {
+            submitted[a.slot_number] = a.answer_text
+        })
+        props.answers.forEach(r => {
+            if (r.is_correct) {
+                correct[r.slot] = r.answer_text
+            }
+        })
+        for (let i in correct) {
+            total++
+            if (i in submitted && submitted[i] === correct[i]) {
+                score++
+            }
+        }
+        let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
+        setPoints(pts)
+        let msg = (score + ' correctos de ' + total + ' para ' + pts + '%')
+        if (!editMode) {
+            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
+        }
+        props.handleAnswer(props.problem.id, pts, msg)
+    }
 
     const multiAnswerSelect = (ans) => {
-        let numCorr = props.numberCorrect
         let score = 0, total = 0
         props.answers.forEach(r => {
             let didSubmit = ans.indexOf(r.id) >= 0
@@ -44,10 +71,6 @@ export default function ShowProblem(props) {
         }
         props.handleAnswer(props.problem.id, pts, msg)
     }
-
-    useEffect(() => {
-        console.log('props', props)
-    }, [props.ctr])
 
     const answerSelect = (ans) => {
         let pts, msg
@@ -213,7 +236,7 @@ export default function ShowProblem(props) {
     if (props.problem.problem_type_id === 5) {
         answerComponent = (
             <FillInTheBlanksAnswerComponent
-                answers={ props.answers }
+                answers={ [ ...props.answers ] }
                 answered={ props.answered }
                 answerSelect={ fillInTheBlankAnswerSelect }
                 setSelectedAnswers={ setSelectedAnswers }

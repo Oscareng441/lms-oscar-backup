@@ -67,7 +67,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const title = !isAdd ? `Editar #${ problem.id }` : 'Problema Nuevo'
 
     const genericAnswer = (a) => {
-        return {problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text:'', is_correct: 0, display_type: 'latex'}
+        return {problem_id: problem.id, sequence_id: (a.length + 1) * 10, answer_text: '', is_correct: 0, display_type: 'latex'}
     }
 
     const nextProblem = () => {
@@ -138,7 +138,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 ansrs.push(a)
             }
         })
-        arr.some(autoAnswer => {
+        arr.some((autoAnswer, k) => {
             let addMe = true
             ansrs.forEach(a => {
                 if (a.answer_text === autoAnswer) {
@@ -148,11 +148,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 return false
             })
             if (addMe) {
-                let ans = { problem_id: problem.id, answer_text:autoAnswer, is_auto: 1, display_type: 'latex' }
+                let ans = { problem_id: problem.id, answer_text: autoAnswer, is_correct: 1, slot: k+1, is_auto: 1, display_type: 'latex' }
                 ansrs.push(ans)
             }
         })
-
+console.log(ansrs)
         setAnswers(ansrs)
     }
 
@@ -466,9 +466,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                             type="text"
                                             onChange={ chgProbTxt }
                                             onBlur={ blurProbTxt }
-                                            value={probTxt}
+                                            value={ probTxt }
                                             className="w-full h-fit"
-                                            rows={10}
+                                            rows={ 10 }
                                         />
                                     </div>
                                     <InputError message={ errMsg } className="mt-2" />

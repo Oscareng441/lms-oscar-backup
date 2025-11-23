@@ -2,6 +2,7 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
 export default function AnswerChoice (props) {
+    console.log(props)
     let ans = props.answer.answer_text
     let useLatex = false
     if (!isNaN(ans)) {
