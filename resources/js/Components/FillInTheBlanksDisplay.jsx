@@ -7,9 +7,22 @@ export default function FillInTheBlanksDisplay(props) {
     useEffect(() => {
         setTheDisplay(parseBlanks(props.content))
     }, [props.content, props.chosenAnswers])
+    useEffect(() => console.log(props), [props])
 
-    function removeAnswer(e) {
-        console.log(1)
+    function removeAnswer(ansrTxt) {
+        console.log(ansrTxt)
+        let a = [ ...props.chosenAnswers ]
+        let idx = -1
+        a.some((x, k) => {
+            if (x.answer_text === ansrTxt) {
+                idx = k
+                return true
+            }
+
+            return false
+        })
+        a.splice(idx, 1)
+        props.setSelectedAnswers(a)
     }
 
     function parseBlanks(txt) {
@@ -36,7 +49,7 @@ export default function FillInTheBlanksDisplay(props) {
     }
 
     return (
-        <div className="flex justify-start">
+        <div className="flex justify-start items-center">
             { theDisplay }
         </div>
     )

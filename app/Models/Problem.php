@@ -38,6 +38,11 @@ class Problem extends Model
                 SELECT id, TRIM(TRAILING "0" FROM answer) AS answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_numeric
                 WHERE problem_id = ?';
                 break;
+            case 5:
+                $sql = '
+                SELECT problem_id, answer_text, is_correct, position as slot, display_type from ordered_answers
+                WHERE problem_id = ?';
+                break;
             default:
                 throw new Exception("UNKNOWN PROBLEM_TYPE_ID");
             
@@ -247,6 +252,35 @@ class Problem extends Model
         $sql = '
         INSERT INTO open_answers_alpha
         (problem_id, answer, pct_tolerance)
+        VALUES ' .
+        implode(',', $placeholders) . ';';
+
+        DB::insert($sql, $params);
+    }
+
+    public function saveSlotsAnswers($answers)
+    {
+        $sql = '
+        DELETE FROM ordered_answers
+        WHERE problem_id = ?';
+        $rec = DB::delete($sql, [$this->id]);
+
+        $params = [];
+        $placeholders = [];
+        $placeholder = '(?,?,?,?,?)';
+
+        foreach ($answers as $ans) {
+            $placeholders[] = $placeholder;
+            $params[] = $this->id;
+            $params[] = $ans['answer_text'];
+            $params[] = $ans['is_correct'];
+            $params[] = empty($ans['slot']) ? 0 : $ans['slot'];
+            $params[] = $ans['display_type'];
+        }
+
+        $sql = '
+        INSERT INTO ordered_answers
+        (problem_id, answer_text, is_correct, position, display_type)
         VALUES ' .
         implode(',', $placeholders) . ';';
 

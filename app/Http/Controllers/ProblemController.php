@@ -85,6 +85,9 @@ class ProblemController extends Controller
             case 4:
                 $problem->saveOpenAnswer($answers[0]);
                 break;
+            case 5:
+                $problem->saveSlotsAnswers($answers);
+                break;
             default:
                 throw new \Exception("unknown answer type in save prob");
         }

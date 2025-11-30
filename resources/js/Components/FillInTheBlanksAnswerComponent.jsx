@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AnswerChoice from '@/Components/AnswerChoice';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import { handleFraction } from '@/Helpers/Utilities';
 
-const propsAnswers = [{answer_text: 'big'}, {answer_text: 'feline'}]
-
 export default function FillInTheBlanksAnswerComponent(props) {
     const [selectedAnswers, setSelectedAnswers] = useState(props.selectedAnswers)
     const [hasAnswered, setHasAnswered] = useState( false )
     const [slot, setSlot] = useState( 1 )
+
+    useEffect(() => console.log(props), [props])
 
     function selectAnswer(ans) {
         let a = [ ...props.selectedAnswers ]
@@ -30,7 +30,7 @@ export default function FillInTheBlanksAnswerComponent(props) {
                     <div className="flex justify-center flex-wrap">
                     { props.answers.map((r, k) => {
                         let isSelected = false
-                        selectedAnswers.some(a => {
+                        props.selectedAnswers.some(a => {
                             if (r.answer_text === a.answer_text) {
                                 isSelected = true
                                 return true

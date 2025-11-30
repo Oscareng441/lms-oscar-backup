@@ -23,6 +23,7 @@ export default function ShowProblem(props) {
     const editMode = 'editMode' in props && props.editMode
 
     const fillInTheBlankAnswerSelect = (ans) => {
+        console.log(ans)
         let score = 0, total = 0
         let answerTextArr = ans.map(a=>{
             return a.answer_text
@@ -209,7 +210,11 @@ export default function ShowProblem(props) {
     }
     if (props.problem.display_type === 'ranuras') {
         problemSection = (
-            <FillInTheBlanksDisplay content={ props.problem.problem_text } chosenAnswers={ selectedAnswers } />
+            <FillInTheBlanksDisplay
+                content={ props.problem.problem_text }
+                chosenAnswers={ selectedAnswers } 
+                setSelectedAnswers={ setSelectedAnswers }
+            />
         )
     }
 

@@ -14,7 +14,7 @@ import Checkbox from '@/Components/Checkbox';
 const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     const [probs, setProbs] = useState(problems)
     let { flash } = usePage().props;
-
+console.log(flash)
     const title = `${ lesson.name } Ejercicios`
 
     let topMenu = (

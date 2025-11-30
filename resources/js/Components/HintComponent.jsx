@@ -15,7 +15,7 @@ export default function HintComponent(props) {
         }
     })
     let xxx = jsxParts.map((p,k) => {
-        let cls = k > 0 ? 'text-slate-300' : 'text-slate-600 bg-red-100 rounded-lg p-2 mx-2'
+        let cls = k > 0 ? 'text-slate-400 p-2 mx-2' : 'text-slate-600 bg-slate-100 rounded-lg p-2 mx-2'
         return (
             <div key={ k } className={`my-4 ${cls}`}>
                 { p }
