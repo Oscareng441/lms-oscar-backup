@@ -261,10 +261,15 @@ export default function ShowProblem(props) {
             <div className="mx-auto max-w-7xl space-y-1">
                 <div className="bg-white px-4 shadow sm:rounded-lg sm:px-8 sm:py-2">
                     <div className="flex flex-row w-fit">
-                        { hintLink }
-                        { nextLink }
-                        { prevLink }
-                        { restartLink } 
+                        <div className="mr-4 font-bold">
+                            { props.problem.name }
+                        </div>
+                        <div className="flex flex-row w-fit items-center">
+                            { hintLink }
+                            { nextLink }
+                            { prevLink }
+                            { restartLink } 
+                        </div>
                     </div>
                     <div className="py-2">
                         <div className="mx-auto space-y-6">

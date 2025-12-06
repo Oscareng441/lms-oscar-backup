@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('problems', function (Blueprint $table) {
+        Schema::create('table_problem_template', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('problem_type_id')->default(1);
-            $table->boolean('active')->default(0);
-            $table->boolean('is_premium')->default(0);
-            $table->integer('sequence_id')->default(10);
+            $table->text('template_text');
+            $table->string('display_type');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('problems');
+        Schema::dropIfExists('table_problem_template');
     }
 };
