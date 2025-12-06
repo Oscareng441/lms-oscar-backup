@@ -2,13 +2,14 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
 export default function AnswerChoice (props) {
-    console.log(props)
     let ans = props.answer.answer_text
-    let useLatex = false
-    if (!isNaN(ans)) {
-        useLatex = true
-        ans = '$' + ans + '$'
-    }                
+    // if display_type is latex or the distractor is just a number, use latex
+    let useLatex = props.answer.display_type === 'latex' || !isNaN(ans)
+    if (useLatex) {
+        if (!(ans.substring(0, 2) === '\\[' || ans.substring(0, 1) === '$')) {
+            ans = '$' + ans + '$'
+        }
+    }        
     let border = props.selected ? 'border-2 border-slate-400' : ''
     let cursor = props.selectable ? 'cursor-pointer' : ''
     return (
@@ -21,7 +22,7 @@ export default function AnswerChoice (props) {
                     }
                     {
                         !useLatex &&
-                        <span>{ ans }</span>
+                        <div className="">{ ans }</div>
                     }
                 </div>
             </div>
