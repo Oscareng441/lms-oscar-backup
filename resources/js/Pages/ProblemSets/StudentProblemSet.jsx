@@ -73,10 +73,13 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
             )
         }
         return (
-            <div key={k}  className="flex flex-row justify-space">
-                <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>
-                    <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
-                        { problemSection }
+            <div className="text-left">
+                <Link as="button" key={k} disabled={userScore !== null} href={ route('problem.show', p.id) }>
+                    <div className="flex flex-row justify-space items-center ">
+                        <div>{ p.name }</div>
+                        <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
+                            { problemSection }
+                        </div>
                     </div>
                 </Link>
             </div>
@@ -85,8 +88,6 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
 
     const confirmAndReset = () => {
         if (confirm('Quieres resetear tus resultados de esta lección?')) {
-            // alert("Enlace armado. Haz clic una vez más.");
-            // setOkToReset(true)
             fetch(route('results.reset', { lessonId: lesson.id}))
             .then(res => res.json())
             .then(

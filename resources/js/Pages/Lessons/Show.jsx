@@ -22,7 +22,7 @@ const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAsset
             }
         )
     }, [])
-    const title = `${ lesson.name }`
+    const title = `${ lesson.short_name }`
     let lessonSection, problemSection
     if (lesson.lesson_type === 'text') {
         lessonSection = (

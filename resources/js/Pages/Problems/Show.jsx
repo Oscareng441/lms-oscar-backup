@@ -45,7 +45,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
         };
     }, [handleKeyDown]);
 
-    const title = `${ lesson.name }`
+    const title = `${ lesson.short_name }`
 
     const handleAnswer = (id, points, msg) => {
         setFeedbackMessage(msg)

@@ -117,6 +117,15 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setProbTxt(e.target.value)
     }
 
+    const chgProbName = (e) => {
+        let p = { ...problem }
+        let d = { ...data }
+        p.name = e.target.value
+        setProblem(p)
+        d.problem = p
+        setData(d)
+    }
+
     const blurProbTxt = (e) => {
         if (probType === 5) {
             let arr = e.target.value.split('_')
@@ -152,7 +161,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 ansrs.push(ans)
             }
         })
-console.log(ansrs)
+
         setAnswers(ansrs)
     }
 
@@ -472,6 +481,19 @@ console.log(ansrs)
                                         />
                                     </div>
                                     <InputError message={ errMsg } className="mt-2" />
+                                </div>
+                                <div className="mx-auto max-w-7xl space-y-6">
+                                    <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex items-center">
+                                        <div className="mr-2">Name:</div>
+                                        <div className="w-full">
+                                            <input 
+                                                type="text"
+                                                onChange={ chgProbName }
+                                                value={ problem.name }
+                                                className="w-full"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </TabPanel>

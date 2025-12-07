@@ -56,7 +56,7 @@ class ProblemController extends Controller
             'answers.required' => ' Tiene que haber a lo menos una respuesta. ',
         ]);
 
-        $problem->name = '';
+        $problem->name = $p['name'];
         $problem->lesson_id = $p['lesson_id'];
         $problem->problem_type_id = $p['problem_type_id'];
         $problem->display_type = $p['display_type'];
