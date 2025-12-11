@@ -76,7 +76,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             )
         }
         return (
-            <div key={ k } className="flex flex-row justify-space items-center max-h-48 overflow-y-auto my-8 w-full">
+            <div key={ k } className="flex flex-row justify-space items-center my-8 w-full">
                 <div className="text-sm">{ p.name }</div>
                 <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
                     <Link href={ route('problem.show', p.id) }>{ problemSection }</Link>

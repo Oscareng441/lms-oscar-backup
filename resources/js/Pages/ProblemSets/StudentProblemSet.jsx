@@ -75,7 +75,7 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
         return (
             <div className="text-left">
                 <Link as="button" key={k} disabled={userScore !== null} href={ route('problem.show', p.id) }>
-                    <div className="flex flex-row justify-space items-center max-h-48 overflow-y-auto my-8 w-full">
+                    <div className="flex flex-row justify-space items-center my-8 w-full">
                         <div className="text-sm">{ p.name }</div>
                         <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
                             { problemSection }
