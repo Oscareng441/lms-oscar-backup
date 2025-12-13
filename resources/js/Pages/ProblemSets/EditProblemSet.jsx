@@ -13,6 +13,7 @@ import Checkbox from '@/Components/Checkbox';
 
 const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     const [probs, setProbs] = useState(problems)
+    const [draggedItem, setDraggedItem] = useState(null);
     let { flash } = usePage().props;
 
     const title = `${ lesson.name } Ejercicios`
@@ -48,6 +49,24 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
         setProbs(probsTmp)
     }
 
+    const handleDragStart = (e, item) => {
+        setDraggedItem(item);
+        e.dataTransfer.setData('text/plain', item); // Required for some browsers
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        if (draggedItem) {
+            // You can also remove the item from the original list here if desired
+            setDraggedItem(null);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault(); // Prevent default to allow drop
+    };
+
+
     const probList = probs.map((p, k) => {
         let problemSection
         if (p.display_type === 'text') { //deprecate
@@ -76,8 +95,13 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             )
         }
         return (
-            <div key={ k } className="flex flex-row justify-space items-center my-8 w-full">
-                <div className="text-sm">{ p.name }</div>
+            <div 
+                key={ k } 
+                draggable
+                onDragStart={(e) => handleDragStart(e, item)}
+                className="flex flex-row justify-space items-center my-8 w-full"
+            >
+                <div className="text-sm cursor-grab [&.is-dragging]:cursor-grabbing">{ p.name }</div>
                 <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
                     <Link href={ route('problem.show', p.id) }>{ problemSection }</Link>
                 </div>
@@ -94,6 +118,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
                         Publicar
                     </div>
                     <FaTrash className="text-base ml-2 cursor-pointer" onClick={ () => deleteProblem(p, k) } />
+                    { p.sequence_id }
                 </div>
             </div>
         )
@@ -112,7 +137,11 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
                             <Link href={route("problemset.student", lesson.id)}>Go to student mode</Link>
                         </p>
                     </div>
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                    <div 
+                        className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8"
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                    >
                         { probList }
                     </div>
                 </div>
