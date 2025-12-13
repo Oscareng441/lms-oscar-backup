@@ -50,7 +50,7 @@ class LessonController extends Controller implements HasMiddleware
         if (!$user->isAdmin() && !$user->isTeacher()) {
             abort(403);
         }
-        $problems = Problem::where(['lesson_id' => $id,])->get();
+        $problems = Problem::where(['lesson_id' => $id,])->orderBy('sequence_id')->get();
         $lesson = Lesson::find($id);
         $problems->shuffle();
         $answers = [];

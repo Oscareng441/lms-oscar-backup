@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');
     Route::post('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
+    Route::post('/problem/save-seq-id', [ProblemController::class, 'recordSeqId'])->name('problem.recordSeqId');
     Route::get('/report/{groupId}/{unit}/{unitId}/{agg}/{studentId}', [ReportController::class, 'groupReport'])->name('group.report');
     Route::get('/export-csv', [ReportController::class, 'exportCsv'])->name('exportCsv');
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');

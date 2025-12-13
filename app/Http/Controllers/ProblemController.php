@@ -245,4 +245,16 @@ class ProblemController extends Controller
 
         return redirect()->back()->with([$cat => $msg]);
     }
+
+    public function recordSeqId(Request $request)
+    {
+        // OmniHelper::log($request);
+        foreach ($request->get('sq') as $arr) {
+        OmniHelper::log($arr);
+            $p = Problem::find($arr['id']);
+            $p->sequence_id = $arr['sequence_id'];
+            $p->save();
+        }
+        return back();
+    }
 }
