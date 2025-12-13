@@ -170,7 +170,7 @@ function ProbRow(props) {
             onDragOver={ (e) => handleDragOver(e, true) }
             onDragLeave={ (e) => handleDragOver(e, false) }
             onDrop={ (e) => handleDrop(e, props.idx) }
-            className={`flex flex-row justify-space items-center my-8 w-full ${ isDraggingOver ? "mt-12" : ""}`}
+            className={`flex flex-row justify-space items-center my-8 w-full ${ isDraggingOver ? "pt-48" : ""}`}
         >
             <div className="text-sm cursor-grab [&.is-dragging]:cursor-grabbing">{ props.prob.name }</div>
             <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
