@@ -189,7 +189,6 @@ function ProbRow(props) {
                     Publicar
                 </div>
                 <FaTrash className="text-base ml-2 cursor-pointer" onClick={ () => deleteProblem(props.prob, props.idx) } />
-                { props.prob.sequence_id }
             </div>
         </div>
     )
