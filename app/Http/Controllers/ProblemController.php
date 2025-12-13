@@ -177,11 +177,13 @@ class ProblemController extends Controller
             $course = null;
             $chapter = null;
             $lesson = null;
+            $problemIds = [];
         } else {
             extract($this->getHierarchy($p->lesson_id));
             $lessonId = $p->lesson_id;
             $chapterId = $lesson->lesson_set_id;
             $courseId = $chapter->course_id;
+            $problemIds = $p->getNeighboringProblemIds($request->user()->id);
         }
         $answers = $p->getAnswers();
         $hints = $p->getHints();
@@ -192,7 +194,7 @@ class ProblemController extends Controller
         foreach ($filePaths as $path) {
             $imageUrls[] = '/storage/' . $path;
         }
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls, 'credits' => $sources]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls, 'credits' => $sources, 'problemIds' => $problemIds]);
     }
 
     public function getHierarchy($id) {

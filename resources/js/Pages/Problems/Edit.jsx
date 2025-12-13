@@ -17,7 +17,7 @@ import CreditsComponent from '@/Components/CreditsComponent';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images, credits = [] }) => {
+const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images, credits = [], problemIds = [] }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [probDisplayType, setProbDisplayType] = useState(origProblem.display_type)
     const [probType, setProbType] = useState(origProblem.problem_type_id)
@@ -71,15 +71,17 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     }
 
     const nextProblem = () => {
-        setProblem(problem)
-        setShowFeedback(false)
-        setShowHint(false)
+        window.location.href = '/problem/' + problemIds.siguiente + '/edit'
+        // setProblem(problem)
+        // setShowFeedback(false)
+        // setShowHint(false)
     }
 
     const prevProblem = () => {
-        setProblem(problem)
-        setShowFeedback(false)
-        setShowHint(false)
+        window.location.href = '/problem/' + problemIds.anterior + '/edit'
+        // setProblem(problem)
+        // setShowFeedback(false)
+        // setShowHint(false)
     }
 
     const toggleShowHint = () => {
@@ -612,10 +614,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                         totalHints={hints.length}
                                         hintsToShow={hintsToShow}
                                         nextHint={nextHint}
-                                        next={() => {}}
-                                        prev={() => {}}
-                                        hasNextProblem={false}
-                                        hasPrevProblem={false}
+                                        next={nextProblem}
+                                        prev={prevProblem}
+                                        hasNextProblem={problemIds.siguiente !== null}
+                                        hasPrevProblem={problemIds.anterior !== null}
                                         editMode={true}
                                         answered={false}
                                     />
