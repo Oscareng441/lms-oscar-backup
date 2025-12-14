@@ -434,13 +434,35 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
             <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 py-2">
                 <TabGroup className="mx-auto w-full">
                     <TabList className="flex gap-4 bg-white">
-                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Presentación del Problema</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Vista Estudiantil</Tab>
+                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Capturar el Problema</Tab>
                         <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Respuestas</Tab>
                         <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Pistas</Tab>
                         <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Recursos</Tab>
-                        <Tab className="aria-selected:underline hover:bg-slate-300 p-1">Vista Estudiantil</Tab>
                     </TabList>
                     <TabPanels>
+                        <TabPanel>
+                            {
+                                problem !== null && (
+                                    <ShowProblem
+                                        problem={problem}
+                                        answers={answers}
+                                        handleAnswer={handleAnswer}
+                                        showHint={showHint} 
+                                        hint={toggleShowHint}
+                                        totalHints={hints.length}
+                                        hintsToShow={hintsToShow}
+                                        nextHint={nextHint}
+                                        next={nextProblem}
+                                        prev={prevProblem}
+                                        hasNextProblem={problemIds.siguiente !== null}
+                                        hasPrevProblem={problemIds.anterior !== null}
+                                        editMode={true}
+                                        answered={false}
+                                    />
+                                )
+                            }
+                        </TabPanel>
                         <TabPanel>
                             <div className="">
                                 <div className="mx-auto max-w-7xl space-y-6 ">
@@ -601,28 +623,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                     </div>
                                 </div>
                             </div>
-                        </TabPanel>
-                        <TabPanel>
-                            {
-                                problem !== null && (
-                                    <ShowProblem
-                                        problem={problem}
-                                        answers={answers}
-                                        handleAnswer={handleAnswer}
-                                        showHint={showHint} 
-                                        hint={toggleShowHint}
-                                        totalHints={hints.length}
-                                        hintsToShow={hintsToShow}
-                                        nextHint={nextHint}
-                                        next={nextProblem}
-                                        prev={prevProblem}
-                                        hasNextProblem={problemIds.siguiente !== null}
-                                        hasPrevProblem={problemIds.anterior !== null}
-                                        editMode={true}
-                                        answered={false}
-                                    />
-                                )
-                            }
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
