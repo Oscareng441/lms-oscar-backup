@@ -31,7 +31,7 @@ class LessonSet extends Model
     public function getMyLessons($publishedOnly = true)
     {
         $activeClause = $publishedOnly ? 'and active = 1' : '';
-        $sql = 'SELECT * FROM lessons where lesson_set_id = ? ' . $activeClause;
+        $sql = 'SELECT * FROM lessons where lesson_set_id = ? ' . $activeClause . ' ORDER BY sequence_id, id';
         $recs = DB::select($sql, [$this->id]);
         return $recs;
     }
