@@ -76,6 +76,9 @@ class LessonSetController extends Controller
         $lessons = $data['lessons'];
         $deletedLessons = $data['deletedLessons'];
         foreach ($lessons as $a) {
+            if (empty($a['name'])) {
+                continue;
+            }
             if (empty($a['id'])) {
                 $lesson = new Lesson();
             } else {
@@ -98,9 +101,11 @@ class LessonSetController extends Controller
             $lesson->delete();
         }
 
-        return redirect()->route(
-            'chapter.edit', ['id' => $chapter->id]
-        );
+        // return redirect()->route(
+        //     'chapter.edit', ['id' => $chapter->id]
+        // );
+
+        return back();
     }
 
     public function lessons(Request $request, $id)

@@ -196,4 +196,14 @@ class LessonController extends Controller implements HasMiddleware
             'course' => $course,
         ];
     }
+
+    public function recordSeqId(Request $request)
+    {
+        foreach ($request->get('sq') as $arr) {
+            $p = Lesson::find($arr['id']);
+            $p->sequence_id = $arr['sequence_id'];
+            $p->save();
+        }
+        return back();
+    }
 }
