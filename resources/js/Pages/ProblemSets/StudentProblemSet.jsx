@@ -5,6 +5,7 @@ import TopMenu from '@/Components/TopMenu';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
+import FillInTheBlanksDisplay from '@/Components/FillInTheBlanksDisplay';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { Link, Head } from '@inertiajs/react';
@@ -72,9 +73,16 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
                 <HybridDisplay  key={k} content={ p.problem_text } />
             )
         }
+        if (p.display_type === 'ranuras') {
+            problemSection = (
+                <FillInTheBlanksDisplay
+                    content={ p.problem_text }
+                />
+            )
+        }
         return (
-            <div className="text-left">
-                <Link as="button" key={k} disabled={userScore !== null} href={ route('problem.show', p.id) }>
+            <div key={k} className="text-left">
+                <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>
                     <div className="flex flex-row justify-space items-center my-8 w-full">
                         <div className="text-sm">{ p.name }</div>
                         <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>

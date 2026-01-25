@@ -102,7 +102,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={ title } />
-            <div className="py-2">
+            <div className="py-2" translate="no">
                 <ShowProblem
                     problem={prob}
                     answers={answers}

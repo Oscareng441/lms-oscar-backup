@@ -72,16 +72,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const nextProblem = () => {
         window.location.href = '/problem/' + problemIds.siguiente + '/edit'
-        // setProblem(problem)
-        // setShowFeedback(false)
-        // setShowHint(false)
     }
 
     const prevProblem = () => {
         window.location.href = '/problem/' + problemIds.anterior + '/edit'
-        // setProblem(problem)
-        // setShowFeedback(false)
-        // setShowHint(false)
     }
 
     const toggleShowHint = () => {
@@ -396,10 +390,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         errMsg = errMsg + errors[i]
     }
 
-    let probTextInstructionsTxt = ''
+    let probTextInstructionsTxt = '', placeholder=''
     switch (probDisplayType) {
         case "ranuras":
-            probTextInstructionsTxt = "tecla dos o más guiones bajos para una ranura"
+            probTextInstructionsTxt = "tecla dos o más guiones bajos para una ranura, como \"_No_ tengo _piano_\""
             break
         default:
             probTextInstructionsTxt = ""

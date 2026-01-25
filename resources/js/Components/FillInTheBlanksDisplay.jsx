@@ -5,12 +5,12 @@ export default function FillInTheBlanksDisplay(props) {
     const [theDisplay, setTheDisplay] = useState('')
 
     useEffect(() => {
-        setTheDisplay(parseBlanks(props.content))
+        setTheDisplay('chosenAnswers' in props ? parseBlanks(props.content) : displayOnly(props.content))
     }, [props.content, props.chosenAnswers])
+
     useEffect(() => console.log(props), [props])
 
     function removeAnswer(ansrTxt) {
-        console.log(ansrTxt)
         let a = [ ...props.chosenAnswers ]
         let idx = -1
         a.some((x, k) => {
@@ -23,6 +23,28 @@ export default function FillInTheBlanksDisplay(props) {
         })
         a.splice(idx, 1)
         props.setSelectedAnswers(a)
+    }
+
+    function displayOnly(txt) {
+        let arr = txt.split('_')
+        let ret1 = []
+        arr.forEach((r,k) => {
+            if (k % 2) {
+                let textToShow = ''
+                ret1.push(<FillInTheBlanksBox answer={ r } showText={ textToShow } remove={ removeAnswer } />)
+            } else {
+                ret1.push(<div className="bg-white px-2">{ r }</div>)
+            }
+        })
+        let ret = ret1.map((r,k) => {
+            return (
+                <Fragment key={ k }>
+                    { r }
+                </Fragment>
+            )
+        })
+
+        return ret
     }
 
     function parseBlanks(txt) {
@@ -54,7 +76,3 @@ export default function FillInTheBlanksDisplay(props) {
         </div>
     )
 }
-
-/*
-    would like the choices above; click on one puts it in the next available box
-*/

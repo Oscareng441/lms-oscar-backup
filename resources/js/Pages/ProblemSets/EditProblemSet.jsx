@@ -6,6 +6,7 @@ import TopMenu from '@/Components/TopMenu';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
+import FillInTheBlanksDisplay from '@/Components/FillInTheBlanksDisplay';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
@@ -81,6 +82,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const togglePublish = (p, k) => {
+        console.log(p)
         fetch(route('problem.publish', { id: p.id, deactivate: p.active}))
         let probsTmp = [ ...probs ]
         probsTmp[k].active = !probsTmp[k].active
@@ -114,6 +116,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const probList = probs.map((p, k) => {
+        console.log(p.display_type)
         let problemSection
         if (p.display_type === 'text') { //deprecate
             problemSection = (
@@ -140,11 +143,19 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
                 <HybridDisplay content={ p.problem_text } />
             )
         }
+        if (p.display_type === 'ranuras') {
+            problemSection = (
+                <FillInTheBlanksDisplay
+                    content={ p.problem_text }
+                />
+            )
+        }
         return <ProbRow 
             key={ k } 
             idx={ k }
             prob={ p }
             problemSection={ problemSection }
+            togglePublish={ togglePublish }
         />
     })
 
@@ -197,6 +208,14 @@ function ProbRow(props) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  const [prob, setProb] = useState(props.prob)
+
+    function togglePublish() {
+        console.log(prob)
+        props.togglePublish(prob, props.idx)
+        p.active = !p.active
+        setProblem(p)
+    }
 
     return (
         <div 
@@ -212,8 +231,8 @@ function ProbRow(props) {
                     <FaPencilAlt className="text-base mx-4 cursor-pointer" />
                 </Link>
                 <Checkbox
-                    checked={ props.prob.active }
-                    onChange={ () => togglePublish(props.prob, props.idx) }
+                    checked={ prob.active }
+                    onChange={ togglePublish }
                     className='border border-black border-1'
                 />
                 <div className="text-sm ml-1 mr-2">
