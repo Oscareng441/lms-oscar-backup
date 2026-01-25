@@ -48,7 +48,7 @@ export default function FillInTheBlanksDisplay(props) {
     }
 
     function parseBlanks(txt) {
-        let arr = txt.split('_')
+        let arr = txt.split('_') 
         console.log(arr)
         let ret1 = []
         arr.forEach((r,k) => {
@@ -56,7 +56,7 @@ export default function FillInTheBlanksDisplay(props) {
                 let textToShow = props.chosenAnswers.length > (k-1)/2 ? props.chosenAnswers[(k-1)/2]['answer_text'] : ''
                 ret1.push(<FillInTheBlanksBox answer={ r } showText={ textToShow } remove={ removeAnswer } />)
             } else {
-                ret1.push(<div className="bg-white px-2">{ r }</div>)
+                ret1.push(<div className="bg-white px-2" dangerouslySetInnerHTML={{ __html: r }} />)
             }
         })
         let ret = ret1.map((r,k) => {
