@@ -29,7 +29,6 @@ export default function FillInTheBlanksDisplay(props) {
                     ret1.push(<div className="bg-white px-2" dangerouslySetInnerHTML={{ __html: r }} />)
                 }
             })
-            // return txt
             return (
                 <div className="flex justify-start items-center my-4" key={`d-${ kk }`}>
                     { 
@@ -93,7 +92,7 @@ export default function FillInTheBlanksDisplay(props) {
 
             return false
         })
-        a.splice(idx, 1)
+        a.splice(idx, 10)
         props.setSelectedAnswers(a)
     }
 
