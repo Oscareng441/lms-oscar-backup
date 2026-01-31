@@ -30,6 +30,9 @@ class ResultController extends Controller
             case 4:
                 Result::insertOpenAnswerNumeric($userId, $prob->id, $data['answers'], $data['score']);
                 break;
+            case 5:
+                // Result::insertOpenAnswerNumeric($userId, $prob->id, $data['answers'], $data['score']); TBI FINISH
+                // break;
             default:
                 throw new \Exception('Undefined Problem Type Id');
         }
