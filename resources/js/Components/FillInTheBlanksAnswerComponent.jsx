@@ -9,8 +9,6 @@ export default function FillInTheBlanksAnswerComponent(props) {
     const [hasAnswered, setHasAnswered] = useState( false )
     const [slot, setSlot] = useState( 1 )
 
-    useEffect(() => console.log(props), [props])
-
     function selectAnswer(ans) {
         let a = [ ...props.selectedAnswers ]
         ans.slot_number = slot
