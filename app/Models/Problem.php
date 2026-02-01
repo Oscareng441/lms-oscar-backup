@@ -16,6 +16,7 @@ class Problem extends Model
         'problem_text',
         'display_type',
         'credit_id',
+        'is_premium',
         'active',
     ];
 

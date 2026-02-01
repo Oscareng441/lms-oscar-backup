@@ -42,6 +42,17 @@ class Result extends Model
         DB::insert($sql, [$userId, $problemId, $answers, $score]);
     }
 
+    public static function insertRanuraAnswers($userId, $problemId, $answers, $score)
+    {
+        $sql = 'DELETE FROM results WHERE user_id = ? AND problem_id = ?';
+        DB::delete($sql, [$userId, $problemId]);
+
+        foreach ($answers as $answer) {
+            $sql = 'INSERT INTO results (user_id, problem_id, open_answer_alpha, slot, score) VALUES (?, ?, ?, ?, ?)';
+            DB::insert($sql, [$userId, $problemId, $answer['answer_text'], $answer['slot_number'], $answer['is_correct']]);
+        }
+    }
+
     public static function reset($userId, $lessonId)
     {
         $sql = '

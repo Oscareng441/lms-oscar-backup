@@ -220,7 +220,7 @@ function ProbRow(props) {
     return (
         <div 
             ref={setNodeRef} style={style} {...attributes} {...listeners}
-            className={`flex flex-row justify-space items-center my-8 w-full `}
+            className={`flex flex-row justify-space items-center my-8 w-full overflow-y-scroll`}
         >
             <div className="text-sm cursor-grab">{ props.prob.name }</div>
             <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
