@@ -43,7 +43,7 @@ class ProblemController extends Controller
         $request->validate([
             'problem.problem_text' => 'required|string',
             'answers' => [
-                'required',
+                'nullable',
                 'array', 
                 function ($attribute, $value, $fail) use ($request) {
                     if ($request->problem['problem_type_id'] == 4 && count($value) > 1) {
@@ -56,7 +56,7 @@ class ProblemController extends Controller
             'answers.required' => ' Tiene que haber a lo menos una respuesta. ',
         ]);
 
-        $problem->name = $p['name'] || '';
+        $problem->name = !empty($p['name']) ? $p['name'] : '';
         $problem->lesson_id = $p['lesson_id'];
         $problem->problem_type_id = $p['problem_type_id'];
         $problem->display_type = $p['display_type'];
