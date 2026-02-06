@@ -67,18 +67,19 @@ class LessonController extends Controller implements HasMiddleware
 
     public function showStudentProblemSet(Request $request, $id)
     {
-        $problems = Problem::where(['lesson_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
+        // $problems = Problem::where(['lesson_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
+        $user = $request->user();
+        $problems = Problem::getStudentProblemSet($id, $user);
         extract($this->getHierarchy($id));
-        $answers = [];
-        $hints = [];
+        foreach ($problems as $p) {
+        }
         $userScores = [];
         foreach ($problems as $p) {
-            $answers[$p->id] = $p->getAnswers();
-            $hints[$p->id] = $p->getHints();
-            $userScores[$p->id] = $p->getUserScore($request->user()->id);
+            OmniHelper::log($p->is_premium);
+            $userScores[$p->id] = $user->getProblemScore($p->id);
         }
 
-        return Inertia::render('ProblemSets/StudentProblemSet', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
+        return Inertia::render('ProblemSets/StudentProblemSet', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'userScores' => $userScores]);
     }
 
     public function videos(Request $request, $id)

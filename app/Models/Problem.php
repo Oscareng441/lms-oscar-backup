@@ -299,4 +299,30 @@ class Problem extends Model
 
         return $recs[0]->ct == 0;
     }
+
+    public static function getStudentProblemSet($lessonId, $user)
+    {
+        $whereUser = "WHERE 1";
+        $isPremium = 1;
+        $params = [];
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            $whereUser = "WHERE CU.user_id = ?";
+            $params[] = $user->id;
+            $isPremium = "CU.is_premium";
+        }
+        $params[] = $lessonId;
+        $sql = '
+        SELECT P.id, P.name, P.lesson_id, P.problem_type_id, P.sequence_id, P.problem_text, P.display_type, P.credit_id, P.is_premium, P.active, ' . $isPremium . ' AS has_access
+        FROM problems P
+        INNER JOIN lessons L ON L.id = P.lesson_id
+        INNER JOIN lesson_sets LS ON LS.id = L.lesson_set_id
+        INNER JOIN courses C ON C.id = LS.course_id
+        LEFT JOIN courses_users CU ON CU.course_id = C.id
+        ' . $whereUser . '
+        AND L.id = ?
+        ORDER BY P.sequence_id, P.id
+        ';
+OmniHelper::log($sql);
+        return DB::select($sql, $params);
+    }
 }

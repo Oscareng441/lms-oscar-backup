@@ -24,7 +24,7 @@ const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAsset
     }, [])
     const title = `${ lesson.short_name }`
     let lessonSection, problemSection
-    if (lesson.lesson_type === 'text') {
+    if (lesson.lesson_type === 'html' || lesson.lesson_type === 'text') {
         lessonSection = (
             <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
         )

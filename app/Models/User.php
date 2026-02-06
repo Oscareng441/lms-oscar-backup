@@ -255,4 +255,17 @@ class User extends Authenticatable
 
         return $recs;
     }
+
+    public function getProblemScore($problemId)
+    {
+        $sql = '
+        SELECT * FROM problem_scores
+        WHERE problem_id = ? AND user_id = ?';
+        $rec = DB::select($sql, [$problemId, $this->id]);
+        if (empty($rec)) {
+            return null;
+        }
+
+        return (float)$rec[0]->score;
+    }
 }

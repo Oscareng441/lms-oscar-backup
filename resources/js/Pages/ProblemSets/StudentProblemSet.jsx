@@ -6,13 +6,15 @@ import FeedbackComponent from '@/Components/FeedbackComponent';
 import EndOfSet from '@/Components/EndOfSet';
 import HybridDisplay from '@/Components/HybridDisplay';
 import FillInTheBlanksDisplay from '@/Components/FillInTheBlanksDisplay';
+import IsPremiumComponent from '@/Components/IsPremiumComponent';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { Link, Head } from '@inertiajs/react';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 import { LuListRestart } from "react-icons/lu";
+import { FaLock } from "react-icons/fa";
 
-const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, hints, userScores }) => {
+const StudentProblemSet = ({ auth, problems, lesson, chapter, course, userScores }) => {
     const [currentProblem, setCurrentProblem] = useState(null)
     const [currentProblemIdx, setCurrentProblemIdx] = useState(-1)
     const [feedbackMessage, setFeedbackMessage] = useState('')
@@ -84,7 +86,13 @@ const StudentProblemSet = ({ auth, problems, lesson, chapter, course, answers, h
             <div key={k} className="text-left">
                 <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>
                     <div className="flex flex-row justify-space items-center my-8 w-full">
-                        <div className="text-sm">{ p.name }</div>
+                        <div className="text-sm">
+                            { p.name }
+                            {
+                                p.is_premium &&
+                                <IsPremiumComponent hasAccess={ p.has_access } />
+                            }
+                        </div>
                         <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
                             { problemSection }
                         </div>

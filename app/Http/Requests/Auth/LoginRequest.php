@@ -57,6 +57,11 @@ class LoginRequest extends FormRequest
     public function ensureIsActive()
     {
         $user = User::where('email', $this->email)->first();
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);            
+        }
         if (!$user->active) {
             throw ValidationException::withMessages([
                 'email' => __('auth.disabled'),
