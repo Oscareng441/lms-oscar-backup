@@ -106,13 +106,6 @@ class User extends Authenticatable
 
     public function getCourseProgress($courseId)
     {
-        // $sql = 'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?';
-        // $rec = DB::select($sql, [$this->id, $courseId]);
-        // if (empty($rec)) {
-        //     return null;
-        // }
-        // $isPremium = $rec[0]->is_premium;
-
         $sql = '
             SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
                 SELECT count(*) as ct, C.id

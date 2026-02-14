@@ -5,7 +5,7 @@ import { FaUserGroup } from "react-icons/fa6";
 
 export default function CourseDescription(props) {
     let progressComponent = "";
-    if (props.showProgress) {
+    if (props.showProgress && !Array.isArray(props.progress)) {
         progressComponent = (
             <StudentCourseProgress
                 progress={props.progress}

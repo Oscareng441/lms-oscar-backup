@@ -1,11 +1,7 @@
 export default function StudentProgress(props) {
     let txt = "";
     if (props.progress === null) {
-        txt = (
-            <span className="p-1 m-1 border rounded-md text-sm bg-yellow-400">
-                no hay datos
-            </span>
-        );
+        txt = '';
     } else {
         let bgCol =
             props.progress.pct_done > 95

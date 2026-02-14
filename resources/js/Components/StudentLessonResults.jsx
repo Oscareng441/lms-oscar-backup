@@ -1,11 +1,7 @@
 export default function StudentLessonResults(props) {
     let txt = "";
     if (props.progress === null || props.progress.total == 0) {
-        txt = (
-            <span className="p-1 m-1 border rounded-md text-sm bg-yellow-400">
-                no hay datos
-            </span>
-        );
+        txt = '';
     } else {
         let info = `${props.progress.pct_done}% hecho; ${props.progress.score}% correctos; ${props.progress.total} problemas`;
         let bgCol =

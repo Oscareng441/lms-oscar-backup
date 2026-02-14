@@ -53,7 +53,10 @@ const Index = ({
         lessonSection = <HybridDisplay content={lesson.lesson_text} />;
     }
     let showProblemLink = problemSet !== null;
-
+    let iconNav = ["home", "prob-add", "chapter", "lesson-edit"]
+    if (problemSet) {
+        iconNav.push("prob-set")
+    }
     const breadcrumbs = buildBreadCrumbs({ course, chapter }, 3);
 
     let topMenu = (
@@ -63,7 +66,7 @@ const Index = ({
             courseId={course.id}
             lessonId={lesson.id}
             chapterId={lesson.lesson_set_id}
-            show={["home", "prob-set", "prob-add", "chapter", "lesson-edit"]}
+            show={iconNav}
             breadcrumbs={breadcrumbs}
         />
     );

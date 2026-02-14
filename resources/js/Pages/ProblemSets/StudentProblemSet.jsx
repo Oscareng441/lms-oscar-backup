@@ -42,13 +42,13 @@ const StudentProblemSet = ({
             courseId={course.id}
             lessonId={lesson.id}
             chapterId={lesson.lesson_set_id}
-            show={["home", "lesson", "prob-edit", "prob-add", "prob-set-edit"]}
+            show={["home", "lesson", "chapter", "prob-edit", "prob-add", "prob-set-edit"]}
             breadcrumbs={breadcrumbs}
         />
     );
 
     let userScore, bgCol, txtCol;
-    const probList = problems.map((p, k) => {
+    const probList = problems.length < 1 ? 'No hay problemas' : problems.map((p, k) => {
         userScore = scores[p.id];
         bgCol =
             userScore === null
