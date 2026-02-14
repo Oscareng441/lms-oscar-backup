@@ -59,7 +59,7 @@ class LoginRequest extends FormRequest
         $user = User::where('email', $this->email)->first();
         if (!$user) {
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => trans('auth.failed'),
             ]);            
         }
         if (!$user->active) {

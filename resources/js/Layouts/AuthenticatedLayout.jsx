@@ -1,9 +1,10 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import Dropdown from "@/Components/Dropdown";
+import NavLink from "@/Components/NavLink";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
+import { Link, usePage } from "@inertiajs/react";
+import { useState } from "react";
+import { CiSearch } from "react-icons/ci";
 
 export default function AuthenticatedLayout({ header, topMenu, children }) {
     const user = usePage().props.auth.user;
@@ -26,53 +27,55 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route("dashboard")}
+                                    active={route().current("dashboard")}
                                 >
                                     Inicio
                                 </NavLink>
                                 <NavLink
-                                    href={route('course.all')}
-                                    active={route().current('course.all')}
+                                    href={route("course.all")}
+                                    active={route().current("course.all")}
                                 >
                                     Cursos
                                 </NavLink>
-                                {
-                                    auth.is_admin &&
+                                {auth.is_admin && (
                                     <NavLink
-                                        href={route('admin.users')}
-                                        active={route().current('admin.users')}
+                                        href={route("admin.users")}
+                                        active={route().current("admin.users")}
                                     >
                                         Usuarios
                                     </NavLink>
-                                }
-                                {
-                                    auth.is_admin &&
+                                )}
+                                {auth.is_admin && (
                                     <NavLink
-                                        href={route('admin.groups')}
-                                        active={route().current('admin.groups')}
+                                        href={route("admin.groups")}
+                                        active={route().current("admin.groups")}
                                     >
                                         Grupos
                                     </NavLink>
-                                }
-                                {
-                                    auth.is_admin &&
+                                )}
+                                {auth.is_admin && (
                                     <NavLink
-                                        href={route('source.index')}
-                                        active={route().current('source.index')}
+                                        href={route("source.index")}
+                                        active={route().current("source.index")}
                                     >
                                         Fuentes
                                     </NavLink>
-                                }
-                                {
-                                    auth.is_admin &&
+                                )}
+                                {auth.is_admin && (
                                     <NavLink
-                                        href={route('school.index')}
-                                        active={route().current('school.index')}
+                                        href={route("school.index")}
+                                        active={route().current("school.index")}
                                     >
                                         Escuelas
                                     </NavLink>
-                                }
+                                )}
+                                <NavLink
+                                    href={route("searchAll")}
+                                    active={route().current("searchAll")}
+                                >
+                                    <CiSearch size={16} />
+                                </NavLink>
                             </div>
                         </div>
 
@@ -105,12 +108,12 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route('profile.edit')}
+                                            href={route("profile.edit")}
                                         >
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route('logout')}
+                                            href={route("logout")}
                                             method="post"
                                             as="button"
                                         >
@@ -139,8 +142,8 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                     <path
                                         className={
                                             !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
+                                                ? "inline-flex"
+                                                : "hidden"
                                         }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -150,8 +153,8 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                     <path
                                         className={
                                             showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
+                                                ? "inline-flex"
+                                                : "hidden"
                                         }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -166,14 +169,14 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
 
                 <div
                     className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
+                        (showingNavigationDropdown ? "block" : "hidden") +
+                        " sm:hidden"
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            href={route("dashboard")}
+                            active={route().current("dashboard")}
                         >
                             Inicio
                         </ResponsiveNavLink>
@@ -190,12 +193,12 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink href={route("profile.edit")}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route('logout')}
+                                href={route("logout")}
                                 as="button"
                             >
                                 Log Out
@@ -218,7 +221,7 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
             {topMenu && (
                 <header className="bg-white shadow">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <div className="text-xl font-semibold leading-tight text-gray-800">
+                        <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
                             {topMenu}
                         </div>
                     </div>

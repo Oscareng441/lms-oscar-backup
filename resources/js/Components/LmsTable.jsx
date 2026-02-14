@@ -1,146 +1,168 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { PiMagnifyingGlassThin } from "react-icons/pi";
 import { MdClose, MdSave } from "react-icons/md";
-import TableCellContents from '@/Components/TableCellContents';
-import Pagination from '@/Components/Pagination';
-import ColumnSort from '@/Components/ColumnSort';
-import { useForm, Link } from '@inertiajs/react';
+import TableCellContents from "@/Components/TableCellContents";
+import Pagination from "@/Components/Pagination";
+import ColumnSort from "@/Components/ColumnSort";
+import { useForm, Link } from "@inertiajs/react";
 
 export default function LmsTable(props) {
-	const [currentPage, setCurrentPage] = useState(1)
-	const [filterStr, setFilterStr] = useState("")
-	const [recordsPerPage, setRecordsPerPage] = useState(10)
-	const [sortCol, setSortCol] = useState(props.initialSort)
-	const [sortDir, setSortDir]= useState(props.initialSortDir || 1) // 1 or -1
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterStr, setFilterStr] = useState("");
+    const [recordsPerPage, setRecordsPerPage] = useState(10);
+    const [sortCol, setSortCol] = useState(props.initialSort);
+    const [sortDir, setSortDir] = useState(props.initialSortDir || 1); // 1 or -1
 
-	const { data, setData, post } = useForm({
+    const { data, setData, post } = useForm({
         tds: props.data,
-    }) 
+    });
 
-	const filterAndOrderData = () => {
-		let data = props.data
-		if (filterStr) {
-			const f = filterStr.toLowerCase()
-			data = data.filter((row) => {
-			    return Object.keys(row).some((key) => {
-			        return String(row[key]).toLowerCase().indexOf(f) > -1
-			    })
-			})
-		}
-		if (sortCol) {
-			data = data.slice().sort((a, b) => {
-			    a = a[sortCol]
-			    b = b[sortCol]
-			    return (a === b ? 0 : a > b ? 1 : -1) * sortDir
-			})
-		}
+    const showSrch = !("hideSearch" in props) || !props.hideSearch;
 
-		return data
-	}
+    const filterAndOrderData = () => {
+        let data = props.data;
+        if (filterStr) {
+            const f = filterStr.toLowerCase();
+            data = data.filter((row) => {
+                return Object.keys(row).some((key) => {
+                    return String(row[key]).toLowerCase().indexOf(f) > -1;
+                });
+            });
+        }
+        if (sortCol) {
+            data = data.slice().sort((a, b) => {
+                a = a[sortCol];
+                b = b[sortCol];
+                return (a === b ? 0 : a > b ? 1 : -1) * sortDir;
+            });
+        }
 
-	const sliceData = (data) => {
-	    const firstRecord = (currentPage - 1) * recordsPerPage
-	    const lastRecord = firstRecord + recordsPerPage
-	    return data.slice(firstRecord, lastRecord)
-	}
+        return data;
+    };
 
-	const filteredOrderedData = filterAndOrderData();
+    const sliceData = (data) => {
+        const firstRecord = (currentPage - 1) * recordsPerPage;
+        const lastRecord = firstRecord + recordsPerPage;
+        return data.slice(firstRecord, lastRecord);
+    };
 
-	const dataForPage = sliceData(filteredOrderedData);
+    const filteredOrderedData = filterAndOrderData();
 
-	function updateSort(s) {
-	    setSortDir(s === sortCol ? -1 * sortDir : 1);
-	    setSortCol(s);
-	    setCurrentPage(1)
-	}
+    const dataForPage = sliceData(filteredOrderedData);
 
-	const hdr = props.columns.map((col, k) => {
-		const cls = col.css ? col.css: 'w-[10%]'
-		return (
-			<th className={cls} key={ k }>
-                <div className="flex flex-row cursor-pointer" onClick={() => updateSort(col.field)} >
-                    { col.title }
-                    <ColumnSort field={col.field} sort={sortCol} dir={sortDir} sortable={col.sortable} />
+    function updateSort(s) {
+        setSortDir(s === sortCol ? -1 * sortDir : 1);
+        setSortCol(s);
+        setCurrentPage(1);
+    }
+
+    const hdr = props.columns.map((col, k) => {
+        const cls = col.css ? col.css : "w-[10%]";
+        return (
+            <th className={cls} key={k}>
+                <div
+                    className="flex flex-row cursor-pointer"
+                    onClick={() => updateSort(col.field)}
+                >
+                    {col.title}
+                    <ColumnSort
+                        field={col.field}
+                        sort={sortCol}
+                        dir={sortDir}
+                        sortable={col.sortable}
+                    />
                 </div>
             </th>
-		)
-	})
+        );
+    });
 
-	const bod = dataForPage.map((dta, j) => {
-		const rw = props.columns.map((col, k) => {
-			return (
-                <td className="font-medium" key={ k }>
-                    <TableCellContents col={ col } data={ dta } />
+    const bod = dataForPage.map((dta, j) => {
+        const rw = props.columns.map((col, k) => {
+            return (
+                <td className="font-medium" key={k}>
+                    <TableCellContents col={col} data={dta} />
                 </td>
-            )
-		})
-		return (
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800" key={ j }>
-            	{ rw }
+            );
+        });
+        return (
+            <tr
+                className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800"
+                key={j}
+            >
+                {rw}
             </tr>
-		)
-	})
+        );
+    });
 
-	let downloadLink = ''
-	if (props.downloadLink) {
-		let flds = ''
-		if (props.downloadParams) {
-			flds = props.downloadParams.map((p,k) => {
-				return <input key={ k } type="hidden" name={ p.key } value={ p.val } />
-			})
-		}
-		downloadLink = (
-            <form action={ props.downloadLink } method="GET" target="_blank">
-            	{ flds }
-            	<button type="submit">
+    let downloadLink = "";
+    if (props.downloadLink) {
+        let flds = "";
+        if (props.downloadParams) {
+            flds = props.downloadParams.map((p, k) => {
+                return (
+                    <input key={k} type="hidden" name={p.key} value={p.val} />
+                );
+            });
+        }
+        downloadLink = (
+            <form action={props.downloadLink} method="GET" target="_blank">
+                {flds}
+                <button type="submit">
                     <MdSave className="size-6 text-muted-foreground" />
                 </button>
             </form>
-		)
-	}
+        );
+    }
 
-	return (
-		<div className="p-2">
-	        <div className="flex flex-row justify-start pb-2">
-	            <div className="relative w-full max-w-sm items-center">
-	                <input
-	                	type="text" 
-	                	placeholder="Buscar..."
-	                	className="pl-10 h-[36px] w-full"
-	                	value={ filterStr }
-	                	onChange={(e) => { setFilterStr(e.target.value); setCurrentPage(1)} } 
-	                />
-	                <span className="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-	                    <PiMagnifyingGlassThin className="size-6 text-muted-foreground" />
-	                </span>
-	            </div>
-	            {
-	            	filterStr &&
-	                <div className="pt-1 cursor-pointer" title="Borrar" onClick={() => { setFilterStr('') }} >
-	                    <MdClose className="size-6 text-muted-foreground" />
-	                </div>
-	            }
-	            <div className="flex">
-	                { downloadLink }
-		        </div>
-	        </div>
-	        <table className="w-full">
-	            <thead>
-	                <tr>
-	                	{ hdr }
-	                </tr>
-	            </thead>
-	            <tbody>
-	            	{ bod }
-	            </tbody>
-	        </table>
-	        <Pagination
-	        	totalRecords={ filteredOrderedData.length }
-	        	recordsPerPage={ recordsPerPage }
-	        	page={ currentPage }
-	        	changePage={ setCurrentPage }
-	        	updateRecordsPerPage={ setRecordsPerPage }
-	        />
-	    </div>
-	)
+    return (
+        <div className="p-2">
+            <div className="flex flex-row justify-start pb-2">
+                {showSrch && (
+                    <div className="relative w-full max-w-sm items-center">
+                        <input
+                            type="text"
+                            placeholder="Buscar..."
+                            className="pl-10 h-[36px] w-full"
+                            value={filterStr}
+                            onChange={(e) => {
+                                setFilterStr(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                        <span className="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+                            <PiMagnifyingGlassThin className="size-6 text-muted-foreground" />
+                        </span>
+                    </div>
+                )}
+                {filterStr && (
+                    <div
+                        className="pt-1 cursor-pointer"
+                        title="Borrar"
+                        onClick={() => {
+                            setFilterStr("");
+                        }}
+                    >
+                        <MdClose className="size-6 text-muted-foreground" />
+                    </div>
+                )}
+                <div className="flex">{downloadLink}</div>
+            </div>
+            {dataForPage.length === 0 && <div className="">Sin resultados</div>}
+            {dataForPage.length > 0 && (
+                <table className="w-full">
+                    <thead>
+                        <tr>{hdr}</tr>
+                    </thead>
+                    <tbody>{bod}</tbody>
+                </table>
+            )}
+            <Pagination
+                totalRecords={filteredOrderedData.length}
+                recordsPerPage={recordsPerPage}
+                page={currentPage}
+                changePage={setCurrentPage}
+                updateRecordsPerPage={setRecordsPerPage}
+            />
+        </div>
+    );
 }

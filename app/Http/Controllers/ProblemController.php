@@ -101,6 +101,9 @@ class ProblemController extends Controller
             $hint->hint = $h['hint'];
             $hint->save();
         }
+        if (!empty($data['keywords'])) {
+            $problem->saveKeywords($data['keywords']);
+        }
 
         return redirect()->route(
             'problem.edit', ['id' => $problem->id]

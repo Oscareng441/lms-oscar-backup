@@ -1,62 +1,68 @@
-import { useState, useEffect, CSSProperties } from 'react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import LmsTable from '@/Components/LmsTable';
-import TopMenu from '@/Components/TopMenu';
-import { router, Link, Head } from '@inertiajs/react';
+import { useState, useEffect, CSSProperties } from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import LmsTable from "@/Components/LmsTable";
+import TopMenu from "@/Components/TopMenu";
+import { router, Link, Head } from "@inertiajs/react";
 
 const Index = ({ auth, users }) => {
-
-    const title = 'Usuarios'
+    const title = "Usuarios";
 
     const columns = [
         {
-            title: 'Nombre',
-            field: 'name',
+            title: "Nombre",
+            field: "name",
             sortable: true,
         },
         {
-            title: 'Email',
-            field: 'email',
+            title: "Email",
+            field: "email",
             sortable: true,
         },
         {
-            title: 'Vigente',
-            field: 'active',
+            title: "Vigente",
+            field: "active",
             sortable: false,
-            displayFormatter: yy
+            displayFormatter: yy,
         },
         {
-            title: 'Role',
-            field: 'role',
+            title: "Role",
+            field: "role",
             sortable: true,
-            displayFormatter: ww
+            displayFormatter: ww,
         },
         {
-            title: 'Acciones',
-            field: '',
+            title: "Acciones",
+            field: "",
             sortable: false,
-            displayFormatter: xx
+            displayFormatter: xx,
         },
-    ]
+    ];
 
     function yy(data) {
-        return data.active ? 'sí' : 'no'
+        return data.active ? "sí" : "no";
     }
 
     function ww(data) {
-        return data.roles.replace('student', 'estudiante').replace('teacher', 'maestr@').split(',').join('; ')
+        return data.roles
+            .replace("student", "estudiante")
+            .replace("teacher", "maestr@")
+            .split(",")
+            .join("; ");
     }
 
     function xx(data) {
-        return (<Link href={route('user.edit', { id: data.id })}>editar</Link>)
+        return <Link href={route("user.edit", { id: data.id })}>editar</Link>;
     }
 
-    let topMenu = (
-        <TopMenu auth={auth} title={ title } show={['user-add']} />
-    )
+    let topMenu = <TopMenu auth={auth} title={title} show={["user-add"]} />;
 
     return (
-        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
+        <AuthenticatedLayout
+            auth={auth}
+            user={auth.user}
+            header={false}
+            topMenu={topMenu}
+        >
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <LmsTable
@@ -67,7 +73,7 @@ const Index = ({ auth, users }) => {
                 </div>
             </div>
         </AuthenticatedLayout>
-    )
-}
+    );
+};
 
 export default Index;

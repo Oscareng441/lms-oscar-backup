@@ -1,15 +1,15 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link } from "@inertiajs/react";
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const handleImageError = () => {
         document
-            .getElementById('screenshot-container')
-            ?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
+            .getElementById("screenshot-container")
+            ?.classList.add("!hidden");
+        document.getElementById("docs-card")?.classList.add("!row-span-1");
         document
-            .getElementById('docs-card-content')
-            ?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
+            .getElementById("docs-card-content")
+            ?.classList.add("!flex-row");
+        document.getElementById("background")?.classList.add("!hidden");
     };
 
     return (
@@ -40,7 +40,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
                                     <Link
-                                        href={route('dashboard')}
+                                        href={route("dashboard")}
                                         className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                     >
                                         Inicio
@@ -48,13 +48,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                 ) : (
                                     <>
                                         <Link
-                                            href={route('login')}
+                                            href={route("login")}
                                             className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                         >
                                             Acceso
                                         </Link>
                                         <Link
-                                            href={route('register')}
+                                            href={route("register")}
                                             className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                         >
                                             Registrar
@@ -150,7 +150,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     href="/courses/all"
                                     className="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
                                 >
-                                    <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16" title="Lista de Cursos">
+                                    <div
+                                        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
+                                        title="Lista de Cursos"
+                                    >
                                         <svg
                                             className="size-5 sm:size-6"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +172,17 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         </h2>
 
                                         <p className="mt-4 text-sm/relaxed">
-                                            Este sitio se está desarrollando para proporcionar problemas de matemáticas que ayuden a los estudiantes a mejorar su dominio de diversas asignaturas. Tenga en cuenta que no es un sitio completo; actualmente contiene muchos problemas. Con el tiempo y su ayuda, será cada vez más útil. Haz clic para ver la lista de cursos disponibles.
+                                            Este sitio se está desarrollando
+                                            para proporcionar problemas de
+                                            matemáticas que ayuden a los
+                                            estudiantes a mejorar su dominio de
+                                            diversas asignaturas. Tenga en
+                                            cuenta que no es un sitio completo;
+                                            actualmente contiene muchos
+                                            problemas. Con el tiempo y su ayuda,
+                                            será cada vez más útil. Haz clic
+                                            para ver la lista de cursos
+                                            disponibles.
                                         </p>
                                     </div>
 
@@ -214,11 +227,21 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         </h2>
 
                                         <p className="mt-4 text-sm/relaxed">
-                                            Los colaboradores de este sitio son profesores y apasionados de las matemáticas. Sabemos que la mejor manera de aprender es practicando. Para aprender matemáticas, hay que resolver muchos problemas. Por ello, nos esforzamos continuamente por hacer que esta colección de problemas sea lo más interesante y relevante posible.
+                                            Los colaboradores de este sitio son
+                                            profesores y apasionados de las
+                                            matemáticas. Sabemos que la mejor
+                                            manera de aprender es practicando.
+                                            Para aprender matemáticas, hay que
+                                            resolver muchos problemas. Por ello,
+                                            nos esforzamos continuamente por
+                                            hacer que esta colección de
+                                            problemas sea lo más interesante y
+                                            relevante posible.
                                         </p>
 
                                         <p className="mt-4 text-sm/relaxed">
-                                            Si no te hayas registrado todavía, haz clic en la flecha para empzar...
+                                            Si no te hayas registrado todavía,
+                                            haz clic en la flecha para empzar...
                                         </p>
                                     </div>
 

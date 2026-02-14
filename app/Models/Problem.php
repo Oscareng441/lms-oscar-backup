@@ -305,11 +305,12 @@ class Problem extends Model
         $whereUser = "WHERE 1";
         $isPremium = 1;
         $params = [];
-        if (!$user->isAdmin() && !$user->isTeacher()) {
-            $whereUser = "WHERE CU.user_id = ?";
-            $params[] = $user->id;
-            $isPremium = "CU.is_premium";
-        }
+        // NEED TO FIX THIS
+        // if (!$user->isAdmin() && !$user->isTeacher()) {
+        //     $whereUser = "WHERE CU.user_id = ?";
+        //     $params[] = $user->id;
+        //     $isPremium = "CU.is_premium";
+        // }
         $params[] = $lessonId;
         $sql = '
         SELECT P.id, P.name, P.lesson_id, P.problem_type_id, P.sequence_id, P.problem_text, P.display_type, P.credit_id, P.is_premium, P.active, ' . $isPremium . ' AS has_access
@@ -322,7 +323,27 @@ class Problem extends Model
         AND L.id = ?
         ORDER BY P.sequence_id, P.id
         ';
-OmniHelper::log($sql);
+
         return DB::select($sql, $params);
+    }
+
+    public function saveKeywords($kw)
+    {
+        $arr = explode(" ", $kw);
+        $placeholders = [];
+        foreach ($arr as $a) {
+            $placeholders[] = '(?,?)';
+            $params[] = $a;
+            $params[] = $this->id;
+        }
+        if (!empty($placeholders)) {
+            $sql = '
+            INSERT IGNORE INTO problem_keywords
+            (keyword, problem_id)
+            VALUES
+            ' . implode(', ', $placeholders);
+
+            DB::insert($sql, $params);
+        }
     }
 }

@@ -3,22 +3,22 @@
 @tailwind utilities;
 
 .hint-header {
-	border:2px solid #999;
-	background-color:#e6ccff;
-	padding:10px 15px;
-	font-weight:bold;
-	font-size:18px;
-	margin-bottom:10px;
-	display:inline-block;
+    border: 2px solid #999;
+    background-color: #e6ccff;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 .hint {
-	font-size:18px;
-	margin-left:20px;
-	background-color:#e6ccff;
+    font-size: 18px;
+    margin-left: 20px;
+    background-color: #e6ccff;
 }
 
 .math-formula {
-	color:#003366;
-	font-weight:bold;
+    color: #003366;
+    font-weight: bold;
 }

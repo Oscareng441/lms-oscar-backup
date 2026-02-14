@@ -1,9 +1,9 @@
 // import { useState, useEffect } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import TopMenu from '@/Components/TopMenu';
-import { useForm } from '@inertiajs/react';
-import Select from 'react-select';
+import Checkbox from "@/Components/Checkbox";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import TopMenu from "@/Components/TopMenu";
+import { useForm } from "@inertiajs/react";
+import Select from "react-select";
 
 export default function Edit(props) {
     const { data, setData, post } = useForm({
@@ -12,88 +12,99 @@ export default function Edit(props) {
         email: props.user.email,
         active: props.user.active,
         roles: props.userRoles,
-    })
-    const title = 'Usuario'
+    });
+    const title = "Usuario";
 
     let topMenu = (
-        <TopMenu auth={ props.auth } title={ title } show={['home', 'user-add']} />
-    )
+        <TopMenu auth={props.auth} title={title} show={["home", "user-add"]} />
+    );
 
     function toggleActive() {
-        const d = { ...data }
-        d.active = !d.active
+        const d = { ...data };
+        d.active = !d.active;
 
-        setData(d)
+        setData(d);
     }
 
     function updateForm(e, field) {
-        const d = { ...data }
-        d[field] = e.target.value
+        const d = { ...data };
+        d[field] = e.target.value;
 
-        setData(d)
+        setData(d);
     }
 
     function updateRoles(e) {
-        const d = { ...data }
-        d.roles = e
+        const d = { ...data };
+        d.roles = e;
 
-        setData(d)
+        setData(d);
     }
 
     function submit(e) {
-        post(route('user.save'), {
-            onFinish: () => console.log(''),
+        post(route("user.save"), {
+            onFinish: () => console.log(""),
         });
         e.preventDefault();
     }
 
     return (
-        <AuthenticatedLayout auth={ props.auth } user={ props.auth.user } header={ false } topMenu={ topMenu }>
+        <AuthenticatedLayout
+            auth={props.auth}
+            user={props.auth.user}
+            header={false}
+            topMenu={topMenu}
+        >
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="">
-                        <label htmlFor="name" className="mr-2">Nombre</label>
+                        <label htmlFor="name" className="mr-2">
+                            Nombre
+                        </label>
                         <input
                             type="text"
                             id="name"
                             value={data.name}
-                            onChange={ (e) => updateForm(e, 'name') }
+                            onChange={(e) => updateForm(e, "name")}
                             className="w-1/2"
                             placeholder="nombre del usuario"
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="email" className="mr-2">Email</label>
+                        <label htmlFor="email" className="mr-2">
+                            Email
+                        </label>
                         <input
                             type="text"
                             id="email"
                             value={data.email}
-                            onChange={ (e) => updateForm(e, 'email') }
+                            onChange={(e) => updateForm(e, "email")}
                             className="w-1/2"
                             placeholder="email"
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="active" className="mr-2">Vigente</label>
+                        <label htmlFor="active" className="mr-2">
+                            Vigente
+                        </label>
                         <Checkbox
                             name="active"
                             checked={data.active}
-                            onChange={ toggleActive }
+                            onChange={toggleActive}
                         />
                     </div>
                     <div className="">
                         <Select
-                            value={ data.roles }
+                            value={data.roles}
                             className="w-full"
                             isMulti
-                            onChange={ updateRoles }
-                            options={ props.roles }
+                            onChange={updateRoles}
+                            options={props.roles}
                         />
                     </div>
                     <div className="">
                         <button
                             type="submit"
-                            onClick={ submit }
+                            onClick={submit}
                             className="mx-2 btn btn-primary"
                         >
                             GUARDAR
@@ -102,5 +113,5 @@ export default function Edit(props) {
                 </div>
             </div>
         </AuthenticatedLayout>
-    )
+    );
 }

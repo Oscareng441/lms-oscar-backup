@@ -1,259 +1,353 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { PiSteps } from "react-icons/pi";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { MdSkipPrevious } from "react-icons/md";
 import { BsFillSkipStartFill } from "react-icons/bs";
-import AnswersComponent from '@/Components/AnswersComponent';
-import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
-import OpenAnswerComponent from '@/Components/OpenAnswerComponent';
-import OpenAlphaAnswerComponent from '@/Components/OpenAlphaAnswerComponent';
-import FillInTheBlanksAnswerComponent from '@/Components/FillInTheBlanksAnswerComponent';
-import HybridDisplay from '@/Components/HybridDisplay';
-import FillInTheBlanksDisplay from '@/Components/FillInTheBlanksDisplay';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
-import levenshtein from 'js-levenshtein';
+import AnswersComponent from "@/Components/AnswersComponent";
+import MultiAnswersComponent from "@/Components/MultiAnswersComponent";
+import OpenAnswerComponent from "@/Components/OpenAnswerComponent";
+import OpenAlphaAnswerComponent from "@/Components/OpenAlphaAnswerComponent";
+import FillInTheBlanksAnswerComponent from "@/Components/FillInTheBlanksAnswerComponent";
+import HybridDisplay from "@/Components/HybridDisplay";
+import FillInTheBlanksDisplay from "@/Components/FillInTheBlanksDisplay";
+import "katex/dist/katex.min.css";
+import Latex from "react-latex-next";
+import levenshtein from "js-levenshtein";
 
 export default function ShowProblem(props) {
-    const [selectedAnswers, setSelectedAnswers] = useState([])
-    const [htmlContent, setHtmlContent] = useState(props.problem.problem_text)
-    const [hasAnswered, setHasAnswered] = useState(false)
-    const [points, setPoints] = useState(null)
-    const [feedbackMessage, setFeedbackMessage] = useState('right')
-    const editMode = 'editMode' in props && props.editMode
+    const [selectedAnswers, setSelectedAnswers] = useState([]);
+    const [htmlContent, setHtmlContent] = useState(props.problem.problem_text);
+    const [hasAnswered, setHasAnswered] = useState(false);
+    const [points, setPoints] = useState(null);
+    const [feedbackMessage, setFeedbackMessage] = useState("right");
+    const editMode = "editMode" in props && props.editMode;
 
     const fillInTheBlankAnswerSelect = (ans) => {
-        console.log(ans)
-        let score = 0, total = 0
-        let answerTextArr = ans.map(a=>{
-            return a.answer_text
-        })
-        let submitted = {}
-        let correct = {}
-        ans.forEach(a => {
-            submitted[a.slot_number] = a.answer_text
-        })
-        props.answers.forEach(r => {
+        console.log(ans);
+        let score = 0,
+            total = 0;
+        let answerTextArr = ans.map((a) => {
+            return a.answer_text;
+        });
+        let submitted = {};
+        let correct = {};
+        ans.forEach((a) => {
+            submitted[a.slot_number] = a.answer_text;
+        });
+        props.answers.forEach((r) => {
             if (r.is_correct) {
-                correct[r.slot] = r.answer_text
+                correct[r.slot] = r.answer_text;
             }
-        })
+        });
         for (let i in correct) {
-            total++
+            total++;
             if (i in submitted && submitted[i] === correct[i]) {
-                score++
+                score++;
             }
         }
-        let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
-        setPoints(pts)
-        let msg = (score + ' correctos de ' + total + ' para ' + pts + '%')
+        let pts = !total
+            ? 1
+            : Math.floor(0.5 + 100 * ((100 * score) / total)) / 100;
+        setPoints(pts);
+        let msg = score + " correctos de " + total + " para " + pts + "%";
         if (!editMode) {
-            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
+            fetch(
+                route("results.recordanswer", {
+                    id: props.problem.id,
+                    answers: ans,
+                    score: pts,
+                }),
+            );
         }
-        props.handleAnswer(props.problem.id, pts, msg)
-    }
+        props.handleAnswer(props.problem.id, pts, msg);
+    };
 
     const multiAnswerSelect = (ans) => {
-        let score = 0, total = 0
-        props.answers.forEach(r => {
-            let didSubmit = ans.indexOf(r.id) >= 0
+        let score = 0,
+            total = 0;
+        props.answers.forEach((r) => {
+            let didSubmit = ans.indexOf(r.id) >= 0;
             if (r.is_correct) {
                 total++;
                 if (didSubmit) {
                     score++;
                 }
             }
-        })
-        let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
-        setPoints(pts)
-        let msg = (score + ' correctos de ' + total + ' para ' + pts + '%')
+        });
+        let pts = !total
+            ? 1
+            : Math.floor(0.5 + 100 * ((100 * score) / total)) / 100;
+        setPoints(pts);
+        let msg = score + " correctos de " + total + " para " + pts + "%";
         if (!editMode) {
-            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
+            fetch(
+                route("results.recordanswer", {
+                    id: props.problem.id,
+                    answers: ans,
+                    score: pts,
+                }),
+            );
         }
-        props.handleAnswer(props.problem.id, pts, msg)
-    }
+        props.handleAnswer(props.problem.id, pts, msg);
+    };
 
     const answerSelect = (ans) => {
-        let pts, msg
+        let pts, msg;
         if (ans.is_correct) {
-            pts = 100
-            msg = getPositiveFeedback()
+            pts = 100;
+            msg = getPositiveFeedback();
         } else {
-            pts = 0
-            msg = getNegativeFeedback()
+            pts = 0;
+            msg = getNegativeFeedback();
         }
-        setPoints(pts)
+        setPoints(pts);
         if (!editMode) {
-            fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
+            fetch(
+                route("results.recordanswer", {
+                    id: props.problem.id,
+                    answers: [ans.id],
+                    score: pts,
+                }),
+            );
         }
-        props.handleAnswer(props.problem.id, pts, msg)
-    }
+        props.handleAnswer(props.problem.id, pts, msg);
+    };
 
     const getPositiveFeedback = () => {
-        const choices = [
-            'Así es!',
-            'Bien!',
-            'Correcto!',
-            'Excelente!',
-        ];
-        return choices[Math.floor(choices.length * Math.random())]
-    }
+        const choices = ["Así es!", "Bien!", "Correcto!", "Excelente!"];
+        return choices[Math.floor(choices.length * Math.random())];
+    };
 
     const getNegativeFeedback = () => {
         const choices = [
-            'Casi...',
-            'Hmm, no...',
-            'No creo...',
-            'No estoy de acuerdo...!',
+            "Casi...",
+            "Hmm, no...",
+            "No creo...",
+            "No estoy de acuerdo...!",
         ];
-        return choices[Math.floor(choices.length * Math.random())]
-    }
+        return choices[Math.floor(choices.length * Math.random())];
+    };
 
     const openAnswerSubmit = (ans) => {
-        let pts, msg
+        let pts, msg;
         let houseAnswer = parseFloat(props.answers[0].answer_text);
         let tolerance = parseFloat(props.answers[0].pct_tolerance);
         let ansMin = (1 - tolerance) * houseAnswer;
         let ansMax = (1 + tolerance) * houseAnswer;
         if (ansMax < ansMin) {
-            let tmp = ansMax
-            ansMax = ansMin
-            ansMin  = tmp
+            let tmp = ansMax;
+            ansMax = ansMin;
+            ansMin = tmp;
         }
         if (ans >= ansMin && ans <= ansMax) {
-            pts = 100
-            msg = getPositiveFeedback()
+            pts = 100;
+            msg = getPositiveFeedback();
         } else {
-            pts = 0
-            msg = getNegativeFeedback()
+            pts = 0;
+            msg = getNegativeFeedback();
         }
-        setPoints(pts)
+        setPoints(pts);
         if (!editMode) {
-            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+            fetch(
+                route("results.recordanswer", {
+                    id: props.problem.id,
+                    answers: ans,
+                    score: pts,
+                }),
+            );
         }
-        props.handleAnswer(props.problem.id, pts, msg)
-    }
+        props.handleAnswer(props.problem.id, pts, msg);
+    };
 
     const openAlphaAnswerSubmit = (ans) => {
-        let pts, msg, corr, regx, dist
-        props.answers.forEach(a => {
-            dist = levenshtein(a.answer_text, ans)
-            if (dist/a.answer_text.length < a.pct_tolerance) {
-                corr = true
+        let pts, msg, corr, regx, dist;
+        props.answers.forEach((a) => {
+            dist = levenshtein(a.answer_text, ans);
+            if (dist / a.answer_text.length < a.pct_tolerance) {
+                corr = true;
             }
-            regx = new RegExp(a.answer_text, "i")
-            if(regx.test(ans.toLowerCase())) {
-                corr = true
+            regx = new RegExp(a.answer_text, "i");
+            if (regx.test(ans.toLowerCase())) {
+                corr = true;
             }
-        })
+        });
         if (corr) {
-            pts = 100
-            msg = getPositiveFeedback()
+            pts = 100;
+            msg = getPositiveFeedback();
         } else {
-            pts = 0
-            msg = getNegativeFeedback()
+            pts = 0;
+            msg = getNegativeFeedback();
         }
-        setPoints(pts)
+        setPoints(pts);
         if (!editMode) {
-            fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+            fetch(
+                route("results.recordanswer", {
+                    id: props.problem.id,
+                    answers: ans,
+                    score: pts,
+                }),
+            );
         }
-        props.handleAnswer(props.problem.id, pts, msg)
-    }
+        props.handleAnswer(props.problem.id, pts, msg);
+    };
 
-    let problemSection, answerComponent, answersType = 'latex'
+    let problemSection,
+        answerComponent,
+        answersType = "latex";
 
-    let disabled = props.totalHints <= 0
-    let colr = disabled ? 'text-slate-400' : ''
-    let pointer = disabled ? '' : 'cursor-pointer'
-    let clik = disabled ? () => {} : props.hint
-    let hintLink = <PiSteps className={`${pointer} ${colr} mx-1`} onClick={clik} title="enséñame los pasos" />
+    let disabled = props.totalHints <= 0;
+    let colr = disabled ? "text-slate-400" : "";
+    let pointer = disabled ? "" : "cursor-pointer";
+    let clik = disabled ? () => {} : props.hint;
+    let hintLink = (
+        <PiSteps
+            className={`${pointer} ${colr} mx-1`}
+            onClick={clik}
+            title="enséñame los pasos"
+        />
+    );
 
-    colr = props.hasPrevProblem ? '' : 'text-slate-400'
-    pointer = props.hasPrevProblem ? 'cursor-pointer' : ''
-    clik = props.hasPrevProblem ? props.prev : () => {}
-    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr} mx-1`} onClick={clik} title="problema anterior" />
+    colr = props.hasPrevProblem ? "" : "text-slate-400";
+    pointer = props.hasPrevProblem ? "cursor-pointer" : "";
+    clik = props.hasPrevProblem ? props.prev : () => {};
+    let prevLink =
+        props.hints === null ? (
+            ""
+        ) : (
+            <IoCaretBack
+                className={`${pointer} ${colr} mx-1`}
+                onClick={clik}
+                title="problema anterior"
+            />
+        );
 
-    colr = props.hasNextProblem ? '' : 'text-slate-400'
-    pointer = props.hasNextProblem ? 'cursor-pointer' : ''
-    clik = props.hasNextProblem ? props.next : () => {}
-    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr} mx-1`} onClick={clik} title="próximo problema" />
+    colr = props.hasNextProblem ? "" : "text-slate-400";
+    pointer = props.hasNextProblem ? "cursor-pointer" : "";
+    clik = props.hasNextProblem ? props.next : () => {};
+    let nextLink =
+        props.hints === null ? (
+            ""
+        ) : (
+            <IoCaretForward
+                className={`${pointer} ${colr} mx-1`}
+                onClick={clik}
+                title="próximo problema"
+            />
+        );
 
-    colr = props.problem != null ? '' : 'text-slate-400'
-    pointer = props.problem != null ? 'cursor-pointer' : ''
-    clik = props.problem != null ? props.restart : () => {}
-    let restartLink = props.hints === null ? '' : <BsFillSkipStartFill className={`${pointer} ${colr} mx-1`} onClick={clik} title="reiniciar" />
+    colr = props.problem != null ? "" : "text-slate-400";
+    pointer = props.problem != null ? "cursor-pointer" : "";
+    clik = props.problem != null ? props.restart : () => {};
+    let restartLink =
+        props.hints === null ? (
+            ""
+        ) : (
+            <BsFillSkipStartFill
+                className={`${pointer} ${colr} mx-1`}
+                onClick={clik}
+                title="reiniciar"
+            />
+        );
 
-    if (props.problem.display_type === 'text') { // deprecate; use html
+    if (props.problem.display_type === "text") {
+        // deprecate; use html
         problemSection = (
-            <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
-        )
+            <div
+                dangerouslySetInnerHTML={{ __html: props.problem.problem_text }}
+            />
+        );
     }
-    if (props.problem.display_type === 'html') {
+    if (props.problem.display_type === "html") {
         problemSection = (
-            <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
-        )
+            <div
+                dangerouslySetInnerHTML={{ __html: props.problem.problem_text }}
+            />
+        );
     }
-    if (props.problem.display_type === 'latex') {
+    if (props.problem.display_type === "latex") {
+        problemSection = <Latex>{props.problem.problem_text}</Latex>;
+    }
+    if (props.problem.display_type === "pdf") {
         problemSection = (
-            <Latex>{ props.problem.problem_text }</Latex>
-        )
+            <iframe
+                src={`/storage/${pageAssets.pdf}.pdf`}
+                style={{ width: "900px", height: "1200px" }}
+                frameBorder="0"
+            />
+        );
     }
-    if (props.problem.display_type === 'pdf') {
-        problemSection = (
-            <iframe src={`/storage/${pageAssets.pdf}.pdf`} style={{width:"900px", height:"1200px"}} frameBorder="0" />
-        )
+    if (props.problem.display_type === "hybrid") {
+        problemSection = <HybridDisplay content={props.problem.problem_text} />;
     }
-    if (props.problem.display_type === 'hybrid') {
-        problemSection = (
-            <HybridDisplay content={ props.problem.problem_text } />
-        )
-    }
-    if (props.problem.display_type === 'ranuras') {
+    if (props.problem.display_type === "ranuras") {
         problemSection = (
             <FillInTheBlanksDisplay
-                content={ props.problem.problem_text }
-                chosenAnswers={ selectedAnswers } 
-                setSelectedAnswers={ setSelectedAnswers }
+                content={props.problem.problem_text}
+                chosenAnswers={selectedAnswers}
+                setSelectedAnswers={setSelectedAnswers}
             />
-        )
+        );
     }
 
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
-            <AnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ answerSelect } editMode={ editMode }  />
-        )
+            <AnswersComponent
+                answers={props.answers}
+                answered={props.answered}
+                answerSelect={answerSelect}
+                editMode={editMode}
+            />
+        );
     }
     if (props.problem.problem_type_id === 2) {
         answerComponent = (
-            <MultiAnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect} editMode={ editMode } />
-        )
+            <MultiAnswersComponent
+                answers={props.answers}
+                answered={props.answered}
+                answerSelect={multiAnswerSelect}
+                numCorrect={props.numberCorrect}
+                editMode={editMode}
+            />
+        );
     }
     if (props.problem.problem_type_id === 4) {
         answerComponent = (
-            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } editMode={ editMode } />
-        )
+            <OpenAnswerComponent
+                answers={props.answers}
+                answered={props.answered}
+                answerSelect={openAnswerSubmit}
+                editMode={editMode}
+            />
+        );
     }
     if (props.problem.problem_type_id === 3) {
         answerComponent = (
-            <OpenAlphaAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAlphaAnswerSubmit } editMode={ editMode } />
-        )
+            <OpenAlphaAnswerComponent
+                answers={props.answers}
+                answered={props.answered}
+                answerSelect={openAlphaAnswerSubmit}
+                editMode={editMode}
+            />
+        );
     }
     if (props.problem.problem_type_id === 5) {
         answerComponent = (
             <FillInTheBlanksAnswerComponent
-                answers={ [ ...props.answers ] }
-                answered={ props.answered }
-                answerSelect={ fillInTheBlankAnswerSelect }
-                setSelectedAnswers={ setSelectedAnswers }
-                selectedAnswers={ selectedAnswers }
-                editMode={ editMode }
+                answers={[...props.answers]}
+                answered={props.answered}
+                answerSelect={fillInTheBlankAnswerSelect}
+                setSelectedAnswers={setSelectedAnswers}
+                selectedAnswers={selectedAnswers}
+                editMode={editMode}
             />
-        )
+        );
     }
     if (props.answered && !props.editMode) {
         answerComponent = (
-            <div className="mx-auto w-full text-center bg-slate-500/50">Ya contestaste este problema</div>
-        )
+            <div className="mx-auto w-full text-center bg-slate-500/50">
+                Ya contestaste este problema
+            </div>
+        );
     }
 
     return (
@@ -262,23 +356,23 @@ export default function ShowProblem(props) {
                 <div className="bg-white px-4 shadow sm:rounded-lg sm:px-8 sm:py-2">
                     <div className="flex flex-row w-fit">
                         <div className="mr-4 font-bold">
-                            { props.problem.name }
+                            {props.problem.name}
                         </div>
                         <div className="flex flex-row w-fit items-center">
-                            { hintLink }
-                            { prevLink }
-                            { nextLink }
-                            { restartLink } 
+                            {hintLink}
+                            {prevLink}
+                            {nextLink}
+                            {restartLink}
                         </div>
                     </div>
                     <div className="py-2">
                         <div className="mx-auto space-y-6">
-                            <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                                { problemSection }
+                            <div className="text-center bg-white p-1 shadow text-xs sm:text-base rounded-lg sm:p-8">
+                                {problemSection}
                             </div>
                         </div>
                     </div>
-                    { answerComponent }
+                    {answerComponent}
                 </div>
             </div>
         </>

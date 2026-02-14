@@ -1,18 +1,23 @@
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 
 export default function BreadcrumbsComponent(props) {
     if (!props.data) {
-        return ''
+        return "";
     }
-    let separator
+    let separator;
     const bc = props.data.map((d, k) => {
-        separator = k < props.data.length - 1 ? '>' : ''
-        return (<div key={k} className="text-nowrap flex"><Link href={d.link}>{d.name}</Link><div className="mx-1">{ separator }</div></div>) 
-    })
+        separator = k < props.data.length - 1 ? ">" : "";
+        return (
+            <div key={k} className="text-nowrap flex">
+                <Link href={d.link}>{d.name}</Link>
+                <div className="mx-1">{separator}</div>
+            </div>
+        );
+    });
 
     return (
         <div className="text-sm flex justify-end text-nowrap overflow-x-auto">
-            { bc }
+            {bc}
         </div>
     );
 }

@@ -1,57 +1,56 @@
-import { useState, useEffect } from 'react';
-import Select from 'react-select';
-import LessonSelect from '@/Components/LessonSelect';
+import { useState, useEffect } from "react";
+import Select from "react-select";
+import LessonSelect from "@/Components/LessonSelect";
 
-export default function ChapterSelect (props) {
-    const [chapterId, setChapterId] = useState(props.selected)
-    const [lessons, setLessons] = useState([])
+export default function ChapterSelect(props) {
+    const [chapterId, setChapterId] = useState(props.selected);
+    const [lessons, setLessons] = useState([]);
     useEffect(() => {
-        fetch(route('chapter.lessons', {id: chapterId}))
-        .then(res => res.json())
-        .then(
-            (results) => {
-                setLessons(results)
-            },
-            (error) => {
-                console.log('error', error)
-            }
-        )
-    }, [chapterId])
+        fetch(route("chapter.lessons", { id: chapterId }))
+            .then((res) => res.json())
+            .then(
+                (results) => {
+                    setLessons(results);
+                },
+                (error) => {
+                    console.log("error", error);
+                },
+            );
+    }, [chapterId]);
 
-    const options = props.chapters.map(c => {
-        return { key: c.id, value: c.id, label: c.name }
+    const options = props.chapters.map((c) => {
+        return { key: c.id, value: c.id, label: c.name };
     });
-    let selected = null
-    options.some(x => {
+    let selected = null;
+    options.some((x) => {
         if (x.value == props.selected) {
-            selected = x
-            return true
+            selected = x;
+            return true;
         }
-        return false
-    })
+        return false;
+    });
 
     const onSelectChapter = (e) => {
-        setChapterId(e.value)
+        setChapterId(e.value);
         // props.onSelect(e)
-    } 
+    };
 
     return (
         <>
             <div className="mx-auto max-w-7xl space-y-6">
                 <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex">
-                <div className="w-50%">Chapter:</div>
-                {
-                    props.chapters.length > 0 &&
-                    <div className = "w-full">
-                        <Select
-                            options={options}
-                            placeholder='Select a chapter...'
-                            onChange={onSelectChapter}
-                            isClearable={ true }
-                            defaultValue={ selected }
-                        />
-                    </div>
-                }
+                    <div className="w-50%">Chapter:</div>
+                    {props.chapters.length > 0 && (
+                        <div className="w-full">
+                            <Select
+                                options={options}
+                                placeholder="Select a chapter..."
+                                onChange={onSelectChapter}
+                                isClearable={true}
+                                defaultValue={selected}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
             <LessonSelect
@@ -60,5 +59,5 @@ export default function ChapterSelect (props) {
                 onSelect={props.onSelectLesson}
             />
         </>
-    )
+    );
 }

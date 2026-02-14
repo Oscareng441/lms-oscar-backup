@@ -85,8 +85,8 @@ class CourseController extends Controller
             abort(403);
         }
         $course = Course::find($id);
-        $students = User::allStudentsWithGroupMembership(0);
-        $teachersThisGroup = User::allStudentsWithGroupMembership(0, 'teacher');
+        $students = User::allUsersWithGroupMembership(0);
+        $teachersThisGroup = User::allUsersWithGroupMembership(0, 'teacher');
         return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null, 'allStudents' => $students, 'teachersThisGroup' => $teachersThisGroup]);
     }
 
@@ -196,6 +196,9 @@ class CourseController extends Controller
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'pdf');
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'img');
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'thumbs');
+        }
+        if (!empty($data['keywords'])) {
+            $course->saveKeywords($data['keywords']);
         }
         return redirect()->route(
             'lessonset.index', ['id' => $course->id]

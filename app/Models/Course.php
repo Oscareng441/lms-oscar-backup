@@ -84,4 +84,86 @@ class Course extends Model
 
         return $recs;
     }
+
+    public static function getSearchResults($srch)
+    {
+        preg_match_all('/[^\s]+|"[^"]+"/', $srch, $tokens);
+        $params = [];
+        $p = []; // temp param holder
+        $wi = []; // where inner
+        $wo = []; // where outer
+        $finalWhere = [];
+        $cats = [
+            'course' => ['name', 'description'],
+            'kcourse' => ['keyword'],
+            'chapter' => ['name', 'short_name'],
+            'kchapter' => ['keyword'],
+            'lesson' => ['name', 'short_name'],
+            'klesson' => ['keyword'],
+            'problem' => ['name'],
+            'kproblem' => ['keyword'],
+        ];
+        foreach ($cats as $k => $dummy) {
+            $wo[$k] = [];
+            $p[$k] = [];
+        }
+        foreach ($tokens[0] as $token) {
+            $token = str_replace('"', '', $token);
+            foreach ($cats as $k => $cols) {
+                $wi[$k] = [];
+                foreach ($cols as $col) {
+                    $wi[$k][] = $col.' LIKE ?';
+                    $p[$k][] = '%'.$token.'%';
+                }
+            }
+            foreach ($cats as $k => $dummy) {
+                $wo[$k][] = '('.implode(' OR ', $wi[$k]).')';
+            }
+        }
+
+        foreach ($cats as $k => $dummy) {
+            $finalWhere[$k] = '('.implode(' AND ', $wo[$k]).')';
+            $params = array_merge($params, $p[$k]);
+        }
+
+        $sql = '
+        SELECT id, name, description, "course" AS link_type FROM courses WHERE active = 1 AND ' . $finalWhere['course'] . '
+        UNION
+        SELECT course_id AS id, name, description, "course" AS link_type FROM course_keywords K INNER JOIN courses C ON C.id = K.course_id WHERE active = 1 AND ' . $finalWhere['kcourse'] . '
+        UNION
+        SELECT id, name, "" as description, "chapter" AS link_type FROM lesson_sets WHERE active = 1 AND ' . $finalWhere['chapter'] . '
+        UNION
+        SELECT chapter_id AS id, name, "" AS description, "chapter" AS link_type FROM chapter_keywords K INNER JOIN lesson_sets C ON C.id = K.chapter_id WHERE active = 1 AND ' . $finalWhere['kchapter'] . '
+        UNION
+        SELECT id, name, "" as description, "lesson" AS link_type FROM lessons WHERE active = 1 AND ' . $finalWhere['lesson'] . '
+        UNION
+        SELECT lesson_id AS id, name, "" AS description, "lesson" AS link_type FROM lesson_keywords K INNER JOIN lessons C ON C.id = K.lesson_id WHERE active = 1 AND ' . $finalWhere['klesson'] . '
+        UNION
+        SELECT id, name, "" as description, "problem" AS link_type FROM problems WHERE active = 1 AND ' . $finalWhere['problem'] . '
+        UNION
+        SELECT problem_id AS id, name, "" AS description, "problem" AS link_type FROM problem_keywords K INNER JOIN problems C ON C.id = K.problem_id WHERE active = 1 AND ' . $finalWhere['kproblem'] . '
+        ';
+
+        return DB::select($sql, $params);
+    }
+
+    public function saveKeywords($kw)
+    {
+        $arr = explode(" ", $kw);
+        $placeholders = [];
+        foreach ($arr as $a) {
+            $placeholders[] = '(?,?)';
+            $params[] = $a;
+            $params[] = $this->id;
+        }
+        if (!empty($placeholders)) {
+            $sql = '
+            INSERT IGNORE INTO course_keywords
+            (keyword, course_id)
+            VALUES
+            ' . implode(', ', $placeholders);
+
+            DB::insert($sql, $params);
+        }
+    }
 }

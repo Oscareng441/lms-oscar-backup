@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import AnswerChoice from '@/Components/AnswerChoice';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+import { useState } from "react";
+import AnswerChoice from "@/Components/AnswerChoice";
+import "katex/dist/katex.min.css";
+import Latex from "react-latex-next";
 
 export default function AnswersComponent(props) {
-    const [selectedAnswer, setSelectedAnswer] = useState(0)
-    const [hasAnswered, setHasAnswered] = useState(props.answered && !props.editMode)
-    const selectAnswer = ( ans ) => {
+    const [selectedAnswer, setSelectedAnswer] = useState(0);
+    const [hasAnswered, setHasAnswered] = useState(
+        props.answered && !props.editMode,
+    );
+    const selectAnswer = (ans) => {
         if (!hasAnswered) {
-            setSelectedAnswer(ans.id)
-            setHasAnswered(true)
-            props.answerSelect(ans)
+            setSelectedAnswer(ans.id);
+            setHasAnswered(true);
+            props.answerSelect(ans);
         }
-    }
+    };
 
     return (
         <>
@@ -22,11 +24,17 @@ export default function AnswersComponent(props) {
                         Escoge la respuesta correcta:
                     </div>
                     <div className="flex justify-center flex-wrap">
-                    { props.answers.map((r, k) => {
-                        return (
-                            <AnswerChoice key={ k } answer={ r } select={ selectAnswer } selected={ r.id === selectedAnswer} selectable= { !hasAnswered } />
-                        )
-                    })}
+                        {props.answers.map((r, k) => {
+                            return (
+                                <AnswerChoice
+                                    key={k}
+                                    answer={r}
+                                    select={selectAnswer}
+                                    selected={r.id === selectedAnswer}
+                                    selectable={!hasAnswered}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             </div>

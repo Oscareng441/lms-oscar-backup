@@ -3,12 +3,12 @@ import {
     DialogPanel,
     Transition,
     TransitionChild,
-} from '@headlessui/react';
+} from "@headlessui/react";
 
 export default function Modal({
     children,
     show = false,
-    maxWidth = '3xl',
+    maxWidth = "3xl",
     closeable = true,
     onClose = () => {},
 }) {
@@ -19,13 +19,13 @@ export default function Modal({
     };
 
     const maxWidthClass = {
-        sm: 'sm:max-w-sm',
-        md: 'sm:max-w-md',
-        lg: 'sm:max-w-lg',
-        xl: 'sm:max-w-xl',
-        '3xl': 'sm:max-w-3xl',
-        '4xl': 'sm:max-w-4xl',
-        '5xl': 'sm:max-w-5xl',
+        sm: "sm:max-w-sm",
+        md: "sm:max-w-md",
+        lg: "sm:max-w-lg",
+        xl: "sm:max-w-xl",
+        "3xl": "sm:max-w-3xl",
+        "4xl": "sm:max-w-4xl",
+        "5xl": "sm:max-w-5xl",
     }[maxWidth];
 
     return (
