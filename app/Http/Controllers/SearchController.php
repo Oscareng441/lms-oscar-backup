@@ -7,19 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use App\Http\Middleware\CheckEditorPermission;
+// use Illuminate\Routing\Controllers\Middleware;
+// use App\Http\Middleware\CheckEditorPermission;
 use App\Helpers\OmniHelper;
 use App\Models\Course;
 
-class SearchController extends Controller implements HasMiddleware
+class SearchController extends Controller // implements HasMiddleware
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware(CheckEditorPermission::class),
-        ];
-    }
+    // public static function middleware(): array
+    // {
+    //     return [
+    //         new Middleware(CheckEditorPermission::class),
+    //     ];
+    // }
 
     public function searchAll(Request $request)
     {
