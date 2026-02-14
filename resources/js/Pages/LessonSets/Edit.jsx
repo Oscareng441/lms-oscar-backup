@@ -24,9 +24,10 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 
-const Edit = ({ auth, origLessons, origChapter, course }) => {
+const Edit = ({ auth, origLessons, origChapter, course, origKeywords = [] }) => {
     const [chapter, setChapter] = useState(origChapter);
     const [lessons, setLessons] = useState(origLessons);
+    const [keywords, setKeywords] = useState(origKeywords.join(' '));
     const [reordered, setReordered] = useState(false);
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -122,6 +123,14 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
         setLessons(c);
         data.lessons = c;
         setData(data);
+    };
+
+    const manageKeywords = (e) => {
+        let k = e.target.value;
+        setKeywords(k)
+        let d = {...data}
+        d.keywords = k;
+        setData(d)
     };
 
     const save = () => {
@@ -258,6 +267,19 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
                                 })}
                             </SortableContext>
                         </DndContext>
+                    </div>
+                </div>
+            </div>
+            <div className="mx-auto max-w-7xl space-y-6 pt-2">
+                <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex items-center">
+                    <div className="text-left text-2xl"> Palabras Claves:</div>
+                    <div>
+                        <input
+                            type="text"
+                            onChange={manageKeywords}
+                            value={keywords}
+                            className="w-full"
+                        />
                     </div>
                 </div>
             </div>

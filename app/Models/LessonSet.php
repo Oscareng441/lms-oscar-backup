@@ -58,4 +58,24 @@ class LessonSet extends Model
 
         return $recs;
     }
+
+    public function saveKeywords($kw)
+    {
+        $arr = explode(" ", $kw);
+        $placeholders = [];
+        foreach ($arr as $a) {
+            $placeholders[] = '(?,?)';
+            $params[] = $a;
+            $params[] = $this->id;
+        }
+        if (!empty($placeholders)) {
+            $sql = '
+            INSERT IGNORE INTO chapter_keywords
+            (keyword, chapter_id)
+            VALUES
+            ' . implode(', ', $placeholders);
+
+            DB::insert($sql, $params);
+        }
+    }
 }

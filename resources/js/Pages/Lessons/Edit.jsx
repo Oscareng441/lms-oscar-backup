@@ -8,11 +8,13 @@ import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { buildBreadCrumbs } from "@/Helpers/Utilities";
 
-const Edit = ({ auth, origLesson, chapter, course }) => {
+const Edit = ({ auth, origLesson, chapter, course, origKeywords = [] }) => {
     const [lesson, setLesson] = useState(origLesson);
+    const [keywords, setKeywords] = useState(origKeywords.join(' '));
     const { data, setData, post } = useForm({
         lesson: origLesson,
         file: null,
+        keywords: keywords,
     });
 
     const title = `Capítulo ${lesson.name}`;
@@ -88,6 +90,14 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
             );
         },
     );
+
+    const manageKeywords = (e) => {
+        let k = e.target.value;
+        setKeywords(k)
+        let d = {...data}
+        d.keywords = k;
+        setData(d)
+    };
 
     const save = () => {
         post(route("lesson.save"));
@@ -240,7 +250,19 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
                             </div>
                         </TabPanel>
                         <TabPanel>
-                            <div className="py-2">coming</div>
+                            <div className="mx-auto max-w-7xl space-y-6 pt-2">
+                                <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex items-center">
+                                    <div className="text-left text-2xl"> Palabras Claves:</div>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            onChange={manageKeywords}
+                                            value={keywords}
+                                            className="w-full"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>

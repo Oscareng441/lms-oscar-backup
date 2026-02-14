@@ -101,9 +101,9 @@ class LessonSetController extends Controller
             $lesson->delete();
         }
 
-        // return redirect()->route(
-        //     'chapter.edit', ['id' => $chapter->id]
-        // );
+        if (!empty($data['keywords'])) {
+            $chapter->saveKeywords($data['keywords']);
+        }
 
         return back();
     }

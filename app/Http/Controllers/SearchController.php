@@ -23,20 +23,13 @@ class SearchController extends Controller // implements HasMiddleware
 
     public function searchAll(Request $request)
     {
-OmniHelper::log('search');
         return Inertia::render('Search', []);
     }
 
     public function performSearch(Request $request, $srch): array
     {
-OmniHelper::log('performSearch');
-// return [];
-        // $request->validate([
-        //     'srch' => 'required|string|max:255',
-        // ]);
-OmniHelper::log('performSearch 2');
         $results = Course::getSearchResults($srch);
-OmniHelper::log($results);
+
         return ['data' => $results];
     }
 

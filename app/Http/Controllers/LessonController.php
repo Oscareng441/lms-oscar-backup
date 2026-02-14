@@ -181,6 +181,10 @@ class LessonController extends Controller implements HasMiddleware
         $lesson->active = !empty($c['active']) ? 1 : 0;
         $lesson->save();
 
+        if (!empty($data['keywords'])) {
+            $lesson->saveKeywords($data['keywords']);
+        }
+
         return redirect()->route(
             'lesson.show', ['id' => $lesson->id]
         );

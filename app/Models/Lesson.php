@@ -36,4 +36,24 @@ class Lesson extends Model
         $vids = DB::select($sql, [$this->id]);
         return $vids;
     }
+
+    public function saveKeywords($kw)
+    {
+        $arr = explode(" ", $kw);
+        $placeholders = [];
+        foreach ($arr as $a) {
+            $placeholders[] = '(?,?)';
+            $params[] = $a;
+            $params[] = $this->id;
+        }
+        if (!empty($placeholders)) {
+            $sql = '
+            INSERT IGNORE INTO lesson_keywords
+            (keyword, lesson_id)
+            VALUES
+            ' . implode(', ', $placeholders);
+
+            DB::insert($sql, $params);
+        }
+    }
 }

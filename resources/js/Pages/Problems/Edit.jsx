@@ -604,9 +604,9 @@ const Edit = ({
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                                        <div className="text-left"> Palabras Claves:</div>
+                                <div className="mx-auto max-w-7xl space-y-6 pt-2">
+                                    <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex items-center">
+                                        <div className="text-left text-2xl"> Palabras Claves:</div>
                                         <div>
                                             <input
                                                 type="text"
