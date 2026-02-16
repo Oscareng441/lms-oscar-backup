@@ -32,7 +32,7 @@ const Groups = ({ auth, course, group, allStudents, teachersThisGroup }) => {
     const submit = (e) => {
         let save = false
         if (filter.length) {
-            if (confirm(" Si queieres guardar todos, quita el filtro y vuelve a guardar. Quieres guardar solamente los nombres filtrados?")) {
+            if (confirm(" Si quieres guardar todos, quita el filtro y vuelve a guardar. Quieres guardar solamente los nombres filtrados?")) {
                 save = true
             }
         } else {
