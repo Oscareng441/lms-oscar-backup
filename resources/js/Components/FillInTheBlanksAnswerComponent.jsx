@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AnswerChoice from "@/Components/AnswerChoice";
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
-import { handleFraction } from "@/Helpers/Utilities";
+import { handleFraction, shuffleArray } from "@/Helpers/Utilities";
 
 export default function FillInTheBlanksAnswerComponent(props) {
     const [selectedAnswers, setSelectedAnswers] = useState(
@@ -28,7 +28,7 @@ export default function FillInTheBlanksAnswerComponent(props) {
                         Haz clic en una opción para llenar la siguiente caja.
                     </div>
                     <div className="flex justify-center flex-wrap">
-                        {props.answers.map((r, k) => {
+                        {shuffleArray(props.answers).map((r, k) => {
                             r.display_type = 'text'
                             let isSelected = false;
                             props.selectedAnswers.some((a) => {
