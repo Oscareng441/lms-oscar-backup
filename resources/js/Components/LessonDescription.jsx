@@ -4,7 +4,6 @@ import { FaGraduationCap } from "react-icons/fa";
 import { BiMath } from "react-icons/bi";
 
 export default function LessonDescription(props) {
-    console.log(props)
     return (
         <div className="py-2">
             <div className="mx-auto max-w-7xl space-y-1 sm:px-6 lg:px-8">
@@ -16,9 +15,6 @@ export default function LessonDescription(props) {
                             </a>
                         </div>
                         <StudentLessonResults progress={props.progress} />
-                        {/*<Link href={`/lesson/${props.lesson.id}`}>
-                            <FaGraduationCap title="ir a la lección" />
-                        </Link>*/}
                         {props.progress.total > 0 &&
                             <Link href={`/problem-set/${props.lesson.id}`}>
                                 <BiMath title="ir a los problemas" />

@@ -19,7 +19,7 @@ class LessonSetController extends Controller
         $chapters = LessonSet::where(['course_id' => $id, 'active' => 1])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         $course = Course::find($id);
         $user = $request->user();
-        $myProgress = $user->getCourseLessonSetProgress($id);
+        $myProgress = $user->getCourseProgressByChapter($id);
 
         return Inertia::render('LessonSets/Index', ['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
     }
@@ -29,7 +29,7 @@ class LessonSetController extends Controller
         $lessons = Lesson::where(['lesson_set_id' => $id, 'active' => 1])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         extract($this->getHierarchy($id));
         $user = $request->user();
-        $myProgress = $user->getLessonSetProgressByLesson($id);
+        $myProgress = $user->getChapterProgressByLesson($id);
         $chapterIds = $chapter->getNeighboringChapterIds();
 
         return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'chapter' => $chapter, 'course' => $course, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);

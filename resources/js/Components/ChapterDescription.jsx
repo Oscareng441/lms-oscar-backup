@@ -17,12 +17,6 @@ export default function ChapterDescription(props) {
                             progress={props.progress}
                             courseId={props.lesson.id}
                         />
-                        {/*<Link
-                            href={`/chapter/${props.lesson.id}`}
-                            className="pt-2"
-                        >
-                            <FaGraduationCap title="ir al capítulo" />
-                        </Link>*/}
                     </div>
                 </div>
             </div>

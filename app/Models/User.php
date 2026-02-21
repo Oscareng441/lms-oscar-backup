@@ -143,13 +143,13 @@ class User extends Authenticatable
         return $progress;
     }
 
-    public function getCourseLessonSetProgress($courseId)
+    public function getCourseProgressByChapter($courseId)
     {
-        $sql = 'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?';
-        $rec = DB::select($sql, [$this->id, $courseId]);
-        if (empty($rec)) {
-            return null;
-        }
+        // $sql = 'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?';
+        // $rec = DB::select($sql, [$this->id, $courseId]);
+        // if (empty($rec)) {
+        //     return null;
+        // }
 
         $sql = '
             SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
@@ -172,9 +172,7 @@ class User extends Authenticatable
                 GROUP BY LS.id
             ) T2 ON T1.id = T2.id;';
         $recs = DB::select($sql, [$courseId, $courseId, $this->id]);
-        // if (empty($recs)) {
-        //     return [];
-        // }
+
         $progress = [];
         foreach ($recs as $rec) {
             $totalProbs = $rec->ct;
@@ -190,7 +188,7 @@ class User extends Authenticatable
         return $progress;
     }
 
-    public function getLessonSetProgressByLesson($lessonSetId)
+    public function getChapterProgressByLesson($chapterId)
     {
         $sql = '
             SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
@@ -212,7 +210,7 @@ class User extends Authenticatable
                 WHERE LS.id = ? AND user_id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
                 GROUP BY L.id
             ) T2 ON T1.id = T2.id;';
-        $recs = DB::select($sql, [$lessonSetId, $lessonSetId, $this->id]);
+        $recs = DB::select($sql, [$chapterId, $chapterId, $this->id]);
         $progress = [];
         // if (empty($recs)) {
         //     return [];
