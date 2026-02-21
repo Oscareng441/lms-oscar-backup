@@ -100,7 +100,7 @@ class StudentGroup extends Model
     public static function getAll()
     {
         $sql = '
-        SELECT G.name, S.name as school, C.name as course, G.id, owners, member_count, G.active
+        SELECT G.name, S.name as school, C.name as course, G.id, owners, member_count, G.active, C.id as course_id
         FROM student_groups G
         INNER JOIN courses C ON C.id = G.course_id
         LEFT JOIN schools S ON S.id = G.school_id

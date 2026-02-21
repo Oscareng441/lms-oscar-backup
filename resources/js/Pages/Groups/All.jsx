@@ -1,6 +1,7 @@
 import { useState, useEffect, CSSProperties } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 import LmsTable from "@/Components/LmsTable";
 import TopMenu from "@/Components/TopMenu";
 import { router, Link, Head } from "@inertiajs/react";
@@ -69,6 +70,11 @@ const Index = ({ auth, groups }) => {
         return (
             <div className="flex">
                 {/*<Link as 'button' className="mx-1" href={ route('course.groupShow') }><FaPencilAlt /></Link>*/}
+                <div className="m-1 p-1 cursor-pointer">
+                    <Link href={`/report/${data.id}/C/${data.course_id}/C/0`}>
+                        <HiOutlineDocumentReport />
+                    </Link>
+                </div>
                 <Link href={route("course.groupShow", data.id)}>
                     <FaPencilAlt className="text-base mx-4 cursor-pointer" />
                 </Link>
