@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
 
-class LessonSetController extends Controller
+class ChapterController extends Controller
 {
     /**
      * Display a listing of the resource.
