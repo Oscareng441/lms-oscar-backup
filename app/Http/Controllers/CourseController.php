@@ -148,7 +148,9 @@ class CourseController extends Controller
         } else {
             $chapters = $course->getMyChapters(false);
         }
-        return Inertia::render('Courses/Edit', ['origCourse' => $course, 'origChapters' => $chapters]);
+        $keywords = $course->getMyKeywords();
+
+        return Inertia::render('Courses/Edit', ['origCourse' => $course, 'origChapters' => $chapters, 'origKeywords' => $keywords]);
     }
 
     public function saveCourse(Request $request)

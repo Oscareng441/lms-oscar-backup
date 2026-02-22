@@ -23,6 +23,18 @@ class Course extends Model
         return $recs;
     }
 
+    public function getMyKeywords()
+    {
+        $sql = 'SELECT * FROM course_keywords where course_id = ? ORDER BY keyword';
+        $recs = DB::select($sql, [$this->id]);
+        $ret = [];
+        foreach ($recs as $rec) {
+            $ret[] = $rec->keyword;
+        }
+
+        return $ret;
+    }
+
     public function getGroups($userId = null)
     {
         $userFilter = $userId ? ' AND owner_id = ? ' : '';
@@ -149,13 +161,22 @@ class Course extends Model
 
     public function saveKeywords($kw)
     {
-        $arr = explode(" ", $kw);
+        preg_match_all('/\w+|"[^"]+"/', $kw, $arr);
+        OmniHelper::log($arr);
         $placeholders = [];
-        foreach ($arr as $a) {
+        foreach ($arr[0] as $a) {
             $placeholders[] = '(?,?)';
             $params[] = $a;
             $params[] = $this->id;
         }
+
+        if (!empty($placeholders)) {
+            $sql = '
+            DELETE FROM course_keywords WHERE course_id = ?';
+
+            DB::delete($sql, [$this->id]);
+        }
+
         if (!empty($placeholders)) {
             $sql = '
             INSERT IGNORE INTO course_keywords

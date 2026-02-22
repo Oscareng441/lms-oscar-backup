@@ -39,13 +39,21 @@ class Lesson extends Model
 
     public function saveKeywords($kw)
     {
-        $arr = explode(" ", $kw);
+        preg_match_all('/\w+|"[^"]+"/', $kw, $arr);
         $placeholders = [];
-        foreach ($arr as $a) {
+        foreach ($arr[0] as $a) {
             $placeholders[] = '(?,?)';
             $params[] = $a;
             $params[] = $this->id;
         }
+
+        if (!empty($placeholders)) {
+            $sql = '
+            DELETE FROM lesson_keywords WHERE lesson_id = ?';
+
+            DB::delete($sql, [$this->id]);
+        }
+
         if (!empty($placeholders)) {
             $sql = '
             INSERT IGNORE INTO lesson_keywords
@@ -55,5 +63,17 @@ class Lesson extends Model
 
             DB::insert($sql, $params);
         }
+    }
+
+    public function getMyKeywords()
+    {
+        $sql = 'SELECT * FROM lesson_keywords where lesson_id = ? ORDER BY keyword';
+        $recs = DB::select($sql, [$this->id]);
+        $ret = [];
+        foreach ($recs as $rec) {
+            $ret[] = $rec->keyword;
+        }
+
+        return $ret;
     }
 }

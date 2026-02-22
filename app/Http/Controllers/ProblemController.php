@@ -197,7 +197,8 @@ class ProblemController extends Controller
         foreach ($filePaths as $path) {
             $imageUrls[] = '/storage/' . $path;
         }
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls, 'credits' => $sources, 'problemIds' => $problemIds]);
+        $keywords = $p->getMyKeywords();
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'origKeywords' => $keywords, 'images' => $imageUrls, 'credits' => $sources, 'problemIds' => $problemIds]);
     }
 
     public function getHierarchy($id) {

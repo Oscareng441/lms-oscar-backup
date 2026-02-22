@@ -51,7 +51,9 @@ class LessonSetController extends Controller
             $lessons = $chapter->getMyLessons(false);
         }
 
-        return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter, 'course' => $course]);
+        $keywords = $chapter->getMyKeywords();
+
+        return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter, 'origKeywords' => $keywords, 'course' => $course]);
     }
 
     public function saveChapter(Request $request)

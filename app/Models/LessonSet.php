@@ -36,6 +36,18 @@ class LessonSet extends Model
         return $recs;
     }
 
+    public function getMyKeywords()
+    {
+        $sql = 'SELECT * FROM chapter_keywords where chapter_id = ? ORDER BY keyword';
+        $recs = DB::select($sql, [$this->id]);
+        $ret = [];
+        foreach ($recs as $rec) {
+            $ret[] = $rec->keyword;
+        }
+
+        return $ret;
+    }
+
     public function getScores($studentId)
     {
         $groupByUser = $studentId ? ', U.id' : '';
@@ -61,13 +73,21 @@ class LessonSet extends Model
 
     public function saveKeywords($kw)
     {
-        $arr = explode(" ", $kw);
+        preg_match_all('/\w+|"[^"]+"/', $kw, $arr);
         $placeholders = [];
-        foreach ($arr as $a) {
+        foreach ($arr[0] as $a) {
             $placeholders[] = '(?,?)';
             $params[] = $a;
             $params[] = $this->id;
         }
+
+        if (!empty($placeholders)) {
+            $sql = '
+            DELETE FROM chapter_keywords WHERE chapter_id = ?';
+
+            DB::delete($sql, [$this->id]);
+        }
+
         if (!empty($placeholders)) {
             $sql = '
             INSERT IGNORE INTO chapter_keywords

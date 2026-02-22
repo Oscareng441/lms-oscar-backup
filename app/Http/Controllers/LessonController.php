@@ -147,7 +147,9 @@ class LessonController extends Controller implements HasMiddleware
             $lesson->name = '';
         }
 
-        return Inertia::render('Lessons/Edit', ['origLesson' => $lesson ,'chapter' => $chapter, 'course' => $course]);
+        $keywords = $lesson->getMyKeywords();
+
+        return Inertia::render('Lessons/Edit', ['origLesson' => $lesson ,'chapter' => $chapter, 'origKeywords' => $keywords, 'course' => $course]);
     }
 
     public function saveLesson(Request $request)
