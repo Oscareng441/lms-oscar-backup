@@ -229,6 +229,13 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
             )}
 
             <main>{children}</main>
+            <footer className="">
+                {/*<div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">*/}
+                <div className="text-right shadow p-4 bg-white mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    EstudioSinBarreras
+                </div>
+                {/*</div>*/}
+            </footer>
         </div>
     );
 }
