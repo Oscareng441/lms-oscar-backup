@@ -79,7 +79,7 @@ const Index = ({
             topMenu={topMenu}
         >
             <Head title={title} />
-            <div className="py-12">
+            <div className="py-2">
                 {videos.length > 0 && (
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                         <div className="">Videos</div>

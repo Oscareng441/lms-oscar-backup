@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/user/{id}', [AdminController::class, 'userEdit'])->name('user.edit');
     Route::get('/problem/{id}/publish', [ProblemController::class, 'publish'])->name('problem.publish');
     Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
+    Route::get('/lesson/{id}/delete', [LessonController::class, 'deleteLesson'])->name('lesson.delete');
     Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
     Route::get('/source/{id}', [SourceController::class, 'destroy'])->name('source.destroy');
     Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');

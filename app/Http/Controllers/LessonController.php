@@ -8,6 +8,7 @@ use App\Models\Problem;
 use App\Models\Course;
 use App\Models\SourceReference;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
@@ -212,5 +213,30 @@ class LessonController extends Controller implements HasMiddleware
             $p->save();
         }
         return back();
+    }
+
+    public function deleteLesson(Request $request, $id): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $lesson = Lesson::find($id);
+
+        $okToDelete = $lesson->okToDelete();
+        $msg = 'no se puede';
+        $cat = 'error';
+        if ($okToDelete) {
+            $cat = 'success';
+            $msg = 'exitoso';
+            $chapterId = $lesson->lesson_set_id;
+            OmniHelper::log('return to edit chapter ' . $chapterId);
+            $lesson->delete();
+            return redirect()->route('chapter.edit', ['id' => $chapterId]);
+        }
+
+        $request->session()->flash($cat, $msg);
+
+        return redirect()->back()->with([$cat => $msg]);
     }
 }

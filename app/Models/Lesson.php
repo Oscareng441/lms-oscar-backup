@@ -76,4 +76,17 @@ class Lesson extends Model
 
         return $ret;
     }
+
+    public function okToDelete()
+    {
+        $sql = '
+        SELECT count(*) as ct
+        from results R
+        INNER JOIN problems P ON R.problem_id = P.id
+        WHERE P.lesson_id = ?';
+
+        $rec = DB::selectOne($sql, [$this->id]);
+
+        return $rec->ct == 0;
+    }
 }

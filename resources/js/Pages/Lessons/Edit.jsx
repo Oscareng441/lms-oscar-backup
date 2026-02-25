@@ -43,7 +43,14 @@ const Edit = ({ auth, origLesson, chapter, course, origKeywords = [] }) => {
         data.lesson = c;
         setData(data);
     };
-    const deleteLesson = () => {};
+    const deleteLesson = () => {
+        if (confirm("Seguro que quiere borrar la lección y todo su contenido?")) {
+            fetch(route('lesson.delete', {id: lesson.id}))
+            .then(() => {
+                window.location.href = `/chapter/${lesson.lesson_set_id}/edit`;
+            });
+        }
+    };
     const deleteLessonPage = () => {
         let c = { ...lesson };
         c.lesson_page = "";
