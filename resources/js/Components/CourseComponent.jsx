@@ -31,7 +31,7 @@ export default function CourseDescription(props) {
                                 href={`/course/${props.course.id}/groups`}
                                 className="pt-2"
                             >
-                                <FaUserGroup title="ir al curso" />
+                                <FaUserGroup title="ir a grupos" />
                             </Link>
                         )}
                     </div>

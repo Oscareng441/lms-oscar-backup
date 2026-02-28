@@ -38,7 +38,7 @@ export default function FillInTheBlanksDisplay(props) {
                 } else {
                     ret1.push(
                         <div
-                            className="bg-white px-2 whitespace-nowrap"
+                            className="bg-white px-2"
                             dangerouslySetInnerHTML={{ __html: r }}
                         />,
                     );

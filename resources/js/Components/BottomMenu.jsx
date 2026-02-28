@@ -14,7 +14,7 @@ export default function BottomMenu({prev = null, next = null, probs, unitId}) {
             {probs != null &&
                 <div className="">
                     <Link href={route('problemset.student', {id: probs})}>
-                        probs
+                        problemas
                     </Link>
                 </div>
             }

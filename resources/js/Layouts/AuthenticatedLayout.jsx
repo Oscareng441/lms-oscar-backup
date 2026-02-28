@@ -242,7 +242,7 @@ export default function AuthenticatedLayout({ header, topMenu, children, bottomM
             <footer className="bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <div className="text-right text-xs sm:text-base font-semibold leading-tight text-gray-800">
-                        EstudioSinBarreras
+                        EstudioSinFronteras
                     </div>
                 </div>
             </footer>
