@@ -1,9 +1,11 @@
 import StudentCourseProgress from "@/Components/StudentCourseProgress";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { FaBook } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 
 export default function CourseDescription(props) {
+    const page = usePage();
+    const { auth } = page.props;
     let progressComponent = "";
     if (props.showProgress && !Array.isArray(props.progress)) {
         progressComponent = (
@@ -24,12 +26,14 @@ export default function CourseDescription(props) {
                             </a>
                         </div>
                         {progressComponent}
-                        <Link
-                            href={`/course/${props.course.id}/groups`}
-                            className="pt-2"
-                        >
-                            <FaUserGroup title="ir al curso" />
-                        </Link>
+                        {(auth.is_admin || auth.is_teacher) && (
+                            <Link
+                                href={`/course/${props.course.id}/groups`}
+                                className="pt-2"
+                            >
+                                <FaUserGroup title="ir al curso" />
+                            </Link>
+                        )}
                     </div>
                     <div className="m-1 ">{props.course.description}</div>
                 </div>
