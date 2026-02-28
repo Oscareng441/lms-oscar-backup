@@ -25,12 +25,6 @@ export default function CourseDescription(props) {
                         </div>
                         {progressComponent}
                         <Link
-                            href={`/course/${props.course.id}`}
-                            className="pt-2"
-                        >
-                            <FaBook title="ir al curso" />
-                        </Link>
-                        <Link
                             href={`/course/${props.course.id}/groups`}
                             className="pt-2"
                         >

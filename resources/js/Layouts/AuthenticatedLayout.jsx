@@ -6,7 +6,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-export default function AuthenticatedLayout({ header, topMenu, children }) {
+export default function AuthenticatedLayout({ header, topMenu, children, bottomMenu }) {
     const user = usePage().props.auth.user;
     const auth = usePage().props.auth;
 
@@ -219,22 +219,32 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
             )}
 
             {topMenu && (
-                <header className="bg-white shadow">
+                <div className="bg-white shadow mt-2">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
                             {topMenu}
                         </div>
                     </div>
-                </header>
+                </div>
             )}
 
             <main>{children}</main>
-            <footer className="">
-                {/*<div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">*/}
-                <div className="text-right shadow p-4 bg-white mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    EstudioSinBarreras
+
+            {bottomMenu && (
+                <div className="bg-white shadow mb-2">
+                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                        <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
+                            {bottomMenu}
+                        </div>
+                    </div>
                 </div>
-                {/*</div>*/}
+            )}
+            <footer className="bg-white shadow">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <div className="text-right text-xs sm:text-base font-semibold leading-tight text-gray-800">
+                        EstudioSinBarreras
+                    </div>
+                </div>
             </footer>
         </div>
     );

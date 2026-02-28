@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import HybridDisplay from "@/Components/HybridDisplay";
 import TopMenu from "@/Components/TopMenu";
+import BottomMenu from "@/Components/BottomMenu";
 import { router, Link, Head } from "@inertiajs/react";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
@@ -70,13 +71,21 @@ const Index = ({
             breadcrumbs={breadcrumbs}
         />
     );
-
+    let bottomMenu = (
+        <BottomMenu
+            prev={lessonIds.anterior}
+            next={lessonIds.siguiente}
+            probs={problemSet && problemSet.length > 0 ? lesson.id : null}
+        />
+    );
+console.log(lessonIds)
     return (
         <AuthenticatedLayout
             auth={auth}
             user={auth.user}
             header={false}
             topMenu={topMenu}
+            bottomMenu={bottomMenu}
         >
             <Head title={title} />
             <div className="py-2">
