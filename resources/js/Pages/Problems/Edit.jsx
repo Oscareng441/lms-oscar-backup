@@ -274,9 +274,20 @@ const Edit = ({
         setData(data);
     };
 
-    const save = () => {
-        post(route("problem.save"), { data: data });
-    };
+    function updateId(r) {
+        let id = r.props.origProblem.id
+        let d = { ...data }
+        d.problem.id = id
+        setData(d)
+    }
+
+    function save() {
+        post(route('problem.save'), {
+            onError: (err) => {console.log('err')},
+            onSuccess: updateId,
+            preserveScroll: true,
+        });
+    }
 
     const selectCourse = (e) => {
         setCourseId(e.value);

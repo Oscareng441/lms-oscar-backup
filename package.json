@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-	"format": "prettier --write resources/"
+        "format": "prettier --write resources/"
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
