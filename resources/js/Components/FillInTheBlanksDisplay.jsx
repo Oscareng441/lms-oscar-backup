@@ -16,8 +16,8 @@ export default function FillInTheBlanksDisplay(props) {
 
     function displayProb(txt) {
         let lines = txt.split("<br/>");
-        let B = 0;
-        let A = 0;
+        let B = 0; // slot count
+        let A = 0; // answer count
         return lines.map((txt, kk) => {
             let ret1 = [];
             let arr = txt.split("_");
@@ -33,6 +33,7 @@ export default function FillInTheBlanksDisplay(props) {
                             answer={r}
                             showText={textToShow}
                             remove={removeAnswer}
+                            next={A === B - 1}
                         />,
                     );
                 } else {
