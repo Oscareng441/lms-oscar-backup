@@ -112,7 +112,7 @@ const StudentProblemSet = ({
                     <div className="flex flex-row justify-space items-center my-8 w-full">
                         <div className="text-sm">
                             {p.name}
-                            {p.is_premium && (
+                            {p.is_premium > 0 && (
                                 <IsPremiumComponent hasAccess={p.has_access} />
                             )}
                         </div>
