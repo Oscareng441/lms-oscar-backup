@@ -22,3 +22,46 @@
     color: #003366;
     font-weight: bold;
 }
+
+.titulo {
+    background-color: #e8dff5;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.subtitulo {
+    background-color: #d6eaf8;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 25px;
+}
+.caja {
+    background-color: #f3f0ff;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 12px 0;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+th, td {
+    border: 2px solid #0033cc;
+    padding: 4px;
+}
+.header-label {
+    font-size: 10px;
+}
+.azul-rey {
+    background-color: #0033cc;
+    color: #ffffff;
+}
+
+
