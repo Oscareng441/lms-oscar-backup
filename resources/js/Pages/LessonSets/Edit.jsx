@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import LessonDescription from "@/Components/LessonDescription";
 import TopMenu from "@/Components/TopMenu";
 import Checkbox from "@/Components/Checkbox";
-import { router, Link, Head, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 import { GoGrabber } from "react-icons/go";
 import { buildBreadCrumbs } from "@/Helpers/Utilities";
@@ -30,10 +29,12 @@ const Edit = ({ auth, origLessons, origChapter, course, origKeywords = [] }) => 
     const [keywords, setKeywords] = useState(origKeywords.join(' '));
     const [reordered, setReordered] = useState(false);
     const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        }),
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 8, // drag starts after moving 8px
+        },
+      }),
+      useSensor(KeyboardSensor)
     );
     const { data, setData, post } = useForm({
         chapter: origChapter,

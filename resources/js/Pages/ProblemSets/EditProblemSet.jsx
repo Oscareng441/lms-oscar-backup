@@ -35,10 +35,12 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     let { flash } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({ sq: [] });
     const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        }),
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 8, // drag starts after moving 8px
+        },
+      }),
+      useSensor(KeyboardSensor)
     );
 
     useEffect(() => {
@@ -87,7 +89,6 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     };
 
     const togglePublish = (p, k) => {
-        console.log(p);
         fetch(route("problem.publish", { id: p.id, deactivate: p.active }));
         let probsTmp = [...probs];
         probsTmp[k].active = !probsTmp[k].active;
@@ -96,7 +97,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
 
     function handleDragEnd(event) {
         const { active, over } = event;
-        if (active.id !== over.id) {
+        if ('id' in active && 'id' in over && active.id !== over.id) {
             setProbsReordered(true);
             setProbs((probs) => {
                 let oldIndex = -1;
@@ -121,7 +122,6 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const probList = probs.map((p, k) => {
-        console.log(p.display_type);
         let problemSection;
         if (p.display_type === "text") {
             //deprecate
@@ -161,6 +161,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
                 prob={p}
                 problemSection={problemSection}
                 togglePublish={togglePublish}
+                deleteProblem={deleteProblem}
             />
         );
     });
@@ -214,11 +215,15 @@ function ProbRow(props) {
     };
     const [prob, setProb] = useState(props.prob);
 
-    function togglePublish() {
-        console.log(prob);
+    function togPub(e) {
+        let p = {...prob}
         props.togglePublish(prob, props.idx);
         p.active = !p.active;
-        setProblem(p);
+        setProb(p);
+    }
+
+    function delProb(a,b) {
+        console.log(a,b);
     }
 
     return (
@@ -241,13 +246,13 @@ function ProbRow(props) {
                 </Link>
                 <Checkbox
                     checked={prob.active}
-                    onChange={togglePublish}
+                    onChange={togPub}
                     className="border border-black border-1"
                 />
                 <div className="text-sm ml-1 mr-2">Publicar</div>
                 <FaTrash
                     className="text-base ml-2 cursor-pointer"
-                    onClick={() => deleteProblem(props.prob, props.idx)}
+                    onClick={() => props.deleteProblem(props.prob, props.idx)}
                 />
             </div>
         </div>

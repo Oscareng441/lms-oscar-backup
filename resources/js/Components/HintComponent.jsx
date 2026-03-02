@@ -4,6 +4,7 @@ import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 
 export default function HintComponent(props) {
+    const bottomRef = useRef(null);
     let jsxParts = [];
     let hints = [],
         hintCount = 0,
@@ -13,7 +14,7 @@ export default function HintComponent(props) {
     }
     hints.forEach((h) => {
         if (hintCount++ < props.hintsToShow) {
-            jsxParts.unshift(
+            jsxParts.push(
                 <div>
                     <Latex>{h.hint}</Latex>
                 </div>,
@@ -22,7 +23,7 @@ export default function HintComponent(props) {
     });
     let xxx = jsxParts.map((p, k) => {
         let cls =
-            k > 0
+            k < jsxParts.length - 1
                 ? "text-slate-400 p-2 mx-2"
                 : "text-slate-600 bg-slate-100 rounded-lg p-2 mx-2";
         return (
@@ -36,8 +37,9 @@ export default function HintComponent(props) {
         bottomRef.current?.scrollIntoView();
     };
 
-    function nextHint() {
-        props.nextHint();
+    async function nextHint() {
+        await props.nextHint();
+        scrollToBottom()
     }
 
     function prevHint() {
@@ -88,6 +90,7 @@ export default function HintComponent(props) {
                     </div>
                     <div className="w-full">
                         <div className="flex flex-col max-h-dvh">{xxx}</div>
+                        <div ref={bottomRef} className="mb-8"></div>
                     </div>
                 </div>
             </Modal>
