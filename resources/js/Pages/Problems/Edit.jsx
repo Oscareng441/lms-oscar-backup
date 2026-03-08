@@ -93,7 +93,7 @@ const Edit = ({
             sequence_id: (a.length + 1) * 10,
             answer_text: "",
             is_correct: 0,
-            display_type: "latex",
+            display_type: "text",
         };
     };
 
@@ -291,7 +291,7 @@ const Edit = ({
 
     function save() {
         post(route('problem.save'), {
-            onError: (err) => {console.log('err')},
+            onError: (err) => {alert('Hubo un error')},
             onSuccess: updateId,
             preserveScroll: true,
         });
