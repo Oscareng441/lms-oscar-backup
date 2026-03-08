@@ -166,6 +166,22 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
         );
     });
 
+    function toggleUnpub() {
+        setProbs(problems.filter((x) => {
+            return x.active === 0;
+        }))
+    }
+
+    function togglePub() {
+        setProbs(problems.filter((x) => {
+            return x.active === 1;
+        }))
+    }
+
+    function toggleAll() {
+        setProbs(problems)
+    }
+
     return (
         <AuthenticatedLayout
             auth={auth}
@@ -174,17 +190,23 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             topMenu={topMenu}
         >
             <Head title={title} />
-            {flash.success && flash.success}
-            {flash.error && flash.error}
             <div className="py-2 px-4">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="italic text-sm sm:text-md">
-                        Haz clic en un problema para contestarlo.
-                        <p className="not-italic text-sm sm:text-md text-green-600">
+                    <div className="text-sm sm:text-md flex">
+                        <p className="text-green-600">
                             <Link href={route("problemset.student", lesson.id)}>
                                 Go to student mode
                             </Link>
                         </p>
+                        <div className="cursor-pointer ml-8" onClick={toggleUnpub}>
+                            Solo No Publicados
+                        </div>
+                        <div className="cursor-pointer ml-8" onClick={togglePub}>
+                            Solo Publicados
+                        </div>
+                        <div className="cursor-pointer ml-8" onClick={toggleAll}>
+                            Todos
+                        </div>
                     </div>
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                         <DndContext
@@ -215,6 +237,10 @@ function ProbRow(props) {
     };
     const [prob, setProb] = useState(props.prob);
 
+    useEffect(() => {
+        setProb(props.prob)
+    }, [props])
+console.log(props)
     function togPub(e) {
         let p = {...prob}
         props.togglePublish(prob, props.idx);
