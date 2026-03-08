@@ -106,7 +106,7 @@ class ProblemController extends Controller
         }
 
         return redirect()->route(
-            'problem.edit', ['id' => $problem->id]
+            'problemset.edit', ['id' => $problem->lesson_id]
         );
     }
 
