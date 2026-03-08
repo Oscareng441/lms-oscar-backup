@@ -106,7 +106,7 @@ class ProblemController extends Controller
         }
 
         return redirect()->route(
-            'problemset.edit', ['id' => $problem->lesson_id]
+            'problem.show', ['id' => $problem->id]
         );
     }
 
@@ -245,7 +245,6 @@ class ProblemController extends Controller
             $p->delete();
             $p->deleteRelatedItems();
             return to_route('problemset.edit', ['id' => $lessonId]);
-            // return redirect()->route('problemset.edit', ['id' => $lessonId]);
         }
 
         $request->session()->flash($cat, $msg);
