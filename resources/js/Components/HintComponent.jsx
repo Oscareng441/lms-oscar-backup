@@ -66,9 +66,9 @@ export default function HintComponent(props) {
         <div className="mx-auto my-6 max-w-5xl space-y-6 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} maxWidth="5xl">
                 <div
-                    className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl overflow-y-auto h-[90lvh] py-4 my-4`}
+                    className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl h-[90lvh] py-4 my-4`}
                 >
-                    <div className="flex flex-col min-w-[20%]">
+                    <div className="flex flex-col min-w-[20%] max-h-dvh overflow-y-hidden ">
                         <div
                             className={`${nextHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`}
                             onClick={onClk}
@@ -89,7 +89,7 @@ export default function HintComponent(props) {
                         </div>
                     </div>
                     <div className="w-full">
-                        <div className="flex flex-col max-h-dvh">{xxx}</div>
+                        <div className="flex flex-col max-h-dvh overflow-y-auto ">{xxx}</div>
                         <div ref={bottomRef} className="mb-8"></div>
                     </div>
                 </div>

@@ -218,9 +218,17 @@ const Edit = ({
     };
 
     const chgAnsCorrect = (e, k) => {
-        let txt = e.target.value;
         let a = [...answers];
         a[k].is_correct = !a[k].is_correct;
+        setAnswers(a);
+        data.answers = a;
+        setData(data);
+    };
+
+    const chgAnsUseLatex = (e, k) => {
+        let a = [...answers];
+        console.log(a[k].display_type)
+        a[k].display_type = a[k].display_type === 'latex' ? 'text' : 'latex';
         setAnswers(a);
         data.answers = a;
         setData(data);
@@ -690,6 +698,16 @@ const Edit = ({
                                                             className="border border-black border-1"
                                                         />
                                                     )}
+                                                    <Checkbox
+                                                        checked={a.display_type === 'latex'}
+                                                        onChange={(e) =>
+                                                            chgAnsUseLatex(
+                                                                e,
+                                                                k,
+                                                            )
+                                                        }
+                                                        className="border border-black border-1"
+                                                    />
                                                     <FaTrash
                                                         className="text-base ml-2 cursor-pointer"
                                                         onClick={(e) =>

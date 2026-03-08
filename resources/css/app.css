@@ -42,8 +42,11 @@
 }
 .caja {
     background-color: #f3f0ff;
-    padding: 12px;
+    padding: 24px;
     border-radius: 6px;
+    margin: 12px 0;
+}
+.caja li {
     margin: 12px 0;
 }
 table {
