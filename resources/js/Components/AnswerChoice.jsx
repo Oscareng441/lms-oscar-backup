@@ -6,7 +6,7 @@ export default function AnswerChoice(props) {
     // if display_type is latex or the distractor is just a number, use latex
     let useLatex = props.answer.display_type === 'latex' || !isNaN(ans);
     if (useLatex) {
-        if (!(ans.substring(0, 2) === "\\[" || ans.substring(0, 1) === "$")) {
+        if (!(ans.substring(0, 2) === "\\[" || ans.substring(0, 2) === "\\(" || ans.substring(0, 1) === "$")) {
             ans = "$" + ans + "$";
         }
     }

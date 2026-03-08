@@ -687,16 +687,19 @@ const Edit = ({
                                                     />
                                                     {(probType === 1 ||
                                                         probType === 2) && (
-                                                        <Checkbox
-                                                            checked={isRight}
-                                                            onChange={(e) =>
-                                                                chgAnsCorrect(
-                                                                    e,
-                                                                    k,
-                                                                )
-                                                            }
-                                                            className="border border-black border-1"
-                                                        />
+                                                        <>
+                                                            <Checkbox
+                                                                checked={isRight}
+                                                                onChange={(e) =>
+                                                                    chgAnsCorrect(
+                                                                        e,
+                                                                        k,
+                                                                    )
+                                                                }
+                                                                className="border border-black border-1"
+                                                            />
+                                                            <div className='text-xs mr-4'>correct</div>
+                                                        </>
                                                     )}
                                                     <Checkbox
                                                         checked={a.display_type === 'latex'}
@@ -708,6 +711,7 @@ const Edit = ({
                                                         }
                                                         className="border border-black border-1"
                                                     />
+                                                    <div className='text-xs mr-2'>Latex</div>
                                                     <FaTrash
                                                         className="text-base ml-2 cursor-pointer"
                                                         onClick={(e) =>
