@@ -243,6 +243,7 @@ class ProblemController extends Controller
             $msg = 'exitoso';
             $lessonId = $p->lesson_id;
             $p->delete();
+            $p->deleteRelatedItems();
             return to_route('problemset.edit', ['id' => $lessonId]);
             // return redirect()->route('problemset.edit', ['id' => $lessonId]);
         }

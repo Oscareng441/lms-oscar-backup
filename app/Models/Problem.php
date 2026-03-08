@@ -295,9 +295,9 @@ class Problem extends Model
         from results
         WHERE problem_id = ?';
 
-        $recs = DB::select($sql, [$this->id]);
+        $recs = DB::selectOne($sql, [$this->id]);
 
-        return $recs[0]->ct == 0;
+        return $recs->ct == 0;
     }
 
     public static function getStudentProblemSet($lessonId, $user)
@@ -365,5 +365,15 @@ class Problem extends Model
         }
 
         return $ret;
+    }
+
+    public function deleteRelatedItems()
+    {
+        $sql = '
+        DELETE FROM problem_hints
+        where problem_id = ?';
+
+        DB::delete($sql, [$this->id]);
+
     }
 }
