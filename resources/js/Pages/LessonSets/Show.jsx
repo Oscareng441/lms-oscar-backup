@@ -2,6 +2,7 @@ import { useState, useEffect, CSSProperties } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import LessonDescription from "@/Components/LessonDescription";
 import TopMenu from "@/Components/TopMenu";
+import BottomMenu from "@/Components/BottomMenu";
 import { router, Link, Head } from "@inertiajs/react";
 import { buildBreadCrumbs } from "@/Helpers/Utilities";
 
@@ -20,12 +21,21 @@ const Show = ({ auth, lessons, chapter, course, progress, chapterIds }) => {
         />
     );
 
+    let bottomMenu = (
+        <BottomMenu
+            prev={chapterIds.anterior}
+            next={chapterIds.siguiente}
+            nextWhat='lessonset.showset'
+        />
+    );
+
     return (
         <AuthenticatedLayout
             auth={auth}
             user={auth.user}
             header={false}
             topMenu={topMenu}
+            bottomMenu={bottomMenu}
         >
             <Head title={title} />
             {lessons.map((r, k) => {

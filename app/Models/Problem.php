@@ -374,6 +374,5 @@ class Problem extends Model
         where problem_id = ?';
 
         DB::delete($sql, [$this->id]);
-
     }
 }

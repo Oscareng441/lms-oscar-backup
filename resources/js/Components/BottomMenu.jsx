@@ -1,12 +1,12 @@
 import { Link } from "@inertiajs/react";
 
-export default function BottomMenu({prev = null, next = null, probs, unitId}) {
+export default function BottomMenu({prev = null, next = null, probs, nextWhat = 'lesson.show'}) {
     return (
         <div className="flex justify-between w-full my-2">
             
             <div className="">
                 {prev != null &&
-                    <Link as="button" href={route('lesson.show', {id: prev})} disabled={!prev}>
+                    <Link as="button" href={route(nextWhat, {id: prev})} disabled={!prev}>
                         anterior
                     </Link>
                 }
@@ -20,7 +20,7 @@ export default function BottomMenu({prev = null, next = null, probs, unitId}) {
             }
             <div className="">
                 {next != null &&
-                    <Link as="button" href={route('lesson.show', {id: next})} disabled={!next}>
+                    <Link as="button" href={route(nextWhat, {id: next})} disabled={!next}>
                         siguiente
                     </Link>
                 }
