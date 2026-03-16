@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem-set/{id}/edit', [LessonController::class, 'showEditProblemSet'])->name('problemset.edit');
     Route::get('/problem-set/{id}', [LessonController::class, 'showStudentProblemSet'])->name('problemset.student');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
+    Route::get('/get-problem/{id}', [ProblemController::class, 'getProblem'])->name('problem.fetch');
+    Route::get('/get-subproblem/{id}/{seq}', [ProblemController::class, 'getSubProblem'])->name('subproblem.fetch');
     Route::get('/problem/{id}/edit', [ProblemController::class, 'editProblem'])->name('problem.edit');
     Route::get('/chapter/{id}/edit', [ChapterController::class, 'editChapter'])->name('chapter.edit');
     Route::get('/course/{id}/edit', [CourseController::class, 'editCourse'])->name('course.edit');
@@ -70,7 +72,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem/{id}/publish', [ProblemController::class, 'publish'])->name('problem.publish');
     Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
     Route::get('/lesson/{id}/delete', [LessonController::class, 'deleteLesson'])->name('lesson.delete');
+    Route::get('/lesson/{id}/score', [LessonController::class, 'lessonScore'])->name('lesson.score');
+    Route::get('/lesson/{id}/start', [LessonController::class, 'firstProblem'])->name('lesson.start');
     Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
+    Route::get('/whiteboard', [ProblemController::class, 'whiteboard'])->name('whiteboard');
     Route::get('/source/{id}', [SourceController::class, 'destroy'])->name('source.destroy');
     Route::post('/source/save', [SourceController::class, 'store'])->name('source.save');
     Route::get('/schools', [SchoolController::class, 'index'])->name('school.index');

@@ -24,7 +24,7 @@ class LessonController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(CheckEditorPermission::class, except:['show', 'showStudentProblemSet', 'videos', 'getHierarchy']),
+            new Middleware(CheckEditorPermission::class, except:['show', 'lessonScore', 'showStudentProblemSet', 'videos', 'getHierarchy']),
         ];
     }
 
@@ -43,6 +43,20 @@ class LessonController extends Controller implements HasMiddleware
         $lessonIds = $lesson->getNeighboringLessonIds();
 
         return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
+    }
+
+    public function lessonScore(Request $request, $id)
+    {
+        $user = $request->user();
+        $lessonResults = $user->getLessonResults($id);
+
+        return ['lessonResults' => $lessonResults];
+    }
+
+    public function firstProblem(Request $request, $id)
+    {
+        $problem = Problem::where(['lesson_id' => $id,])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->first();
+        return redirect()->route('problem.show', $problem->id);
     }
 
     public function showEditProblemSet(Request $request, $id)

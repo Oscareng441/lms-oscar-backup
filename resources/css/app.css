@@ -66,5 +66,8 @@ th, td {
     background-color: #0033cc;
     color: #ffffff;
 }
+ol li ul {
+    margin-left: 12px;
+}
 
 

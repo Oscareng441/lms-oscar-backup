@@ -229,6 +229,30 @@ class User extends Authenticatable
         return $progress;
     }
 
+    public function getLessonResults($lessonId)
+    {
+        $sql = '
+        SELECT count(*) AS done, sum(S.score) as userScore
+        FROM lessons L
+        INNER JOIN problems P ON L.id = P.lesson_id
+        INNER JOIN problem_scores S ON P.id = S.problem_id
+        WHERE L.id = ? AND user_id = ? AND P.active = 1';
+
+        $rec = DB::selectOne($sql, [$lessonId, $this->id]);
+
+        if (empty($rec)) {
+            return [];
+        }
+
+        $probsDone = $rec->done;
+        $userScore = $rec->userScore;
+
+        return [
+            'total' => $rec->done,
+            'score' => !$probsDone ? 0 : round(1*($userScore/$probsDone)),
+        ];
+    }
+
     public static function allUsersWithGroupMembership($groupId, $role='student')
     {
         $joinTable = $role === 'student' ? 'student_group_user' : 'student_group_owner';

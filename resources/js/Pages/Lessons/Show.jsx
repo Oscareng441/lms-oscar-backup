@@ -53,7 +53,6 @@ const Index = ({
     if (lesson.lesson_type === "hybrid") {
         lessonSection = <HybridDisplay content={lesson.lesson_text} />;
     }
-    let showProblemLink = problemSet !== null;
     let iconNav = ["home", "prob-add", "chapter", "lesson-edit"]
     if (problemSet) {
         iconNav.push("prob-set")
@@ -78,7 +77,7 @@ const Index = ({
             probs={problemSet && problemSet.length > 0 ? lesson.id : null}
         />
     );
-console.log(lessonIds)
+
     return (
         <AuthenticatedLayout
             auth={auth}

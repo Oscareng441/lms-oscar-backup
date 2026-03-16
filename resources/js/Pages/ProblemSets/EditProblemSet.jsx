@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import ShowProblem from "@/Components/ShowProblem";
 import TopMenu from "@/Components/TopMenu";
-import FeedbackComponent from "@/Components/FeedbackComponent";
 import EndOfSet from "@/Components/EndOfSet";
 import HybridDisplay from "@/Components/HybridDisplay";
 import FillInTheBlanksDisplay from "@/Components/FillInTheBlanksDisplay";
