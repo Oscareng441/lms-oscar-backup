@@ -14,7 +14,7 @@ import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 import levenshtein from "js-levenshtein";
 
-export default function ShowProblem(props) {
+export default function DisplayProblem(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [htmlContent, setHtmlContent] = useState(props.problem.problem_text);
     const [hasAnswered, setHasAnswered] = useState(false);
@@ -235,20 +235,6 @@ export default function ShowProblem(props) {
             />
         );
 
-    colr = props.problem != null ? "" : "text-slate-400";
-    pointer = props.problem != null ? "cursor-pointer" : "";
-    clik = props.problem != null ? props.restart : () => {};
-    let restartLink =
-        props.hints === null ? (
-            ""
-        ) : (
-            <BsFillSkipStartFill
-                className={`${pointer} ${colr} mx-1`}
-                onClick={clik}
-                title="reiniciar"
-            />
-        );
-
     if (props.problem.display_type === "text") {
         // deprecate; use html
         problemSection = (
@@ -362,7 +348,6 @@ export default function ShowProblem(props) {
                             {hintLink}
                             {prevLink}
                             {nextLink}
-                            {restartLink}
                         </div>
                     </div>
                     <div className="py-2">

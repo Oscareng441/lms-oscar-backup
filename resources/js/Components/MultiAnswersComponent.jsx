@@ -41,6 +41,7 @@ export default function MultiAnswersComponent(props) {
                                     select={selectAnswer}
                                     selected={isSelected}
                                     selectable={!hasAnswered}
+                                    showCorrect={hasAnswered}
                                 />
                             );
                         })}

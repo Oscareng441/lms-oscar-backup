@@ -263,4 +263,43 @@ class ProblemController extends Controller
         }
         return back();
     }
+
+    public function getSubProblem(Request $request, $id, $seq)
+    {
+        switch($seq) {
+            case 1:
+                return $this->getProblem(1670);
+            case 2:
+                return $this->getProblem(1671);
+            case 3:
+                return $this->getProblem(1673);
+            default:
+                return [];
+        }
+
+    }
+
+    public function getProblem($id)
+    {
+        $p = Problem::find($id);
+        $answers = $p->getAnswers();
+        shuffle($answers);
+        $hints = $p->getHints();
+        extract($this->getHierarchy($p->lesson_id));
+        $lessonIds = $lesson->getNeighboringLessonIds();
+        $numCorr = 0;
+        foreach($answers as $a) {
+            if ($a->is_correct) {
+                $numCorr++;
+            }
+        }
+
+        return ['problem' => $p, 'answers' => $answers];
+
+    }
+
+    public function whiteboard()
+    {
+        return Inertia::render('WhiteboardTest');
+    }
 }

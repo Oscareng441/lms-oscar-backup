@@ -6,7 +6,7 @@ import { FaTrash, FaPlus } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import Checkbox from "@/Components/Checkbox";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import ShowProblem from "@/Components/ShowProblem";
+import DisplayProblem from "@/Components/DisplayProblem";
 import TopMenu from "@/Components/TopMenu";
 import CourseSelect from "@/Components/CourseSelect";
 import FeedbackComponent from "@/Components/FeedbackComponent";
@@ -538,7 +538,7 @@ const Edit = ({
                     <TabPanels>
                         <TabPanel>
                             {problem !== null && (
-                                <ShowProblem
+                                <DisplayProblem
                                     problem={problem}
                                     answers={answers}
                                     handleAnswer={handleAnswer}

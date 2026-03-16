@@ -32,6 +32,7 @@ export default function AnswersComponent(props) {
                                     select={selectAnswer}
                                     selected={r.id === selectedAnswer}
                                     selectable={!hasAnswered}
+                                    showCorrect={hasAnswered}
                                 />
                             );
                         })}

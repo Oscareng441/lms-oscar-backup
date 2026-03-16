@@ -5,10 +5,12 @@ import AnswersComponent from "@/Components/AnswersComponent";
 import HybridDisplay from "@/Components/HybridDisplay";
 import FeedbackComponent from "@/Components/FeedbackComponent";
 import HintComponent from "@/Components/HintComponent";
-import ShowProblem from "@/Components/ShowProblem";
+import DisplayProblem from "@/Components/DisplayProblem";
+import DisplaySubProblem from "@/Components/DisplaySubProblem";
 import LessonNav from "@/Components/LessonNav";
 import ProblemNav from "@/Components/ProblemNav";
 import TopMenu from "@/Components/TopMenu";
+import BottomMenu from "@/Components/BottomMenu";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 import { buildBreadCrumbs } from "@/Helpers/Utilities";
@@ -30,9 +32,11 @@ const Show = ({
     const [hasAnswered, setHasAnswered] = useState(false);
     const [points, setPoints] = useState(null);
     const [showFeedback, setShowFeedback] = useState(false);
+    const [showSubProblem, setShowSubProblem] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState("right");
     const [showHint, setShowHint] = useState(false);
     const [hintsToShow, setHintsToShow] = useState(1);
+    const [subProblemNumber, setSubProblemNumber] = useState(1);
 
     const handleKeyDown = (event) => {
         switch (event.key) {
@@ -67,7 +71,15 @@ const Show = ({
 
     const toggleShowHint = () => {
         setShowFeedback(false);
-        setShowHint(!showHint);
+        if (false) {
+            setShowHint(!showHint);
+        } else {
+            setShowSubProblem(!showSubProblem);
+        }
+    };
+
+    const toggleShowSubProblem = () => {
+        setShowSubProblem(!showSubProblem);
     };
 
     const nextHint = () => {
@@ -99,6 +111,21 @@ const Show = ({
         setShowHint(true);
     };
 
+    const reset = () => {
+        if (confirm("Quieres resetear tus resultados de esta lección y reiniciar?")) {
+            fetch(route("results.reset", { lessonId: lesson.id }))
+                .then((res) => res.json())
+                .then(
+                    (results) => {
+                        window.location.href = route('lesson.start', { id: lesson.id });
+                    },
+                    (error) => {
+                        console.log("error");
+                    },
+                );
+        }
+    };
+
     const breadcrumbs = buildBreadCrumbs({ course, chapter, lesson }, 4);
     let topMenu = (
         <TopMenu
@@ -110,6 +137,14 @@ const Show = ({
             breadcrumbs={breadcrumbs}
         />
     );
+    let bottomMenu = (
+        <BottomMenu
+            prev={problemIds.anterior}
+            next={problemIds.siguiente}
+            probs={null}
+            nextWhat='problem.show'
+        />
+    );
 
     return (
         <AuthenticatedLayout
@@ -117,10 +152,11 @@ const Show = ({
             user={auth.user}
             header={false}
             topMenu={topMenu}
+            bottomMenu={bottomMenu}
         >
             <Head title={title} />
             <div className="py-2" translate="no">
-                <ShowProblem
+                <DisplayProblem
                     problem={prob}
                     answers={answers}
                     handleAnswer={handleAnswer}
@@ -137,12 +173,31 @@ const Show = ({
                     hasPrevProblem={problemIds.anterior !== null}
                 />
             </div>
+            <div className="py-2" translate="no">
+                <DisplaySubProblem
+                    show={showSubProblem}
+                    handleAnswer={handleAnswer}
+                    showHint={showHint}
+                    hint={toggleShowSubProblem}
+                    subProblemNumber={subProblemNumber}
+                    totalHints={!hints ? 0 : hints.length}
+                    next={nextProblem}
+                    prev={prevProblem}
+                    numberCorrect={numberCorrect}
+                    answered={score !== null}
+                    hasNextProblem={problemIds.siguiente !== null}
+                    hasPrevProblem={problemIds.anterior !== null}
+                />
+            </div>
             <FeedbackComponent
                 show={showFeedback}
                 feedback={feedbackMessage}
                 points={points}
+                // next={nextProblem}
                 next={nextProblem}
                 hint={toggleShowHint}
+                lessonId={lesson.id}
+                reset={reset}
                 hasHints={hints != null && hints.length > 0}
                 hasNextProblem={problemIds.siguiente !== null}
                 onClose={closeFeedbackModal}
