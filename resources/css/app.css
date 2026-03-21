@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.oscar {
+.blue-bold {
     color: oklch(45.7% 0.24 277.023);
     font-weight: bold;
 }
