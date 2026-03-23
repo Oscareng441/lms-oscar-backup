@@ -73,6 +73,7 @@ th, td {
 }
 ol li ul {
     margin-left: 12px;
+    list-style: auto;
 }
 
 
