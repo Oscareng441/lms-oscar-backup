@@ -51,7 +51,7 @@
     border-radius: 6px;
     margin: 12px 0;
 }
-.caja ol ul li {
+.caja.ol.li, .caja.ul.li {
     margin: 12px 0;
     list-style: auto;
 }
@@ -72,7 +72,7 @@ th, td {
     background-color: #0033cc;
     color: #ffffff;
 }
-ol li ul {
+ol, ul {
     margin-left: 12px;
     list-style: auto;
 }
