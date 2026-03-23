@@ -51,8 +51,9 @@
     border-radius: 6px;
     margin: 12px 0;
 }
-.caja li {
+.caja ol ul li {
     margin: 12px 0;
+    list-style: auto;
 }
 table {
     border-collapse: collapse;
