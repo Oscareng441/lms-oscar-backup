@@ -51,7 +51,7 @@
     border-radius: 6px;
     margin: 12px 0;
 }
-.caja.ol.li, .caja.ul.li {
+.caja ol li, .caja ul li {
     margin: 12px 6px;
     list-style: auto;
 }
