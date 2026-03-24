@@ -13,7 +13,7 @@ export default function BottomMenu({prev = null, next = null, probs, nextWhat = 
             </div>
             {probs != null &&
                 <div className="">
-                    <Link href={route('problemset.student', {id: probs})}>
+                    <Link href={route('problemset.start', {id: probs})}>
                         problemas
                     </Link>
                 </div>

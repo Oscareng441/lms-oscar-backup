@@ -2,19 +2,17 @@ import { useState, useEffect } from "react";
 import { PiSteps } from "react-icons/pi";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { MdSkipPrevious } from "react-icons/md";
-import { BsFillSkipStartFill } from "react-icons/bs";
 import AnswersComponent from "@/Components/AnswersComponent";
+import ProblemPane from "@/Components/ProblemPane";
 import MultiAnswersComponent from "@/Components/MultiAnswersComponent";
 import OpenAnswerComponent from "@/Components/OpenAnswerComponent";
 import OpenAlphaAnswerComponent from "@/Components/OpenAlphaAnswerComponent";
 import FillInTheBlanksAnswerComponent from "@/Components/FillInTheBlanksAnswerComponent";
-import HybridDisplay from "@/Components/HybridDisplay";
-import FillInTheBlanksDisplay from "@/Components/FillInTheBlanksDisplay";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 import levenshtein from "js-levenshtein";
 
-export default function ShowProblem(props) {
+export default function DisplayProblem(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [htmlContent, setHtmlContent] = useState(props.problem.problem_text);
     const [hasAnswered, setHasAnswered] = useState(false);
@@ -23,7 +21,6 @@ export default function ShowProblem(props) {
     const editMode = "editMode" in props && props.editMode;
 
     const fillInTheBlankAnswerSelect = (ans) => {
-        console.log(ans);
         let score = 0,
             total = 0;
         let answerTextArr = ans.map((a) => {
@@ -235,60 +232,6 @@ export default function ShowProblem(props) {
             />
         );
 
-    colr = props.problem != null ? "" : "text-slate-400";
-    pointer = props.problem != null ? "cursor-pointer" : "";
-    clik = props.problem != null ? props.restart : () => {};
-    let restartLink =
-        props.hints === null ? (
-            ""
-        ) : (
-            <BsFillSkipStartFill
-                className={`${pointer} ${colr} mx-1`}
-                onClick={clik}
-                title="reiniciar"
-            />
-        );
-
-    if (props.problem.display_type === "text") {
-        // deprecate; use html
-        problemSection = (
-            <div
-                dangerouslySetInnerHTML={{ __html: props.problem.problem_text }}
-            />
-        );
-    }
-    if (props.problem.display_type === "html") {
-        problemSection = (
-            <div
-                dangerouslySetInnerHTML={{ __html: props.problem.problem_text }}
-            />
-        );
-    }
-    if (props.problem.display_type === "latex") {
-        problemSection = <Latex>{props.problem.problem_text}</Latex>;
-    }
-    if (props.problem.display_type === "pdf") {
-        problemSection = (
-            <iframe
-                src={`/storage/${pageAssets.pdf}.pdf`}
-                style={{ width: "900px", height: "1200px" }}
-                frameBorder="0"
-            />
-        );
-    }
-    if (props.problem.display_type === "hybrid") {
-        problemSection = <HybridDisplay content={props.problem.problem_text} />;
-    }
-    if (props.problem.display_type === "ranuras") {
-        problemSection = (
-            <FillInTheBlanksDisplay
-                content={props.problem.problem_text}
-                chosenAnswers={selectedAnswers}
-                setSelectedAnswers={setSelectedAnswers}
-            />
-        );
-    }
-
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
             <AnswersComponent
@@ -362,16 +305,13 @@ export default function ShowProblem(props) {
                             {hintLink}
                             {prevLink}
                             {nextLink}
-                            {restartLink}
                         </div>
                     </div>
-                    <div className="py-2">
-                        <div className="mx-auto space-y-6">
-                            <div className="text-center bg-white p-1 shadow text-xs sm:text-base rounded-lg sm:p-8">
-                                {problemSection}
-                            </div>
-                        </div>
-                    </div>
+                    <ProblemPane
+                        problem={props.problem}
+                        selectedAnswers={selectedAnswers}
+                        setSelectedAnswers={setSelectedAnswers}
+                    />
                     {answerComponent}
                 </div>
             </div>

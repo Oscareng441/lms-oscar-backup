@@ -78,6 +78,42 @@ class CourseController extends Controller
         return Inertia::render('Groups/Index', ['course' => $course, 'groups' => $groups]);
     }
 
+    public function duplicate(Request $request, $id)
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isTeacher()) {
+            abort(403);
+        }
+        $course = Course::find($id);
+        $newCourse = new Course();
+        $newCourse->name = $course->name;
+        $newCourse->short_name = $course->short_name;
+        $newCourse->description = $course->description;
+        $newCourse->save();
+        $chapters = $course->getMyChapters(false); // include inactive
+        foreach ($chapters as $chapter) {
+            $newChapter = new LessonSet();
+            $newChapter->name = $chapter->name;
+            $newChapter->short_name = $chapter->short_name;
+            $newChapter->is_premium = $chapter->is_premium;
+            $newChapter->course_id = $newCourse->id;
+            $newChapter->sequence_id = $chapter->sequence_id;
+            $lessons = $chapter->getMyLessons(false);
+            foreach ($lessons as $lesson) {
+                $newLesson = new Lesson();
+                $newLesson->name = $lesson->name;
+                $newLesson->short_name = $lesson->short_name;
+                $newLesson->lesson_type = $lesson->lesson_type;
+                $newLesson->lesson_text = $lesson->lesson_text;
+                $newLesson->lesson_page = $lesson->lesson_page;
+                $newLesson->lesson_set_id = $newChapter->id;
+                $newLesson->sequence_id = $lesson->sequence_id;
+            }
+        }
+
+        return to_route('course.edit', [$newCourse->id]);
+    }
+
     public function addGroup(Request $request, $id)
     {
         $user = $request->user();

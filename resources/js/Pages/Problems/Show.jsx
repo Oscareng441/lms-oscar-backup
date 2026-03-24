@@ -5,10 +5,11 @@ import AnswersComponent from "@/Components/AnswersComponent";
 import HybridDisplay from "@/Components/HybridDisplay";
 import FeedbackComponent from "@/Components/FeedbackComponent";
 import HintComponent from "@/Components/HintComponent";
-import ShowProblem from "@/Components/ShowProblem";
+import DisplayProblem from "@/Components/DisplayProblem";
 import LessonNav from "@/Components/LessonNav";
 import ProblemNav from "@/Components/ProblemNav";
 import TopMenu from "@/Components/TopMenu";
+import BottomMenu from "@/Components/BottomMenu";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 import { buildBreadCrumbs } from "@/Helpers/Utilities";
@@ -111,16 +112,25 @@ const Show = ({
         />
     );
 
+    let bottomMenu = (
+        <BottomMenu
+            prev={problemIds.anterior}
+            next={problemIds.siguiente}
+            nextWhat='problem.show'
+        />
+    );
+
     return (
         <AuthenticatedLayout
             auth={auth}
             user={auth.user}
             header={false}
             topMenu={topMenu}
+            bottomMenu={bottomMenu}
         >
             <Head title={title} />
             <div className="py-2" translate="no">
-                <ShowProblem
+                <DisplayProblem
                     problem={prob}
                     answers={answers}
                     handleAnswer={handleAnswer}

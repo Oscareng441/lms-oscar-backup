@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [CourseController::class, 'all'])->name('home');
     Route::get('/courses/all', [CourseController::class, 'all'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'courses'])->name('course.ajax');
+    Route::get('/course/{id}/duplicate', [CourseController::class, 'duplicate'])->name('course.duplicate');
     Route::get('/course/{id}/groups', [CourseController::class, 'groups'])->name('course.groups');
     Route::get('/course/{id}/group/add', [CourseController::class, 'addGroup'])->name('course.addGroup');
     Route::get('/group/{groupId}', [CourseController::class, 'groupShow'])->name('course.groupShow');
@@ -73,7 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem/{id}/delete', [ProblemController::class, 'delete'])->name('problem.delete');
     Route::get('/lesson/{id}/delete', [LessonController::class, 'deleteLesson'])->name('lesson.delete');
     Route::get('/lesson/{id}/score', [LessonController::class, 'lessonScore'])->name('lesson.score');
-    Route::get('/lesson/{id}/start', [LessonController::class, 'firstProblem'])->name('lesson.start');
+    Route::get('/lesson/{id}/start', [LessonController::class, 'firstProblem'])->name('problemset.start');
     Route::get('/sources', [SourceController::class, 'index'])->name('source.index');
     Route::get('/whiteboard', [ProblemController::class, 'whiteboard'])->name('whiteboard');
     Route::get('/source/{id}', [SourceController::class, 'destroy'])->name('source.destroy');
