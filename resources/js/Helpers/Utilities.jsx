@@ -56,3 +56,18 @@ export function shuffleArray(array) {
 
     return array;
 }
+
+export const getPositiveFeedback = () => {
+    const choices = ["Así es!", "Bien!", "Correcto!", "Excelente!"];
+    return choices[Math.floor(choices.length * Math.random())];
+};
+
+export const getNegativeFeedback = () => {
+    const choices = [
+        "Casi...",
+        "Hmm, no...",
+        "No creo...",
+        "No estoy de acuerdo...!",
+    ];
+    return choices[Math.floor(choices.length * Math.random())];
+};

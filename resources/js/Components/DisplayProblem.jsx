@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { PiSteps } from "react-icons/pi";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import { MdSkipPrevious } from "react-icons/md";
-import AnswersComponent from "@/Components/AnswersComponent";
+import AnswerComponent from "@/Components/AnswerComponent";
+import SingleMCAnswerComponent from "@/Components/SingleMCAnswerComponent";
 import ProblemPane from "@/Components/ProblemPane";
 import MultiAnswersComponent from "@/Components/MultiAnswersComponent";
 import OpenAnswerComponent from "@/Components/OpenAnswerComponent";
@@ -19,6 +20,7 @@ export default function DisplayProblem(props) {
     const [points, setPoints] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("right");
     const editMode = "editMode" in props && props.editMode;
+console.log(props)
 
     const fillInTheBlankAnswerSelect = (ans) => {
         let score = 0,
@@ -234,7 +236,7 @@ export default function DisplayProblem(props) {
 
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
-            <AnswersComponent
+            <SingleMCAnswerComponent
                 answers={props.answers}
                 answered={props.answered}
                 answerSelect={answerSelect}
@@ -312,7 +314,15 @@ export default function DisplayProblem(props) {
                         selectedAnswers={selectedAnswers}
                         setSelectedAnswers={setSelectedAnswers}
                     />
-                    {answerComponent}
+                    <AnswerComponent
+                        handleAnswer={props.handleAnswer}
+                        answers={props.answers}
+                        numberCorrect={props.numberCorrect}
+                        answered={props.answered}
+                        problemTypeId={props.problem.problem_type_id}
+                        editMode={editMode}
+                        setSelectedAnswers={setSelectedAnswers}
+                    />
                 </div>
             </div>
         </>

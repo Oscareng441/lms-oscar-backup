@@ -12,6 +12,7 @@ export default function FillInTheBlanksAnswerComponent(props) {
     const [slot, setSlot] = useState(1);
 
     function selectAnswer(ans) {
+        console.log(ans)
         let a = [...props.selectedAnswers];
         ans.slot_number = slot;
         setSlot(slot + 1);

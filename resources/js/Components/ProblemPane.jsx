@@ -5,7 +5,6 @@ import HybridDisplay from "@/Components/HybridDisplay";
 import FillInTheBlanksDisplay from "@/Components/FillInTheBlanksDisplay";
 
 export default function ProblemPane(props) {
-
     let problemSection;
     if (props.problem.display_type === "text") {
         // deprecate; use html
@@ -46,6 +45,7 @@ export default function ProblemPane(props) {
             />
         );
     }
+
     return (
         <>
             {problemSection}

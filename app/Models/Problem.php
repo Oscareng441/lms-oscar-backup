@@ -78,6 +78,35 @@ class Problem extends Model
         return $rec;
     }
 
+    public function getSubProblems()
+    {
+        $sql = '
+        SELECT * FROM subproblems
+        WHERE problem_id = ?
+        ORDER BY sequence_id, id';
+        $rec = DB::select($sql, [$this->id]);
+        if (empty($rec)) {
+            return [];
+        }
+
+        return $rec;
+    }
+
+    public function getSubProblem($seq)
+    {
+        $sql = '
+        SELECT * FROM subproblems
+        WHERE problem_id = ?
+        ORDER BY sequence_id, id
+        LIMIT 1 OFFSET ?';
+        $rec = DB::selectOne($sql, [$this->id, $seq - 1]);
+        if (empty($rec)) {
+            return null;
+        }
+
+        return $rec->subproblem_id;
+    }
+
     public function deleteHints()
     {
         $sql = '

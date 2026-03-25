@@ -145,6 +145,7 @@ class ProblemController extends Controller
         $answers = $prob->getAnswers();
         shuffle($answers);
         $hints = $prob->getHints();
+        $subProblems = $prob->getSubProblems();
         extract($this->getHierarchy($prob->lesson_id));
         $lessonIds = $lesson->getNeighboringLessonIds();
         $problemIds = $prob->getNeighboringProblemIds($request->user()->id);
@@ -156,7 +157,7 @@ class ProblemController extends Controller
         }
         $score = $prob->getUserScore($request->user()->id);
 
-        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr, 'score' => $score]);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'subProblems' => $subProblems, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr, 'score' => $score]);
     }
 
     public function editProblem(Request $request, $id)
@@ -262,5 +263,38 @@ class ProblemController extends Controller
             $p->save();
         }
         return back();
+    }
+
+    public function getSubProblem(Request $request, $id, $seq)
+    {
+        $p = Problem::find($id);
+        if (!$subProblemId = $p->getSubProblem($seq)) {
+            return [];
+        }
+        return $this->getProblem($subProblemId);
+    }
+
+    public function getProblem($id)
+    {
+        $p = Problem::find($id);
+        $answers = $p->getAnswers();
+        shuffle($answers);
+        $hints = $p->getHints();
+        extract($this->getHierarchy($p->lesson_id));
+        $lessonIds = $lesson->getNeighboringLessonIds();
+        $numCorr = 0;
+        foreach($answers as $a) {
+            if ($a->is_correct) {
+                $numCorr++;
+            }
+        }
+
+        return ['problem' => $p, 'answers' => $answers];
+
+    }
+
+    public function whiteboard()
+    {
+        return Inertia::render('WhiteboardTest');
     }
 }
