@@ -52,7 +52,7 @@ export default function TopMenu(props) {
     );
     let problemsLink = (
         <div className="mx-1" title="haz los problemas">
-            <a href={`/problem-set/${props.lessonId}`}>
+            <a href={`/lesson/${props.lessonId}/start`}>
                 <BiMath />
             </a>
         </div>
