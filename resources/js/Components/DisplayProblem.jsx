@@ -1,198 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PiSteps } from "react-icons/pi";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
-import { MdSkipPrevious } from "react-icons/md";
 import AnswerComponent from "@/Components/AnswerComponent";
-import SingleMCAnswerComponent from "@/Components/SingleMCAnswerComponent";
 import ProblemPane from "@/Components/ProblemPane";
-import MultiAnswersComponent from "@/Components/MultiAnswersComponent";
-import OpenAnswerComponent from "@/Components/OpenAnswerComponent";
-import OpenAlphaAnswerComponent from "@/Components/OpenAlphaAnswerComponent";
-import FillInTheBlanksAnswerComponent from "@/Components/FillInTheBlanksAnswerComponent";
-import "katex/dist/katex.min.css";
-import Latex from "react-latex-next";
-import levenshtein from "js-levenshtein";
 
 export default function DisplayProblem(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
-    const [htmlContent, setHtmlContent] = useState(props.problem.problem_text);
-    const [hasAnswered, setHasAnswered] = useState(false);
-    const [points, setPoints] = useState(null);
-    const [feedbackMessage, setFeedbackMessage] = useState("right");
     const editMode = "editMode" in props && props.editMode;
-console.log(props)
-
-    const fillInTheBlankAnswerSelect = (ans) => {
-        let score = 0,
-            total = 0;
-        let answerTextArr = ans.map((a) => {
-            return a.answer_text;
-        });
-        let submitted = {};
-        let correct = {};
-        ans.forEach((a) => {
-            submitted[a.slot_number] = a.answer_text;
-        });
-        props.answers.forEach((r) => {
-            if (r.is_correct) {
-                correct[r.slot] = r.answer_text;
-            }
-        });
-        for (let i in correct) {
-            total++;
-            if (i in submitted && submitted[i] === correct[i]) {
-                score++;
-            }
-        }
-        let pts = !total
-            ? 1
-            : Math.floor(0.5 + 100 * ((100 * score) / total)) / 100;
-        setPoints(pts);
-        let msg = score + " correctos de " + total + " para " + pts + "%";
-        if (!editMode) {
-            fetch(
-                route("results.recordanswer", {
-                    id: props.problem.id,
-                    answers: ans,
-                    score: pts,
-                }),
-            );
-        }
-        props.handleAnswer(props.problem.id, pts, msg);
-    };
-
-    const multiAnswerSelect = (ans) => {
-        let score = 0,
-            total = 0;
-        props.answers.forEach((r) => {
-            let didSubmit = ans.indexOf(r.id) >= 0;
-            if (r.is_correct) {
-                total++;
-                if (didSubmit) {
-                    score++;
-                }
-            }
-        });
-        let pts = !total
-            ? 1
-            : Math.floor(0.5 + 100 * ((100 * score) / total)) / 100;
-        setPoints(pts);
-        let msg = score + " correctos de " + total + " para " + pts + "%";
-        if (!editMode) {
-            fetch(
-                route("results.recordanswer", {
-                    id: props.problem.id,
-                    answers: ans,
-                    score: pts,
-                }),
-            );
-        }
-        props.handleAnswer(props.problem.id, pts, msg);
-    };
-
-    const answerSelect = (ans) => {
-        let pts, msg;
-        if (ans.is_correct) {
-            pts = 100;
-            msg = getPositiveFeedback();
-        } else {
-            pts = 0;
-            msg = getNegativeFeedback();
-        }
-        setPoints(pts);
-        if (!editMode) {
-            fetch(
-                route("results.recordanswer", {
-                    id: props.problem.id,
-                    answers: [ans.id],
-                    score: pts,
-                }),
-            );
-        }
-        props.handleAnswer(props.problem.id, pts, msg);
-    };
-
-    const getPositiveFeedback = () => {
-        const choices = ["Así es!", "Bien!", "Correcto!", "Excelente!"];
-        return choices[Math.floor(choices.length * Math.random())];
-    };
-
-    const getNegativeFeedback = () => {
-        const choices = [
-            "Casi...",
-            "Hmm, no...",
-            "No creo...",
-            "No estoy de acuerdo...!",
-        ];
-        return choices[Math.floor(choices.length * Math.random())];
-    };
-
-    const openAnswerSubmit = (ans) => {
-        let pts, msg;
-        let houseAnswer = parseFloat(props.answers[0].answer_text);
-        let tolerance = parseFloat(props.answers[0].pct_tolerance);
-        let ansMin = (1 - tolerance) * houseAnswer;
-        let ansMax = (1 + tolerance) * houseAnswer;
-        if (ansMax < ansMin) {
-            let tmp = ansMax;
-            ansMax = ansMin;
-            ansMin = tmp;
-        }
-        if (ans >= ansMin && ans <= ansMax) {
-            pts = 100;
-            msg = getPositiveFeedback();
-        } else {
-            pts = 0;
-            msg = getNegativeFeedback();
-        }
-        setPoints(pts);
-        if (!editMode) {
-            fetch(
-                route("results.recordanswer", {
-                    id: props.problem.id,
-                    answers: ans,
-                    score: pts,
-                }),
-            );
-        }
-        props.handleAnswer(props.problem.id, pts, msg);
-    };
-
-    const openAlphaAnswerSubmit = (ans) => {
-        let pts, msg, corr, regx, dist;
-        props.answers.forEach((a) => {
-            dist = levenshtein(a.answer_text, ans);
-            if (dist / a.answer_text.length < a.pct_tolerance) {
-                corr = true;
-            }
-            regx = new RegExp(a.answer_text, "i");
-            if (regx.test(ans.toLowerCase())) {
-                corr = true;
-            }
-        });
-        if (corr) {
-            pts = 100;
-            msg = getPositiveFeedback();
-        } else {
-            pts = 0;
-            msg = getNegativeFeedback();
-        }
-        setPoints(pts);
-        if (!editMode) {
-            fetch(
-                route("results.recordanswer", {
-                    id: props.problem.id,
-                    answers: ans,
-                    score: pts,
-                }),
-            );
-        }
-        props.handleAnswer(props.problem.id, pts, msg);
-    };
-
-    let problemSection,
-        answerComponent,
-        answersType = "latex";
 
     let disabled = props.totalHints <= 0;
     let colr = disabled ? "text-slate-400" : "";
@@ -234,67 +48,6 @@ console.log(props)
             />
         );
 
-    if (props.problem.problem_type_id === 1) {
-        answerComponent = (
-            <SingleMCAnswerComponent
-                answers={props.answers}
-                answered={props.answered}
-                answerSelect={answerSelect}
-                editMode={editMode}
-            />
-        );
-    }
-    if (props.problem.problem_type_id === 2) {
-        answerComponent = (
-            <MultiAnswersComponent
-                answers={props.answers}
-                answered={props.answered}
-                answerSelect={multiAnswerSelect}
-                numCorrect={props.numberCorrect}
-                editMode={editMode}
-            />
-        );
-    }
-    if (props.problem.problem_type_id === 4) {
-        answerComponent = (
-            <OpenAnswerComponent
-                answers={props.answers}
-                answered={props.answered}
-                answerSelect={openAnswerSubmit}
-                editMode={editMode}
-            />
-        );
-    }
-    if (props.problem.problem_type_id === 3) {
-        answerComponent = (
-            <OpenAlphaAnswerComponent
-                answers={props.answers}
-                answered={props.answered}
-                answerSelect={openAlphaAnswerSubmit}
-                editMode={editMode}
-            />
-        );
-    }
-    if (props.problem.problem_type_id === 5) {
-        answerComponent = (
-            <FillInTheBlanksAnswerComponent
-                answers={[...props.answers]}
-                answered={props.answered}
-                answerSelect={fillInTheBlankAnswerSelect}
-                setSelectedAnswers={setSelectedAnswers}
-                selectedAnswers={selectedAnswers}
-                editMode={editMode}
-            />
-        );
-    }
-    if (props.answered && !props.editMode) {
-        answerComponent = (
-            <div className="mx-auto w-full text-center bg-slate-500/50">
-                Ya contestaste este problema
-            </div>
-        );
-    }
-
     return (
         <>
             <div className="mx-auto max-w-7xl space-y-1" translate="no">
@@ -322,6 +75,7 @@ console.log(props)
                         problemTypeId={props.problem.problem_type_id}
                         editMode={editMode}
                         setSelectedAnswers={setSelectedAnswers}
+                        selectedAnswers={selectedAnswers}
                     />
                 </div>
             </div>

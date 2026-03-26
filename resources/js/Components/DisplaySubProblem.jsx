@@ -6,20 +6,21 @@ import Modal from "@/Components/Modal";
 
 export default function DisplaySubProblem(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
-    const [problem, setProblem] = useState({id: 0, display_type: '', problem_text: '', problem_type_id: 0})
+    const [problem, setProblem] = useState({id: 0, name: '', display_type: '', problem_text: '', problem_type_id: 0})
     const [answers, setAnswers] = useState([])
     const [subProblemCount, setSubProblemCount] = useState(1)
     const [showFeedback, setShowFeedback] = useState(null);
     const editMode = "editMode" in props && props.editMode;
 
     useEffect(() => {
-        fetch(route('subproblem.fetch', {id: props.parentId, seq: subProblemCount}))
-        .then(res => res.json())
-        .then(res => {setProblem(res.problem);setAnswers(res.answers);})
+        if (props.parentId && props.subProblemCount) {
+            fetch(route('subproblem.fetch', {id: props.parentId, seq: subProblemCount}))
+            .then(res => res.json())
+            .then(res => {setProblem(res.problem);setAnswers(res.answers);})
+        }
     }, [subProblemCount, props.parentId]);
 
     useEffect(() => {
-        console.log(props)
         setShowFeedback(props.showFeedback)
     }, [props]);
 

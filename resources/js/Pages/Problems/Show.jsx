@@ -128,7 +128,7 @@ const Show = ({
                 .then((res) => res.json())
                 .then(
                     (results) => {
-                        window.location.href = route('lesson.start', { id: lesson.id });
+                        window.location.href = route('problemset.start', { id: lesson.id });
                     },
                     (error) => {
                         console.log("error");

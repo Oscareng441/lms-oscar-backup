@@ -24,7 +24,7 @@ export default function AnswerComponent(props) {
     const [points, setPoints] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("right");
     const editMode = "editMode" in props && props.editMode;
-
+console.log(props)
     useEffect(() => {
         setHasAnswered(props.answered)
     }, [props]);
@@ -235,7 +235,7 @@ export default function AnswerComponent(props) {
                 answered={props.answered}
                 answerSelect={fillInTheBlankAnswerSelect}
                 setSelectedAnswers={props.setSelectedAnswers}
-                selectedAnswers={selectedAnswers}
+                selectedAnswers={props.selectedAnswers}
                 editMode={editMode}
             />
         );

@@ -54,12 +54,14 @@ export default function FeedbackComponent(props) {
                                     YAY YOU DID IT
                                 </div>
                             )}
-                            <div
-                                className="cursor-pointer bg-white p-2 m-2 rounded-lg"
-                                onClick={props.reset}
-                            >
-                                resetear
-                            </div>
+                            {props.reset != null &&
+                                <div
+                                    className="cursor-pointer bg-white p-2 m-2 rounded-lg"
+                                    onClick={props.reset}
+                                >
+                                    resetear
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

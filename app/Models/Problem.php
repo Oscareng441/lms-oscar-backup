@@ -81,7 +81,8 @@ class Problem extends Model
     public function getSubProblems()
     {
         $sql = '
-        SELECT * FROM subproblems
+        SELECT S.*, P.name FROM subproblems S
+        INNER JOIN problems P ON P.id = S.subproblem_id
         WHERE problem_id = ?
         ORDER BY sequence_id, id';
         $rec = DB::select($sql, [$this->id]);

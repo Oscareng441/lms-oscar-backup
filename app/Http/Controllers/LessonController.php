@@ -121,7 +121,7 @@ class LessonController extends Controller implements HasMiddleware
         $chapter = LessonSet::find($chapterId);
         $courseId = $chapter->course_id;
         $sources = SourceReference::where(['active' => 1])->get();
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => [], 'credits' => $sources]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'origSubProblems' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => [], 'credits' => $sources]);
     }
 
     public function uploadProblem(Request $request, $id)

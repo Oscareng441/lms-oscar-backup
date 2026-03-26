@@ -10,7 +10,7 @@ export default function FillInTheBlanksAnswerComponent(props) {
     );
     const [hasAnswered, setHasAnswered] = useState(false);
     const [slot, setSlot] = useState(1);
-
+console.log(props)
     function selectAnswer(ans) {
         console.log(ans)
         let a = [...props.selectedAnswers];

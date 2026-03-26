@@ -7,6 +7,7 @@ import { GrGallery } from "react-icons/gr";
 import Checkbox from "@/Components/Checkbox";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import DisplayProblem from "@/Components/DisplayProblem";
+import DisplaySubProblem from "@/Components/DisplaySubProblem";
 import TopMenu from "@/Components/TopMenu";
 import CourseSelect from "@/Components/CourseSelect";
 import FeedbackComponent from "@/Components/FeedbackComponent";
@@ -22,6 +23,7 @@ const Edit = ({
     origProblem,
     origAnswers,
     origHints,
+    origSubProblems,
     courses,
     origCourseId,
     origChapterId,
@@ -34,6 +36,8 @@ const Edit = ({
     problemIds = [],
     origKeywords = [],
 }) => {
+    console.log(origSubProblems)
+    console.log(origHints)
     const [probTxt, setProbTxt] = useState(origProblem.problem_text);
     const [probDisplayType, setProbDisplayType] = useState(
         origProblem.display_type,
@@ -43,17 +47,22 @@ const Edit = ({
     const [creditId, setCreditId] = useState(origProblem.credit_id || 0);
     const [problem, setProblem] = useState(origProblem);
     const [answers, setAnswers] = useState(origAnswers);
-    const [hints, setHints] = useState(origHints || []);
+    const [hints, setHints] = useState(origHints);
+    const [subProblems, setSubProblems] = useState(origSubProblems);
     const [courseId, setCourseId] = useState(origCourseId);
     const [chapterId, setChapterId] = useState(origChapterId);
     const [lessonId, setLessonId] = useState(origLessonId);
     const [keywords, setKeywords] = useState(origKeywords.join(' '));
     const [feedbackMessage, setFeedbackMessage] = useState("");
     const [showFeedback, setShowFeedback] = useState(false);
+    const [showSubProblem, setShowSubProblem] = useState(false);
+    const [showFeedbackSubProblem, setShowFeedbackSubProblem] = useState(false);
     const [points, setPoints] = useState(0);
     const [showHint, setShowHint] = useState(false);
     const [showGallery, setShowGallery] = useState(false);
+    const [useSubProblems, setUseSubProblems] = useState(origSubProblems?.length > 0);
     const [hintsToShow, setHintsToShow] = useState(1);
+    const [numberCorrect, setNumberCorrect] = useState(0);
     const [tolerance, setTolerance] = useState(
         origAnswers[0]?.pct_tolerance || 0,
     );
@@ -84,6 +93,16 @@ const Edit = ({
             setProbType("ranuras");
         }
     }, [probDisplayType]);
+
+    useEffect(() => {
+        let nc = 0;
+        answers.forEach(a => {
+            if (a.is_correct) {
+                nc++;
+            }
+        });
+        setNumberCorrect(nc)
+    }, [answers]);
 
     const title = !isAdd ? `Editar #${problem.id}` : "Problema Nuevo";
 
@@ -118,9 +137,23 @@ const Edit = ({
         setHintsToShow(hintsToShow - 1);
     };
 
+    const toggleShowSubProblem = () => {
+        setShowSubProblem(!showSubProblem);
+    };
+
+    const closeShowSubProblem = () => {
+        setShowSubProblem(false);
+    };
+
     const handleAnswer = (id, points, msg) => {
         setFeedbackMessage(msg);
         setShowFeedback(true);
+        setPoints(points);
+    };
+
+    const handleAnswerSubProblem = (id, points, msg) => {
+        setFeedbackMessage(msg);
+        setShowFeedbackSubProblem(true);
         setPoints(points);
     };
 
@@ -363,6 +396,10 @@ const Edit = ({
         setShowGallery(!showGallery);
     };
 
+    const toggleUseSubProblems = () => {
+        setUseSubProblems(!useSubProblems);
+    };
+
     const manageKeywords = (e) => {
         let k = e.target.value;
         setKeywords(k)
@@ -538,26 +575,42 @@ const Edit = ({
                     <TabPanels>
                         <TabPanel>
                             {problem !== null && (
-                                <DisplayProblem
-                                    problem={problem}
-                                    answers={answers}
-                                    handleAnswer={handleAnswer}
-                                    showHint={showHint}
-                                    hint={toggleShowHint}
-                                    totalHints={hints.length}
-                                    hintsToShow={hintsToShow}
-                                    nextHint={nextHint}
-                                    next={nextProblem}
-                                    prev={prevProblem}
-                                    hasNextProblem={
-                                        problemIds.siguiente !== null
-                                    }
-                                    hasPrevProblem={
-                                        problemIds.anterior !== null
-                                    }
-                                    editMode={true}
-                                    answered={false}
-                                />
+                                <div className="py-2" translate="no">
+                                    <DisplayProblem
+                                        problem={problem}
+                                        answers={answers}
+                                        handleAnswer={handleAnswer}
+                                        showHint={showHint}
+                                        hint={toggleShowHint}
+                                        totalHints={!hints.length && !subProblems.length ? 0 : Math.max(hints.length, subProblems.length)}
+                                        hintsToShow={hintsToShow}
+                                        nextHint={nextHint}
+                                        next={nextProblem}
+                                        prev={prevProblem}
+                                        hasNextProblem={
+                                            problemIds.siguiente !== null
+                                        }
+                                        hasPrevProblem={
+                                            problemIds.anterior !== null
+                                        }
+                                        editMode={true}
+                                        answered={false}
+                                    />
+                                    <DisplaySubProblem
+                                        show={showSubProblem}
+                                        parentId={problem.id}
+                                        onClose={closeShowSubProblem}
+                                        handleAnswer={handleAnswerSubProblem}
+                                        subProblemNumber={1}
+                                        subProblemCount={!subProblems ? 0 : subProblems.length}
+                                        numberCorrect={numberCorrect}
+                                        answered={false}
+                                        showFeedback={showFeedbackSubProblem}
+                                        setShowFeedback={setShowFeedbackSubProblem}
+                                        feedback={feedbackMessage}
+                                        points={points}
+                                    />
+                                </div>
                             )}
                         </TabPanel>
                         <TabPanel>
@@ -733,39 +786,81 @@ const Edit = ({
                             <div className="">
                                 <div className="mx-auto max-w-7xl space-y-6 ">
                                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                                        <div className="flex items-center text-sm sm:text-md">
-                                            {" "}
-                                            Pistas:{" "}
-                                            <FaPlus
-                                                className="text-base ml-2 cursor-pointer"
-                                                onClick={addHint}
-                                            />
+                                        <div className="mb-4 text-sm sm:text-md cursor-pointer" onClick={toggleUseSubProblems}>
+                                            {useSubProblems ? 'usar pistas' : 'usar sub-problemas'}
                                         </div>
-                                        {hints.map((h, k) => {
-                                            let hintTxt = h.hint;
-                                            return (
-                                                <div
-                                                    key={`hnt_${k}`}
-                                                    className="flex"
-                                                >
-                                                    <input
-                                                        key={k}
-                                                        type="text"
-                                                        onChange={(e) =>
-                                                            chgHintTxt(e, k)
-                                                        }
-                                                        value={hintTxt}
-                                                        className="w-full"
-                                                    />
-                                                    <FaTrash
+                                        {!useSubProblems &&
+                                            <>
+                                                <div className="flex items-center text-sm sm:text-md">
+                                                    Pistas:
+                                                    <FaPlus
                                                         className="text-base ml-2 cursor-pointer"
-                                                        onClick={(e) =>
-                                                            delHint(e, k)
-                                                        }
+                                                        onClick={addHint}
                                                     />
                                                 </div>
-                                            );
-                                        })}
+                                                {hints.map((h, k) => {
+                                                    let hintTxt = h.hint;
+                                                    return (
+                                                        <div
+                                                            key={`hnt_${k}`}
+                                                            className="flex"
+                                                        >
+                                                            <input
+                                                                key={k}
+                                                                type="text"
+                                                                onChange={(e) =>
+                                                                    chgHintTxt(e, k)
+                                                                }
+                                                                value={hintTxt}
+                                                                className="w-full"
+                                                            />
+                                                            <FaTrash
+                                                                className="text-base ml-2 cursor-pointer"
+                                                                onClick={(e) =>
+                                                                    delHint(e, k)
+                                                                }
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </>
+                                        }
+                                        {useSubProblems &&
+                                            <>
+                                                <div className="flex items-center text-sm sm:text-md">
+                                                    Sub-problemas:
+                                                    <FaPlus
+                                                        className="text-base ml-2 cursor-pointer"
+                                                        onClick={() => {}}
+                                                    />
+                                                </div>
+                                                {subProblems.map((h, k) => {
+                                                    console.log(h)
+                                                    return (
+                                                        <div
+                                                            key={`sb_${k}`}
+                                                            className="flex"
+                                                        >
+                                                            <input
+                                                                key={k}
+                                                                type="text"
+                                                                onChange={(e) =>
+                                                                    chgHintTxt(e, k)
+                                                                }
+                                                                value={h.name}
+                                                                className="w-full"
+                                                            />
+                                                            <FaTrash
+                                                                className="text-base ml-2 cursor-pointer"
+                                                                onClick={(e) =>
+                                                                    delHint(e, k)
+                                                                }
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </>
+                                        }
                                     </div>
                                 </div>
                             </div>
