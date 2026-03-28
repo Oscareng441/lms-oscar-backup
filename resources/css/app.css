@@ -37,6 +37,24 @@
     text-align: center;
     margin-bottom: 20px;
 }
+
+.video-component {
+    background-color: #e8dff5;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.video-component-title {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.video-component-list {
+    text-align: left;
+}
+
 .subtitulo {
     background-color: #d6eaf8;
     padding: 12px;

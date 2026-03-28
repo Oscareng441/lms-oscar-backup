@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import HybridDisplay from "@/Components/HybridDisplay";
 import TopMenu from "@/Components/TopMenu";
 import BottomMenu from "@/Components/BottomMenu";
+import VideoComponent from "@/Components/VideoComponent";
 import { router, Link, Head } from "@inertiajs/react";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
@@ -88,26 +89,15 @@ const Index = ({
         >
             <Head title={title} />
             <div className="py-2">
-                {videos.length > 0 && (
-                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                        <div className="">Videos</div>
-                        {videos.map((r) => {
-                            return (
-                                <div className="text-blue-800">
-                                    <a href={r.url} target="_blank">
-                                        {r.name}
-                                    </a>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                         {lessonSection}
                     </div>
                 </div>
             </div>
+            {videos.length > 0 &&
+                <VideoComponent videos={videos} />
+            }
         </AuthenticatedLayout>
     );
 };

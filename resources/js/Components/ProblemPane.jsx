@@ -48,7 +48,9 @@ export default function ProblemPane(props) {
 
     return (
         <>
-            {problemSection}
+            <div className="text-center bg-white p-1 shadow text-xs sm:text-base rounded-lg sm:p-8">
+                {problemSection}
+            </div>
         </>
     );
 }
