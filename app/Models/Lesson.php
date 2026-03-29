@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\OmniHelper;
 
 class Lesson extends Model
 {
@@ -35,6 +36,70 @@ class Lesson extends Model
         $sql = 'SELECT * FROM videos WHERE lesson_id = ?';
         $vids = DB::select($sql, [$this->id]);
         return $vids;
+    }
+
+    public function saveVideos($videos)
+    {
+        if (empty($videos)) {
+            return;
+        }
+
+        $tbl = 'z_videos_'.rand();
+
+        $sql = '
+        CREATE TABLE '.$tbl.' (
+          `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+          `video_id` bigint DEFAULT NULL,
+          `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+          `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+          `lesson_id` bigint unsigned NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB;';
+
+        DB::statement($sql);
+
+        $placeholders = [];
+        $params = [];
+
+        foreach ($videos as $video) {
+            $placeholders[] = '(?,?,?,?)';
+            $params[] = str_contains($video['id'], 'T') ? NULL : $video['id'];
+            $params[] = $video['name'];
+            $params[] = $video['url'];
+            $params[] = $video['lesson_id'];
+        }
+
+        $sql = '
+        INSERT INTO '.$tbl.'
+        (`video_id`,`name`,`url`,`lesson_id`)
+        VALUES
+        ' . implode(',', $placeholders);
+
+        DB::insert($sql, $params);
+
+        $sql = '
+        INSERT INTO videos
+        (`id`,`name`,`url`,`lesson_id`)
+        SELECT `video_id`,`name`,`url`,`lesson_id`
+        FROM ' . $tbl . '
+        ON DUPLICATE KEY UPDATE
+        name = VALUES(name),
+        url = VALUES(url),
+        lesson_id = VALUES(lesson_id)';
+
+        DB::insert($sql);
+
+        $sql = '
+        DELETE V FROM videos V
+        LEFT JOIN ' . $tbl . ' T ON V.lesson_id = T.lesson_id AND V.name = T.name
+        WHERE T.id IS NULL';
+
+        DB::delete($sql);
+
+        $sql = '
+        DROP TABLE IF EXISTS ' . $tbl;
+
+        DB::statement($sql);        
     }
 
     public function saveKeywords($kw)

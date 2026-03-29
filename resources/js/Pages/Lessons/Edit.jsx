@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import LessonDescription from "@/Components/LessonDescription";
 import TopMenu from "@/Components/TopMenu";
+import VideoManagementComponent from "@/Components/VideoManagementComponent";
+import CreditsComponent from "@/Components/CreditsComponent";
 import Checkbox from "@/Components/Checkbox";
 import { router, Link, Head, useForm } from "@inertiajs/react";
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
@@ -11,11 +13,25 @@ import { buildBreadCrumbs } from "@/Helpers/Utilities";
 const Edit = ({ auth, origLesson, chapter, course, origKeywords = [] }) => {
     const [lesson, setLesson] = useState(origLesson);
     const [keywords, setKeywords] = useState(origKeywords.join(' '));
+    const [videos, setVideos] = useState([]);
     const { data, setData, post } = useForm({
         lesson: origLesson,
         file: null,
+        videos: videos,
         keywords: keywords,
     });
+    useEffect(() => {
+        fetch(route("lesson.videos", { id: lesson.id }))
+            .then((res) => res.json())
+            .then(
+                (results) => {
+                    setVideos(results);
+                },
+                (error) => {
+                    console.log("error", error);
+                },
+            );
+    }, []);
 
     const title = `Capítulo ${lesson.name}`;
 
@@ -105,6 +121,37 @@ const Edit = ({ auth, origLesson, chapter, course, origKeywords = [] }) => {
         d.keywords = k;
         setData(d)
     };
+
+    function removeVideo(video) {
+        let v = [ ...videos ]
+        let fv = v.filter(x => x.id !== video.id)
+        setVideos(fv)
+        let d = { ...data }
+        d.videos = fv;
+        setData(d)
+    }
+
+    function addVideo() {
+        let v = [ ...videos ]
+        const maxId = videos.reduce((max, video) => video.id > max ? video.id : max, -Infinity);
+        v.push({id: 'TMP-' + (maxId + 1), name: '', url: '', lesson_id: lesson.id})
+        setVideos(v)
+        let d = { ...data }
+        d.videos = v;
+        setData(d)
+    }
+
+    function updateVideo(e, fld, video) {
+        let val = e.target.value;
+        let v = [ ...videos ]
+        let fv = v.filter(x => x.id !== video.id)
+        video[fld] = val;
+        fv.push(video)
+        setVideos(fv)
+        let d = { ...data }
+        d.videos = fv;
+        setData(d)
+    }
 
     const save = () => {
         post(route("lesson.save"));
@@ -258,7 +305,14 @@ const Edit = ({ auth, origLesson, chapter, course, origKeywords = [] }) => {
                         </TabPanel>
                         <TabPanel>
                             <div className="mx-auto max-w-7xl space-y-6 pt-2">
-                                <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8 flex items-center">
+                                <div className="text-center bg-white p-1 shadow w-full sm:rounded-lg sm:p-8">
+                                    <VideoManagementComponent 
+                                        remove={removeVideo}
+                                        add={addVideo}
+                                        update={updateVideo}
+                                        videos={videos} 
+                                    />
+                                    {/*<CreditsComponent TBI />*/}
                                     <div className="text-left text-2xl"> Palabras Claves:</div>
                                     <div>
                                         <input

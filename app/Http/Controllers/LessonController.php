@@ -198,6 +198,10 @@ class LessonController extends Controller implements HasMiddleware
         $lesson->active = !empty($c['active']) ? 1 : 0;
         $lesson->save();
 
+        if (!empty($data['videos'])) {
+            $lesson->saveVideos($data['videos']);
+        }
+
         if (!empty($data['keywords'])) {
             $lesson->saveKeywords($data['keywords']);
         }
