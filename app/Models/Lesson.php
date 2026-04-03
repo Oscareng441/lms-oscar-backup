@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\OmniHelper;
 
 class Lesson extends Model
 {
@@ -40,10 +39,6 @@ class Lesson extends Model
 
     public function saveVideos($videos)
     {
-        if (empty($videos)) {
-            return;
-        }
-
         $tbl = 'z_videos_'.rand();
 
         $sql = '
@@ -58,36 +53,39 @@ class Lesson extends Model
 
         DB::statement($sql);
 
-        $placeholders = [];
-        $params = [];
+        if (!empty($videos)) {
 
-        foreach ($videos as $video) {
-            $placeholders[] = '(?,?,?,?)';
-            $params[] = str_contains($video['id'], 'T') ? NULL : $video['id'];
-            $params[] = $video['name'];
-            $params[] = $video['url'];
-            $params[] = $video['lesson_id'];
+            $placeholders = [];
+            $params = [];
+
+            foreach ($videos as $video) {
+                $placeholders[] = '(?,?,?,?)';
+                $params[] = str_contains($video['id'], 'T') ? NULL : $video['id'];
+                $params[] = $video['name'];
+                $params[] = $video['url'];
+                $params[] = $video['lesson_id'];
+            }
+
+            $sql = '
+            INSERT INTO '.$tbl.'
+            (`video_id`,`name`,`url`,`lesson_id`)
+            VALUES
+            ' . implode(',', $placeholders);
+
+            DB::insert($sql, $params);
+
+            $sql = '
+            INSERT INTO videos
+            (`id`,`name`,`url`,`lesson_id`)
+            SELECT `video_id`,`name`,`url`,`lesson_id`
+            FROM ' . $tbl . '
+            ON DUPLICATE KEY UPDATE
+            name = VALUES(name),
+            url = VALUES(url),
+            lesson_id = VALUES(lesson_id)';
+
+            DB::insert($sql);
         }
-
-        $sql = '
-        INSERT INTO '.$tbl.'
-        (`video_id`,`name`,`url`,`lesson_id`)
-        VALUES
-        ' . implode(',', $placeholders);
-
-        DB::insert($sql, $params);
-
-        $sql = '
-        INSERT INTO videos
-        (`id`,`name`,`url`,`lesson_id`)
-        SELECT `video_id`,`name`,`url`,`lesson_id`
-        FROM ' . $tbl . '
-        ON DUPLICATE KEY UPDATE
-        name = VALUES(name),
-        url = VALUES(url),
-        lesson_id = VALUES(lesson_id)';
-
-        DB::insert($sql);
 
         $sql = '
         DELETE V FROM videos V

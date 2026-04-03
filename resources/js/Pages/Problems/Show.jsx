@@ -154,6 +154,11 @@ const Show = ({
             next={problemIds.siguiente}
             probs={null}
             nextWhat='problem.show'
+            middleLink={{
+                url: 'problemset.student',
+                id: lesson.id,
+                text: 'lista de problemas',
+            }}
         />
     );
 
