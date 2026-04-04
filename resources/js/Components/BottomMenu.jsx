@@ -1,7 +1,6 @@
 import { Link } from "@inertiajs/react";
 
-// probably want refactor so that common elts are components, such as next btn, then an array of up to 3 btns is passed in here
-export default function BottomMenu({prev = null, next = null, probs, nextWhat = 'lesson.show', middleLink = null}) {
+export default function BottomMenu({prev = null, next = null, probs = null, nextWhat = 'lesson.show', middleLink = null}) {
     return (
         <div className="flex justify-between w-full my-2">
             

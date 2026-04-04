@@ -9,6 +9,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import DisplayProblem from "@/Components/DisplayProblem";
 import DisplaySubProblem from "@/Components/DisplaySubProblem";
 import TopMenu from "@/Components/TopMenu";
+import BottomMenu from "@/Components/BottomMenu";
 import CourseSelect from "@/Components/CourseSelect";
 import FeedbackComponent from "@/Components/FeedbackComponent";
 import HintComponent from "@/Components/HintComponent";
@@ -546,12 +547,27 @@ const Edit = ({
     let answerBlurb =
         answerBlurbMsg === "" ? "" : <div className="">{answerBlurbMsg}</div>;
 
+    let bottomMenu = (
+        <BottomMenu
+            prev={problemIds.anterior}
+            next={problemIds.siguiente}
+            probs={null}
+            nextWhat='problem.edit'
+            middleLink={{
+                url: 'problemset.student',
+                id: lesson.id,
+                text: 'lista de problemas',
+            }}
+        />
+    );
+
     return (
         <AuthenticatedLayout
             auth={auth}
             user={auth.user}
             header={false}
             topMenu={topMenu}
+            bottomMenu={bottomMenu}
         >
             <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 py-2">
                 <TabGroup className="mx-auto w-full">
