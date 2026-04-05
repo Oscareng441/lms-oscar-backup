@@ -6,24 +6,27 @@ import { router, Link, Head } from "@inertiajs/react";
 
 const Index = ({ auth, courses, myProgress }) => {
     const [courseList, setCourseList] = useState(courses);
+    useEffect(() => {
+        onlyPub()
+    }, [])
 
     const title = "Cursos";
 
     let topMenu = <TopMenu auth={auth} title={title} show={["course-add"]} />;
 
-    function toggleUnpub() {
+    function onlyUnpub() {
         setCourseList(courses.filter((x) => {
             return x.active === 0;
         }))
     }
 
-    function togglePub() {
+    function onlyPub() {
         setCourseList(courses.filter((x) => {
             return x.active === 1;
         }))
     }
 
-    function toggleAll() {
+    function showAll() {
         setCourseList(courses)
     }
 
@@ -36,13 +39,13 @@ const Index = ({ auth, courses, myProgress }) => {
         >
             {auth.is_admin &&
                 <div className="text-sm sm:text-md flex">
-                    <div className="cursor-pointer ml-8" onClick={toggleUnpub}>
+                    <div className="cursor-pointer ml-8" onClick={onlyUnpub}>
                         Solo No Publicados
                     </div>
-                    <div className="cursor-pointer ml-8" onClick={togglePub}>
+                    <div className="cursor-pointer ml-8" onClick={onlyPub}>
                         Solo Publicados
                     </div>
-                    <div className="cursor-pointer ml-8" onClick={toggleAll}>
+                    <div className="cursor-pointer ml-8" onClick={showAll}>
                         Todos
                     </div>
                 </div>
