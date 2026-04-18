@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ImportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -83,6 +84,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/school/{id}/users', [SchoolController::class, 'users'])->name('school.users');
     Route::post('/school/save', [SchoolController::class, 'store'])->name('school.save');
     Route::get('/school/{id}', [SchoolController::class, 'destroy'])->name('school.destroy');
+        // 👇 TU NUEVA FEATURE
+    Route::get('/importador', [ImportController::class, 'index']);
+    Route::get('/importador/preview', [ImportController::class, 'preview']);
+    Route::post('/importador/preview', [ImportController::class, 'preview']);
+    Route::post('/importador/import', [ImportController::class, 'import']);
 });
 
 require __DIR__.'/auth.php';

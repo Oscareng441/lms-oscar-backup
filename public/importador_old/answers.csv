@@ -1,0 +1,175 @@
+external_id,display_type,answer_text,active,is_correct
+psq1,text,Do,1,1
+psq1,text,Does,1,0
+psq1,text,Is,1,0
+psq1,text,Are,1,0
+
+psq2,text,Yes, I do,1,1
+psq2,text,Yes, I am,1,0
+psq2,text,Yes, I did,1,0
+psq2,text,Yes, I was,1,0
+
+psq3,text,Does,1,1
+psq3,text,Do,1,0
+psq3,text,Is,1,0
+psq3,text,Are,1,0
+
+psq4,text,Yes, they do,1,1
+psq4,text,Yes, they are,1,0
+psq4,text,Yes, they did,1,0
+psq4,text,Yes, they were,1,0
+
+psq5,text,Does,1,1
+psq5,text,Do,1,0
+psq5,text,Is,1,0
+psq5,text,Are,1,0
+
+pcA1,text,is,1,1
+pcA1,text,are,1,0
+pcA1,text,am,1,0
+pcA1,text,be,1,0
+
+pcA2,text,are,1,1
+pcA2,text,is,1,0
+pcA2,text,am,1,0
+pcA2,text,be,1,0
+
+pcA3,text,am,1,1
+pcA3,text,is,1,0
+pcA3,text,are,1,0
+pcA3,text,be,1,0
+
+pcA4,text,is,1,1
+pcA4,text,are,1,0
+pcA4,text,am,1,0
+pcA4,text,be,1,0
+
+pcA5,text,are,1,1
+pcA5,text,is,1,0
+pcA5,text,am,1,0
+pcA5,text,be,1,0
+
+pcN1,text,is,1,1
+pcN1,text,are,1,0
+pcN1,text,am,1,0
+pcN1,text,be,1,0
+
+pcN2,text,are,1,1
+pcN2,text,is,1,0
+pcN2,text,am,1,0
+pcN2,text,be,1,0
+
+pcN3,text,am,1,1
+pcN3,text,is,1,0
+pcN3,text,are,1,0
+pcN3,text,be,1,0
+
+pcN4,text,is,1,1
+pcN4,text,are,1,0
+pcN4,text,am,1,0
+pcN4,text,be,1,0
+
+pcN5,text,are,1,1
+pcN5,text,is,1,0
+pcN5,text,am,1,0
+pcN5,text,be,1,0
+
+pcQ1,text,Is,1,1
+pcQ1,text,Are,1,0
+pcQ1,text,Am,1,0
+pcQ1,text,Do,1,0
+
+pcQ2,text,Yes, I am,1,1
+pcQ2,text,Yes, I do,1,0
+pcQ2,text,Yes, I did,1,0
+pcQ2,text,Yes, I was,1,0
+
+pcQ3,text,Are,1,1
+pcQ3,text,Is,1,0
+pcQ3,text,Am,1,0
+pcQ3,text,Do,1,0
+
+pcQ4,text,Yes, he is,1,1
+pcQ4,text,Yes, he does,1,0
+pcQ4,text,Yes, he did,1,0
+pcQ4,text,Yes, he was,1,0
+
+pcQ5,text,Are,1,1
+pcQ5,text,Is,1,0
+pcQ5,text,Am,1,0
+pcQ5,text,Do,1,0
+
+psA1,text,went,1,1
+psA1,text,go,1,0
+psA1,text,goes,1,0
+psA1,text,going,1,0
+
+psA2,text,watched,1,1
+psA2,text,watch,1,0
+psA2,text,watches,1,0
+psA2,text,watching,1,0
+
+psA3,text,did,1,1
+psA3,text,do,1,0
+psA3,text,does,1,0
+psA3,text,doing,1,0
+
+psA4,text,played,1,1
+psA4,text,play,1,0
+psA4,text,plays,1,0
+psA4,text,playing,1,0
+
+psA5,text,ate,1,1
+psA5,text,eat,1,0
+psA5,text,eats,1,0
+psA5,text,eating,1,0
+
+psN1,text,did,1,1
+psN1,text,do,1,0
+psN1,text,does,1,0
+psN1,text,was,1,0
+
+psN2,text,did,1,1
+psN2,text,do,1,0
+psN2,text,does,1,0
+psN2,text,were,1,0
+
+psN3,text,did,1,1
+psN3,text,do,1,0
+psN3,text,does,1,0
+psN3,text,was,1,0
+
+psN4,text,did,1,1
+psN4,text,do,1,0
+psN4,text,does,1,0
+psN4,text,were,1,0
+
+psN5,text,did,1,1
+psN5,text,do,1,0
+psN5,text,does,1,0
+psN5,text,was,1,0
+
+psQ1,text,Did,1,1
+psQ1,text,Do,1,0
+psQ1,text,Does,1,0
+psQ1,text,Was,1,0
+
+psQ2,text,Yes, I did,1,1
+psQ2,text,Yes, I do,1,0
+psQ2,text,Yes, I am,1,0
+psQ2,text,Yes, I was,1,0
+
+psQ3,text,Did,1,1
+psQ3,text,Do,1,0
+psQ3,text,Does,1,0
+psQ3,text,Was,1,0
+
+psQ4,text,Yes, they did,1,1
+psQ4,text,Yes, they do,1,0
+psQ4,text,Yes, they are,1,0
+psQ4,text,Yes, they were,1,0
+
+psQ5,text,Did,1,1
+psQ5,text,Do,1,0
+psQ5,text,Does,1,0
+psQ5,text,Was,1,0

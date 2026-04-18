@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lesson_sets', function (Blueprint $table) {
-            $table->integer('is_premium')->after('sequence_id');
+            $table->integer('is_premium');
         });
     }
 

@@ -1,0 +1,140 @@
+external_id,hint,sequence_id
+psq1,Use "do" or "does" to form questions in present simple.,1
+psq1,For "you", we use "do" not "does".,2
+psq1,Correct structure: Do you like coffee?,3
+
+psq2,Short answers in present simple use "do/does".,1
+psq2,For "you", use "do" in the answer.,2
+psq2,Correct answer: Yes, I do.,3
+
+psq3,He/she/it use "does" in questions.,1
+psq3,"She" requires "does".,2
+psq3,Correct structure: Does she work here?,3
+
+psq4,Plural subjects use "do".,1
+psq4,"They" uses "do" not "does".,2
+psq4,Correct answer: Yes, they do.,3
+
+psq5,He/she/it use "does".,1
+psq5,"He" requires "does" in questions.,2
+psq5,Correct structure: Does he drive?,3
+
+pcA1,Present continuous uses verb "to be".,1
+pcA1,"She" uses "is".,2
+pcA1,Correct sentence: She is reading a book.,3
+
+pcA2,Use "are" with plural subjects.,1
+pcA2,"They" takes "are".,2
+pcA2,Correct: They are playing soccer.,3
+
+pcA3,Use "am" with "I".,1
+pcA3,"I" always uses "am".,2
+pcA3,Correct: I am studying.,3
+
+pcA4,Use "is" with he/she/it.,1
+pcA4,"He" requires "is".,2
+pcA4,Correct: He is working.,3
+
+pcA5,Plural subject uses "are".,1
+pcA5,"We" takes "are".,2
+pcA5,Correct: We are watching TV.,3
+
+pcN1,Negative present continuous uses "not".,1
+pcN1,"She" uses "is not".,2
+pcN1,Correct: She is not eating.,3
+
+pcN2,Plural subjects use "are not".,1
+pcN2,"They" takes "are not".,2
+pcN2,Correct: They are not studying.,3
+
+pcN3,Use "am not" with "I".,1
+pcN3,"I" uses "am not".,2
+pcN3,Correct: I am not working.,3
+
+pcN4,He/she/it use "is not".,1
+pcN4,"He" takes "is not".,2
+pcN4,Correct: He is not sleeping.,3
+
+pcN5,Plural subjects use "are not".,1
+pcN5,"We" takes "are not".,2
+pcN5,Correct: We are not running.,3
+
+pcQ1,Questions invert "to be".,1
+pcQ1,"She" uses "is".,2
+pcQ1,Correct: Is she working?,3
+
+pcQ2,Short answers use "am/is/are".,1
+pcQ2,"I" answers with "am".,2
+pcQ2,Correct: Yes, I am.,3
+
+pcQ3,Plural subject uses "are".,1
+pcQ3,"They" takes "are".,2
+pcQ3,Correct: Are they playing?,3
+
+pcQ4,Short answers use auxiliary verb.,1
+pcQ4,"He" uses "is".,2
+pcQ4,Correct: Yes, he is.,3
+
+pcQ5,Questions invert "to be".,1
+pcQ5,"You" takes "are".,2
+pcQ5,Correct: Are you watching TV?,3
+
+psA1,Past simple uses second form of verb.,1
+psA1,"Go" becomes "went".,2
+psA1,Correct: She went to school yesterday.,3
+
+psA2,Past of "watch" is "watched".,1
+psA2,Use past tense for yesterday/last night.,2
+psA2,Correct: They watched a movie last night.,3
+
+psA3,Past of "do" is "did".,1
+psA3,Use past tense.,2
+psA3,Correct: I did my homework.,3
+
+psA4,Past of "play" is "played".,1
+psA4,Use past tense.,2
+psA4,Correct: He played soccer.,3
+
+psA5,Past of "eat" is "ate".,1
+psA5,Irregular verb.,2
+psA5,Correct: We ate dinner.,3
+
+psN1,Negative past uses "did not".,1
+psN1,Base verb stays the same.,2
+psN1,Correct: She did not go yesterday.,3
+
+psN2,Negative past uses "did not".,1
+psN2,Base verb stays unchanged.,2
+psN2,Correct: They did not watch TV.,3
+
+psN3,Negative past uses "did not".,1
+psN3,Verb stays in base form.,2
+psN3,Correct: I did not finish my work.,3
+
+psN4,Use "did not" + base verb.,1
+psN4,No past form after "did".,2
+psN4,Correct: He did not play soccer.,3
+
+psN5,Use "did not" + base verb.,1
+psN5,Verb stays in base form.,2
+psN5,Correct: We did not eat dinner.,3
+
+psQ1,Questions use "did" + base verb.,1
+psQ1,No past form after "did".,2
+psQ1,Correct: Did you go yesterday?,3
+
+psQ2,Short answers use "did".,1
+psQ2,"I" answers with "did".,2
+psQ2,Correct: Yes, I did.,3
+
+psQ3,Questions use "did".,1
+psQ3,Base form after "did".,2
+psQ3,Correct: Did she work?,3
+
+psQ4,Short answers use "did".,1
+psQ4,"They" answers with "did".,2
+psQ4,Correct: Yes, they did.,3
+
+psQ5,Questions use "did".,1
+psQ5,Base form after "did".,2
+psQ5,Correct: Did he play?,3

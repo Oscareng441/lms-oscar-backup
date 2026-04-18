@@ -1,0 +1,42 @@
+external_id,name,lesson_id,problem_type_id,display_type,owner_id,sequence_id,is_premium,problem_text,credit_id,active
+psq1,Q1,297,1,text,1,1,0,Choose the correct question: ___ you like coffee?,1,1
+psq2,Q2,297,1,text,1,2,0,Choose the correct answer: Do you play soccer? ___,1,1
+psq3,Q3,297,1,text,1,3,0,Choose the correct question: ___ she work here?,1,1
+psq4,Q4,297,1,text,1,4,0,Choose the correct answer: Do they study English? ___,1,1
+psq5,Q5,297,1,text,1,5,0,Choose the correct question: ___ he drive?,1,1
+
+pcA1,Q1,298,1,text,1,1,0,Choose the correct sentence: She ___ reading a book.,1,1
+pcA2,Q2,298,1,text,1,2,0,Choose the correct sentence: They ___ playing soccer.,1,1
+pcA3,Q3,298,1,text,1,3,0,Choose the correct sentence: I ___ studying.,1,1
+pcA4,Q4,298,1,text,1,4,0,Choose the correct sentence: He ___ working.,1,1
+pcA5,Q5,298,1,text,1,5,0,Choose the correct sentence: We ___ watching TV.,1,1
+
+pcN1,Q1,299,1,text,1,1,0,Choose the correct sentence: She ___ not eating.,1,1
+pcN2,Q2,299,1,text,1,2,0,Choose the correct sentence: They ___ not studying.,1,1
+pcN3,Q3,299,1,text,1,3,0,Choose the correct sentence: I ___ not working.,1,1
+pcN4,Q4,299,1,text,1,4,0,Choose the correct sentence: He ___ not sleeping.,1,1
+pcN5,Q5,299,1,text,1,5,0,Choose the correct sentence: We ___ not running.,1,1
+
+pcQ1,Q1,300,1,text,1,1,0,Choose the correct question: ___ she working?,1,1
+pcQ2,Q2,300,1,text,1,2,0,Choose the correct answer: Are you studying? ___,1,1
+pcQ3,Q3,300,1,text,1,3,0,Choose the correct question: ___ they playing?,1,1
+pcQ4,Q4,300,1,text,1,4,0,Choose the correct answer: Is he sleeping? ___,1,1
+pcQ5,Q5,300,1,text,1,5,0,Choose the correct question: ___ you watching TV?,1,1
+
+psA1,Q1,301,1,text,1,1,0,Choose the correct sentence: She ___ to school yesterday.,1,1
+psA2,Q2,301,1,text,1,2,0,Choose the correct sentence: They ___ a movie last night.,1,1
+psA3,Q3,301,1,text,1,3,0,Choose the correct sentence: I ___ my homework.,1,1
+psA4,Q4,301,1,text,1,4,0,Choose the correct sentence: He ___ soccer.,1,1
+psA5,Q5,301,1,text,1,5,0,Choose the correct sentence: We ___ dinner.,1,1
+
+psN1,Q1,302,1,text,1,1,0,Choose the correct sentence: She ___ not go yesterday.,1,1
+psN2,Q2,302,1,text,1,2,0,Choose the correct sentence: They ___ not watch TV.,1,1
+psN3,Q3,302,1,text,1,3,0,Choose the correct sentence: I ___ not finish my work.,1,1
+psN4,Q4,302,1,text,1,4,0,Choose the correct sentence: He ___ not play soccer.,1,1
+psN5,Q5,302,1,text,1,5,0,Choose the correct sentence: We ___ not eat dinner.,1,1
+
+psQ1,Q1,303,1,text,1,1,0,Choose the correct question: ___ you go yesterday?,1,1
+psQ2,Q2,303,1,text,1,2,0,Choose the correct answer: Did you study? ___,1,1
+psQ3,Q3,303,1,text,1,3,0,Choose the correct question: ___ she work?,1,1
+psQ4,Q4,303,1,text,1,4,0,Choose the correct answer: Did they eat? ___,1,1
+psQ5,Q5,303,1,text,1,5,0,Choose the correct question: ___ he play?,1,1
