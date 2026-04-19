@@ -22,7 +22,7 @@ class ImportController extends Controller
         $answers = $this->parseCSV($request->answers);
         $hints = $this->parseCSV($request->hints);
 
-        // 🔥 GUARDAR EN SESIÓN (IMPORTANTE)
+        // 🔥 GUARDAR EN SESIÓN
         session([
             'problems_csv' => $problems,
             'answers_csv' => $answers,
@@ -61,16 +61,10 @@ class ImportController extends Controller
 
     public function import(Request $request)
     {
-        /**
-         * 🔥 PRIORIDAD:
-         * 1. Intentar desde JSON (tu flujo actual)
-         * 2. Si no existe → usar SESSION (fix del bug)
-         */
-
+        // 🔥 JSON → SESSION fallback
         $data = json_decode($request->data, true);
 
         if (!$data) {
-            // 🔥 fallback a sesión
             $data = [
                 'problems' => session('problems_csv'),
                 'answers' => session('answers_csv'),
@@ -93,6 +87,9 @@ class ImportController extends Controller
 
             $problemMap = [];
 
+            // ===============================
+            // 🔹 INSERT PROBLEMS
+            // ===============================
             foreach ($data['problems'] as $p) {
 
                 $exists = DB::table('problems')
@@ -120,18 +117,70 @@ class ImportController extends Controller
                 $problemMap[$p['external_id']] = $id;
             }
 
+            // ===============================
+            // 🔹 INSERT ANSWERS (SMART)
+            // ===============================
             foreach ($data['answers'] as $a) {
+
                 if (!isset($problemMap[$a['external_id']])) continue;
 
-                DB::table('answer_sets')->insert([
-                    'problem_id' => $problemMap[$a['external_id']],
-                    'display_type' => $a['display_type'],
-                    'answer_text' => $a['answer_text'],
-                    'active' => $a['active'],
-                    'is_correct' => $a['is_correct']
-                ]);
+                $problemId = $problemMap[$a['external_id']];
+
+                $problem = collect($data['problems'])
+                    ->firstWhere('external_id', $a['external_id']);
+
+                if (!$problem) continue;
+
+                $type = $problem['problem_type_id'];
+
+                switch ($type) {
+
+                    // ✅ OPCIÓN MÚLTIPLE
+                    case 1:
+                    case 2:
+                        DB::table('answer_sets')->insert([
+                            'problem_id' => $problemId,
+                            'display_type' => $a['display_type'] ?? 'text',
+                            'answer_text' => $a['answer_text'],
+                            'active' => $a['active'] ?? 1,
+                            'is_correct' => $a['is_correct'] ?? 0
+                        ]);
+                    break;
+
+                    // ✅ ALFABÉTICO
+                    case 3:
+                        DB::table('open_answers_alpha')->insert([
+                            'problem_id' => $problemId,
+                            'answer' => $a['answer_text'],
+                            'pct_tolerance' => $a['pct_tolerance'] ?? 0.25
+                        ]);
+                    break;
+
+                    // ✅ NUMÉRICO
+                    case 4:
+                        DB::table('open_answers_numeric')->insert([
+                            'problem_id' => $problemId,
+                            'answer' => $a['answer_text'],
+                            'pct_tolerance' => $a['pct_tolerance'] ?? 0.05
+                        ]);
+                    break;
+
+                    // ✅ RANURAS
+                    case 5:
+                        DB::table('ordered_answers')->insert([
+                            'problem_id' => $problemId,
+                            'answer_text' => $a['answer_text'],
+                            'is_correct' => 1,
+                            'position' => $a['position'] ?? 1,
+                            'display_type' => $a['display_type'] ?? 'text'
+                        ]);
+                    break;
+                }
             }
 
+            // ===============================
+            // 🔹 INSERT HINTS
+            // ===============================
             foreach ($data['hints'] as $h) {
                 if (!isset($problemMap[$h['external_id']])) continue;
 
@@ -144,7 +193,7 @@ class ImportController extends Controller
 
             DB::commit();
 
-            // 🔥 LIMPIAR SESIÓN
+            // 🔥 limpiar sesión
             session()->forget([
                 'problems_csv',
                 'answers_csv',

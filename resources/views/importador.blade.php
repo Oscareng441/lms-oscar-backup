@@ -46,12 +46,21 @@
 @if(isset($preview) && !empty($preview['problems']))
     <h2>Preview</h2>
 
+    <p><strong>Problemas:</strong> {{ count($preview['problems']) }}</p>
+    <p><strong>Respuestas:</strong> {{ count($preview['answers']) }}</p>
+    <p><strong>Pistas:</strong> {{ count($preview['hints']) }}</p>
+
+    {{-- 🔥 PREVIEW DETALLADO --}}
     @foreach($preview['problems'] as $p)
 
         <hr>
+
         <h3>🧩 Problema: {{ $p['external_id'] }}</h3>
 
-        <p><strong>Pregunta:</strong> {{ $p['problem_text'] }}</p>
+        <p><strong>Pregunta:</strong></p>
+        <div style="margin-bottom:10px;">
+            {!! $p['problem_text'] !!}
+        </div>
 
         {{-- RESPUESTAS --}}
         <p><strong>Opciones:</strong></p>
@@ -60,8 +69,11 @@
                 @if($a['external_id'] == $p['external_id'])
                     <li>
                         {{ $a['answer_text'] }}
-                        @if($a['is_correct'])
-                            ✅ <strong>(Correcta)</strong>
+
+                        @if(isset($a['is_correct']) && $a['is_correct'])
+                            <span style="color:green;"> ✅ (Correcta)</span>
+                        @else
+                            <span style="color:#999;"> (Distractor)</span>
                         @endif
                     </li>
                 @endif
@@ -74,7 +86,8 @@
             @foreach($preview['hints'] as $h)
                 @if($h['external_id'] == $p['external_id'])
                     <li>
-                        ({{ $h['sequence_id'] }}) {{ $h['hint'] }}
+                        <strong>[{{ $h['sequence_id'] }}]</strong>
+                        {!! $h['hint'] !!}
                     </li>
                 @endif
             @endforeach
@@ -82,14 +95,13 @@
 
     @endforeach
 
-    <p>Problemas: {{ count($preview['problems']) }}</p>
-    <p>Respuestas: {{ count($preview['answers']) }}</p>
-    <p>Pistas: {{ count($preview['hints']) }}</p>
-
+    {{-- 🚀 IMPORTAR --}}
     <form method="POST" action="/importador/import">
         @csrf
         <input type="hidden" name="data" value="{{ json_encode($preview) }}">
-        <button type="submit">Importar</button>
+        <button type="submit" style="padding:10px 20px; font-size:16px;">
+            🚀 Importar
+        </button>
     </form>
 @endif
 
