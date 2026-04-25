@@ -422,6 +422,7 @@ const Edit = ({
         topMenuIcons.push("prob-dup");
     } else {
         topMenuIcons.push("prob-add-alt");
+        topMenuIcons.push("upload-problems");
     }
     let topMenu = (
         <TopMenu

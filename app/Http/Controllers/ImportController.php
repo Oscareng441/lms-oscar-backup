@@ -14,15 +14,10 @@ class ImportController extends Controller
 
     public function preview(Request $request)
     {
-        // 🔴 DEBUG
-        session()->flash('debug', $request->all());
-
-        // 🔹 Parse CSV
         $problems = $this->parseCSV($request->problems);
         $answers = $this->parseCSV($request->answers);
         $hints = $this->parseCSV($request->hints);
 
-        // 🔥 GUARDAR EN SESIÓN
         session([
             'problems_csv' => $problems,
             'answers_csv' => $answers,
@@ -39,7 +34,6 @@ class ImportController extends Controller
 
         foreach ($answers as $a) {
             if (!isset($a['external_id'])) continue;
-
             if (!$problemIds->contains($a['external_id'])) {
                 $errors[] = "Respuesta sin problema: " . $a['external_id'];
             }
@@ -47,7 +41,6 @@ class ImportController extends Controller
 
         foreach ($hints as $h) {
             if (!isset($h['external_id'])) continue;
-
             if (!$problemIds->contains($h['external_id'])) {
                 $errors[] = "Hint sin problema: " . $h['external_id'];
             }
@@ -61,7 +54,6 @@ class ImportController extends Controller
 
     public function import(Request $request)
     {
-        // 🔥 JSON → SESSION fallback
         $data = json_decode($request->data, true);
 
         if (!$data) {
@@ -72,14 +64,16 @@ class ImportController extends Controller
             ];
         }
 
-        // 🚨 Validación fuerte
         if (
             empty($data['problems']) ||
             empty($data['answers']) ||
             empty($data['hints'])
         ) {
-            return back()->with('error', '❌ Datos vacíos (ni JSON ni SESSION)');
+            return back()->with('error', '❌ Datos vacíos');
         }
+
+        $actions = $request->actions ?? [];
+        $skip = $request->skip ?? [];
 
         DB::beginTransaction();
 
@@ -88,37 +82,76 @@ class ImportController extends Controller
             $problemMap = [];
 
             // ===============================
-            // 🔹 INSERT PROBLEMS
+            // 🔹 PROBLEMS
             // ===============================
             foreach ($data['problems'] as $p) {
+
+                $externalId = $p['external_id'];
+
+                if (isset($skip[$externalId])) {
+                    continue;
+                }
 
                 $exists = DB::table('problems')
                     ->whereRaw('LOWER(TRIM(problem_text)) = ?', [strtolower(trim($p['problem_text']))])
                     ->first();
 
                 if ($exists) {
-                    $problemMap[$p['external_id']] = $exists->id;
-                    continue;
+
+                    if (($actions[$externalId] ?? '') === 'update') {
+
+                        // 🔥 BORRAR TODO LO RELACIONADO
+                        DB::table('answer_sets')->where('problem_id', $exists->id)->delete();
+                        DB::table('open_answers_alpha')->where('problem_id', $exists->id)->delete();
+                        DB::table('open_answers_numeric')->where('problem_id', $exists->id)->delete();
+                        DB::table('ordered_answers')->where('problem_id', $exists->id)->delete();
+                        DB::table('problem_hints')->where('problem_id', $exists->id)->delete();
+
+                        // 🔄 ACTUALIZAR PROBLEMA
+                        DB::table('problems')->where('id', $exists->id)->update([
+                            'name' => $p['name'],
+                            'lesson_id' => $p['lesson_id'],
+                            'problem_type_id' => $p['problem_type_id'],
+                            'display_type' => $p['display_type'],
+                            'owner_id' => $p['owner_id'],
+                            'sequence_id' => $p['sequence_id'],
+                            'is_premium' => $p['is_premium'],
+                            'problem_text' => $p['problem_text'],
+                            'credit_id' => $p['credit_id'],
+                            'active' => $p['active']
+                        ]);
+
+                        $problemMap[$externalId] = $exists->id;
+
+                    } else {
+                        continue;
+                    }
+
+                } else {
+
+                    if (($actions[$externalId] ?? '') !== 'insert') {
+                        continue;
+                    }
+
+                    $id = DB::table('problems')->insertGetId([
+                        'name' => $p['name'],
+                        'lesson_id' => $p['lesson_id'],
+                        'problem_type_id' => $p['problem_type_id'],
+                        'display_type' => $p['display_type'],
+                        'owner_id' => $p['owner_id'],
+                        'sequence_id' => $p['sequence_id'],
+                        'is_premium' => $p['is_premium'],
+                        'problem_text' => $p['problem_text'],
+                        'credit_id' => $p['credit_id'],
+                        'active' => $p['active']
+                    ]);
+
+                    $problemMap[$externalId] = $id;
                 }
-
-                $id = DB::table('problems')->insertGetId([
-                    'name' => $p['name'],
-                    'lesson_id' => $p['lesson_id'],
-                    'problem_type_id' => $p['problem_type_id'],
-                    'display_type' => $p['display_type'],
-                    'owner_id' => $p['owner_id'],
-                    'sequence_id' => $p['sequence_id'],
-                    'is_premium' => $p['is_premium'],
-                    'problem_text' => $p['problem_text'],
-                    'credit_id' => $p['credit_id'],
-                    'active' => $p['active']
-                ]);
-
-                $problemMap[$p['external_id']] = $id;
             }
 
             // ===============================
-            // 🔹 INSERT ANSWERS (SMART)
+            // 🔹 ANSWERS
             // ===============================
             foreach ($data['answers'] as $a) {
 
@@ -132,44 +165,41 @@ class ImportController extends Controller
                 if (!$problem) continue;
 
                 $type = $problem['problem_type_id'];
+                $answer = $a['answer'] ?? $a['answer_text'] ?? '';
 
                 switch ($type) {
 
-                    // ✅ OPCIÓN MÚLTIPLE
                     case 1:
                     case 2:
                         DB::table('answer_sets')->insert([
                             'problem_id' => $problemId,
-                            'display_type' => $a['display_type'] ?? 'text',
-                            'answer_text' => $a['answer_text'],
-                            'active' => $a['active'] ?? 1,
+                            'display_type' => $a['display_type'] ?? 'latex',
+                            'answer_text' => $answer,
+                            'active' => 1,
                             'is_correct' => $a['is_correct'] ?? 0
                         ]);
                     break;
 
-                    // ✅ ALFABÉTICO
                     case 3:
                         DB::table('open_answers_alpha')->insert([
                             'problem_id' => $problemId,
-                            'answer' => $a['answer_text'],
+                            'answer' => $answer,
                             'pct_tolerance' => $a['pct_tolerance'] ?? 0.25
                         ]);
                     break;
 
-                    // ✅ NUMÉRICO
                     case 4:
                         DB::table('open_answers_numeric')->insert([
                             'problem_id' => $problemId,
-                            'answer' => $a['answer_text'],
+                            'answer' => $answer,
                             'pct_tolerance' => $a['pct_tolerance'] ?? 0.05
                         ]);
                     break;
 
-                    // ✅ RANURAS
                     case 5:
                         DB::table('ordered_answers')->insert([
                             'problem_id' => $problemId,
-                            'answer_text' => $a['answer_text'],
+                            'answer_text' => $answer,
                             'is_correct' => 1,
                             'position' => $a['position'] ?? 1,
                             'display_type' => $a['display_type'] ?? 'text'
@@ -179,9 +209,10 @@ class ImportController extends Controller
             }
 
             // ===============================
-            // 🔹 INSERT HINTS
+            // 🔹 HINTS
             // ===============================
             foreach ($data['hints'] as $h) {
+
                 if (!isset($problemMap[$h['external_id']])) continue;
 
                 DB::table('problem_hints')->insert([
@@ -193,7 +224,6 @@ class ImportController extends Controller
 
             DB::commit();
 
-            // 🔥 limpiar sesión
             session()->forget([
                 'problems_csv',
                 'answers_csv',
@@ -201,9 +231,7 @@ class ImportController extends Controller
             ]);
 
             return redirect('/importador')
-                ->with('success', '🎉 Importación exitosa')
-                ->with('preview', null)
-                ->with('errors', null);
+                ->with('success', '🎉 Importación completada');
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -7,6 +7,7 @@ import {
     FaBookOpen,
     FaRegCopy,
 } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { BiMath } from "react-icons/bi";
 import { RiBookShelfLine } from "react-icons/ri";
@@ -19,6 +20,14 @@ import BreadcrumbsComponent from "@/Components/BreadcrumbsComponent";
 
 export default function TopMenu(props) {
     let editMode = props.auth.edit_mode;
+
+    let uploadProblemsLink = (
+        <div className="mx-1" title="Subir problemas CSV">
+            <a href="/importador">
+                <FaUpload />
+            </a>
+        </div>
+    );
 
     let courseListLink = (
         <div className="mx-1" title="lista de cursos">
@@ -241,6 +250,11 @@ export default function TopMenu(props) {
                         props.schoolAdd &&
                         editMode &&
                         schoolAdd}
+                    {props.show.indexOf("upload-problems") >= 0 &&
+                        editMode &&
+                        uploadProblemsLink}
+
+
                 </div>
             </div>
             <BreadcrumbsComponent data={props.breadcrumbs} />
