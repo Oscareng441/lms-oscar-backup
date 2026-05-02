@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ImportController extends Controller
 {
@@ -26,9 +27,9 @@ class ImportController extends Controller
 
         $errors = [];
 
-        if (empty($problems)) $errors[] = "Problems vacío";
-        if (empty($answers)) $errors[] = "Answers vacío";
-        if (empty($hints)) $errors[] = "Hints vacío";
+        if (empty($problems)) $errors[] = "Problems vacío o mal formado";
+        if (empty($answers)) $errors[] = "Answers vacío o mal formado";
+        if (empty($hints)) $errors[] = "Hints vacío o mal formado";
 
         $problemIds = collect($problems)->pluck('external_id');
 
@@ -100,14 +101,12 @@ class ImportController extends Controller
 
                     if (($actions[$externalId] ?? '') === 'update') {
 
-                        // 🔥 BORRAR TODO LO RELACIONADO
                         DB::table('answer_sets')->where('problem_id', $exists->id)->delete();
                         DB::table('open_answers_alpha')->where('problem_id', $exists->id)->delete();
                         DB::table('open_answers_numeric')->where('problem_id', $exists->id)->delete();
                         DB::table('ordered_answers')->where('problem_id', $exists->id)->delete();
                         DB::table('problem_hints')->where('problem_id', $exists->id)->delete();
 
-                        // 🔄 ACTUALIZAR PROBLEMA
                         DB::table('problems')->where('id', $exists->id)->update([
                             'name' => $p['name'],
                             'lesson_id' => $p['lesson_id'],
@@ -239,27 +238,39 @@ class ImportController extends Controller
         }
     }
 
+    // ===============================
+    // 🔥 NUEVO PARSER ROBUSTO
+    // ===============================
     private function parseCSV($text)
     {
         if (!$text) return [];
 
-        $lines = preg_split('/\r\n|\r|\n/', trim($text));
+        // Detectar encoding
+        $text = mb_convert_encoding($text, 'UTF-8', 'auto');
 
-        $rows = array_map(function ($line) {
-            return str_getcsv($line);
-        }, $lines);
-
-        if (count($rows) < 2) return [];
-
-        $header = array_map('trim', array_shift($rows));
+        $handle = fopen('php://temp', 'r+');
+        fwrite($handle, $text);
+        rewind($handle);
 
         $data = [];
 
-        foreach ($rows as $row) {
+        $header = fgetcsv($handle);
+        if (!$header) return [];
+
+        $header = array_map('trim', $header);
+
+        while (($row = fgetcsv($handle)) !== false) {
 
             if (count(array_filter($row)) === 0) continue;
 
-            if (count($row) !== count($header)) continue;
+            if (count($row) !== count($header)) {
+                Log::warning('CSV row mismatch', [
+                    'row' => $row,
+                    'expected' => count($header),
+                    'got' => count($row)
+                ]);
+                continue;
+            }
 
             $assoc = array_combine($header, $row);
 
@@ -267,6 +278,8 @@ class ImportController extends Controller
 
             $data[] = $assoc;
         }
+
+        fclose($handle);
 
         return $data;
     }
