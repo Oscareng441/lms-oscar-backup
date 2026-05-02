@@ -22,7 +22,11 @@ class CourseController extends Controller
     public function all(Request $request)
     {
         $user = $request->user();
-        $courses = Course::where(['active' => 1])->get();
+        if ($user->isAdmin() || $user->isTeacher()) {
+            $courses = Course::all();
+        } else {
+            $courses = Course::where(['active' => 1])->get();
+        }
         $myProgress = [];
         foreach ($courses as $course) {
             $myProgress[$course->id] = $user->getCourseProgress($course->id);
