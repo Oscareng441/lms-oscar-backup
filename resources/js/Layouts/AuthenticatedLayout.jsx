@@ -2,16 +2,26 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
+import Sidebar from "@/Components/Sidebar";
+import { SidebarProvider, useSidebar } from "@/Context/SidebarContext";
 import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-export default function AuthenticatedLayout({ header, topMenu, children, bottomMenu }) {
+export default function AuthenticatedLayout(props) {
+    return (
+        <SidebarProvider>
+            <AuthenticatedLayoutContent {...props} />
+        </SidebarProvider>
+    );
+}
+
+function AuthenticatedLayoutContent({ header, topMenu, children, bottomMenu }) {
     const user = usePage().props.auth.user;
     const auth = usePage().props.auth;
-
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    const { toggleMobileOpen } = useSidebar();
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -126,6 +136,26 @@ export default function AuthenticatedLayout({ header, topMenu, children, bottomM
 
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
+                                type="button"
+                                onClick={toggleMobileOpen}
+                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                                aria-label="Open sidebar"
+                            >
+                                <svg
+                                    className="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                </svg>
+                            </button>
+                            <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
                                         (previousState) => !previousState,
@@ -208,44 +238,49 @@ export default function AuthenticatedLayout({ header, topMenu, children, bottomM
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                            {header}
-                        </h2>
-                    </div>
-                </header>
-            )}
+            <div className="flex">
+                <Sidebar />
+                <div className="flex-1">
+                    {header && (
+                        <header className="bg-white shadow">
+                            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                                    {header}
+                                </h2>
+                            </div>
+                        </header>
+                    )}
 
-            {topMenu && (
-                <div className="bg-white shadow mt-2">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
-                            {topMenu}
+                    {topMenu && (
+                        <div className="bg-white shadow mt-2">
+                            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                                <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
+                                    {topMenu}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
+                    )}
 
-            <main>{children}</main>
+                    <main>{children}</main>
 
-            {bottomMenu && (
-                <div className="bg-white shadow mb-2">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
-                            {bottomMenu}
+                    {bottomMenu && (
+                        <div className="bg-white shadow mb-2">
+                            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                                <div className="text-xs sm:text-base font-semibold leading-tight text-gray-800">
+                                    {bottomMenu}
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
+                    <footer className="bg-white shadow">
+                        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                            <div className="text-right text-xs sm:text-base font-semibold leading-tight text-gray-800">
+                                EstudioSinFronteras
+                            </div>
+                        </div>
+                    </footer>
                 </div>
-            )}
-            <footer className="bg-white shadow">
-                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <div className="text-right text-xs sm:text-base font-semibold leading-tight text-gray-800">
-                        EstudioSinFronteras
-                    </div>
-                </div>
-            </footer>
+            </div>
         </div>
     );
 }
