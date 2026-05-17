@@ -34,9 +34,9 @@ class AppServiceProvider extends ServiceProvider
                     return [];
                 }
 
-                $courses = ($user->isAdmin() || $user->isTeacher())
-                    ? Course::orderBy('name')->get()
-                    : Course::where('active', 1)->orderBy('name')->get();
+                $courses = Course::where('active', 1)
+                    ->orderBy('name')
+                    ->get();
 
                 $data = [];
                 foreach ($courses as $course) {

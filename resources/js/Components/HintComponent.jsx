@@ -1,96 +1,105 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Modal from "@/Components/Modal";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 
 export default function HintComponent(props) {
     const bottomRef = useRef(null);
-    let jsxParts = [];
-    let hints = [],
-        hintCount = 0,
-        nextHintBtn = "";
-    if (props.hints && props.hints.length > 0) {
-        hints = props.hints;
-    }
-    hints.forEach((h) => {
-        if (hintCount++ < props.hintsToShow) {
-            jsxParts.push(
-                <div>
-                    <Latex>{h.hint}</Latex>
-                </div>,
-            );
+    const hints = props.hints ? props.hints.slice(0, props.hintsToShow) : [];
+    const moreHints = props.hintsToShow < (props.hints?.length || 0);
+    const moreHintsP = props.hintsToShow > 1;
+
+    useEffect(() => {
+        if (props.show) {
+            bottomRef.current?.scrollIntoView({
+                block: "end",
+                behavior: "smooth",
+            });
         }
-    });
-    let xxx = jsxParts.map((p, k) => {
-        let cls =
-            k < jsxParts.length - 1
-                ? "text-slate-400 p-2 mx-2"
-                : "text-slate-600 bg-slate-100 rounded-lg p-2 mx-2";
-        return (
-            <div key={k} className={`my-4 ${cls}`}>
-                {p}
-            </div>
-        );
-    });
-
-    const scrollToBottom = () => {
-        bottomRef.current?.scrollIntoView();
-    };
-
-    async function nextHint() {
-        await props.nextHint();
-        scrollToBottom()
-    }
-
-    function prevHint() {
-        props.prevHint();
-    }
-
-    let moreHints = props.hintsToShow < hints.length;
-    let onClk = nextHint;
-    let nextHntCls = "cursor-pointer text-black";
-    if (!moreHints) {
-        onClk = () => {};
-        nextHntCls = "text-slate-200";
-    }
-
-    let moreHintsP = props.hintsToShow > 1;
-    let onClkP = prevHint;
-    let prevHntCls = "cursor-pointer text-black";
-    if (!moreHintsP) {
-        onClkP = () => {};
-        prevHntCls = "text-slate-200";
-    }
+    }, [props.show, props.hintsToShow]);
 
     return (
-        <div className="mx-auto my-6 max-w-5xl space-y-6 sm:px-6 lg:px-8">
+        <div className="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} maxWidth="5xl">
-                <div
-                    className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl h-[90lvh] py-4 my-4`}
-                >
-                    <div className="flex flex-col min-w-[20%] max-h-dvh overflow-y-hidden ">
-                        <div
-                            className={`${nextHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`}
-                            onClick={onClk}
-                        >
-                            siguiente paso
+                <div className="flex h-[88vh] flex-col overflow-hidden rounded-3xl bg-white shadow-xl sm:h-[80vh]">
+                    <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
+                        <div>
+                            <div className="text-lg font-semibold text-slate-900">
+                                Pistas
+                            </div>
+                            <div className="text-sm text-slate-500">
+                                Utiliza estos pasos para entender el problema.
+                            </div>
                         </div>
-                        <div
-                            className={`${prevHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`}
-                            onClick={onClkP}
-                        >
-                            paso anterior
-                        </div>
-                        <div
-                            className="cursor-pointer bg-white p-2 m-2 rounded-lg"
-                            onClick={props.onClose}
-                        >
-                            cerrar
+                        <div className="flex flex-wrap items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={props.prevHint}
+                                disabled={!moreHintsP}
+                                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                                    moreHintsP
+                                        ? "bg-slate-900 text-white hover:bg-slate-800"
+                                        : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                                }`}
+                            >
+                                Paso anterior
+                            </button>
+                            <button
+                                type="button"
+                                onClick={props.nextHint}
+                                disabled={!moreHints}
+                                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                                    moreHints
+                                        ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                                        : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                                }`}
+                            >
+                                Siguiente paso
+                            </button>
+                            <button
+                                type="button"
+                                onClick={props.onClose}
+                                className="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200"
+                            >
+                                Cerrar
+                            </button>
                         </div>
                     </div>
-                    <div className="w-full">
-                        <div className="flex flex-col max-h-dvh overflow-y-auto ">{xxx}</div>
-                        <div ref={bottomRef} className="mb-8"></div>
+
+                    <div className="flex flex-1 flex-col overflow-hidden px-4 py-4 sm:px-6">
+                        <div className="mb-4 flex items-center justify-between gap-4 rounded-3xl bg-slate-50 p-4 text-sm text-slate-600 shadow-sm">
+                            <span>
+                                Paso{" "}
+                                {Math.min(
+                                    props.hintsToShow,
+                                    props.hints?.length || 0,
+                                )}{" "}
+                                de {props.hints?.length || 0}
+                            </span>
+                            <span className="text-slate-500">
+                                {props.hints?.length
+                                    ? "Desplázate para leer más"
+                                    : "No hay pistas disponibles"}
+                            </span>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+                            {hints.length ? (
+                                hints.map((h, k) => (
+                                    <div
+                                        key={k}
+                                        className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-slate-800 shadow-sm"
+                                    >
+                                        <Latex>{h.hint}</Latex>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500">
+                                    No hay pistas para este problema.
+                                </div>
+                            )}
+                            <div ref={bottomRef} className="h-6" />
+                        </div>
                     </div>
                 </div>
             </Modal>
