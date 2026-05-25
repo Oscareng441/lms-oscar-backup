@@ -2,6 +2,12 @@ import { usePage } from "@inertiajs/react";
 
 export default function SidebarDebug() {
     const page = usePage();
+    const isAdmin = page.props.auth?.is_admin;
+
+    if (!isAdmin) {
+        return null;
+    }
+
     const currentRouteName = page.props.currentRouteName;
     const currentRouteParams = page.props.currentRouteParams || {};
 

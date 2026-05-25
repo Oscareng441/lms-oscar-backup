@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@inertiajs/react";
 import { HiChevronDown, HiChevronRight } from "react-icons/hi";
+import { isSidebarItemActive } from "@/Helpers/sidebarUtils";
 
 export default function SidebarItem({
     item,
@@ -14,7 +15,7 @@ export default function SidebarItem({
     const hasChildren =
         Array.isArray(item.children) && item.children.length > 0;
     const active = useMemo(
-        () => hasActiveItem(item, currentRouteName, currentRouteParams),
+        () => isSidebarItemActive(item, currentRouteName, currentRouteParams),
         [item, currentRouteName, currentRouteParams],
     );
 
@@ -27,35 +28,6 @@ export default function SidebarItem({
     }
     const href = getHref(item);
     const style = collapsed ? {} : { paddingLeft: `${depth * 16 + 12}px` };
-
-    function compareParams(itemParams = {}, currentParams = {}) {
-        const keys = Object.keys(itemParams);
-        if (keys.length === 0) return true;
-        return keys.every(
-            (k) => String(itemParams[k]) === String(currentParams[k] ?? ""),
-        );
-    }
-
-    function hasActiveItem(item, currentRouteName, currentRouteParams) {
-        if (item.route && currentRouteName && item.route === currentRouteName) {
-            const result = compareParams(
-                item.params || {},
-                currentRouteParams || {},
-            );
-            if (depth === 0 && item.children) {
-                console.log(
-                    `  → [hasActiveItem] Item "${item.label}" (route: ${item.route}, params: ${JSON.stringify(item.params)}) matches current route? ${result}`,
-                );
-            }
-            return result;
-        }
-        if (item.children) {
-            return item.children.some((child) =>
-                hasActiveItem(child, currentRouteName, currentRouteParams),
-            );
-        }
-        return false;
-    }
 
     function getHref(item) {
         if (!item.route) {
