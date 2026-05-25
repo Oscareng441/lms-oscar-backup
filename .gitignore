@@ -25,3 +25,4 @@ yarn-error.log
 
 # Local build caches
 .npm
+database/240526u682985581_esf.sql
