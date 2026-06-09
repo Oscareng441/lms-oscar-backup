@@ -14,7 +14,7 @@ const Upload = ({ auth, lesson, chapter, course }) => {
     });
     const sbm = (e) => {
         e.preventDefault();
-        post(route("lesson.uploadProblem", lesson.id));
+        post(route("lesson.uploadProblem.submit", lesson.id));
     };
     const hlp = () => {
         let d = { ...data };

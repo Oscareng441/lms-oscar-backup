@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}/videos', [LessonController::class, 'videos'])->name('lesson.videos');
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::get('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');
-    Route::post('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem');
+    Route::post('/lesson/{id}/upload-problem', [LessonController::class, 'uploadProblem'])->name('lesson.uploadProblem.submit');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
     Route::post('/problem/save-seq-id', [ProblemController::class, 'recordSeqId'])->name('problem.recordSeqId');
     Route::post('/lesson/save-seq-id', [LessonController::class, 'recordSeqId'])->name('lesson.recordSeqId');
