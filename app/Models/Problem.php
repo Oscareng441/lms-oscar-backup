@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\OmniHelper;
@@ -19,6 +20,15 @@ class Problem extends Model
         'is_premium',
         'active',
     ];
+
+    /**
+     * Relationship: Parent lesson for this problem.
+     * Supports eager-loading sidebar optimization (Phase 1).
+     */
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class, 'lesson_id');
+    }
 
     public function getAnswers()
     {
@@ -332,29 +342,28 @@ class Problem extends Model
 
     public static function getStudentProblemSet($lessonId, $user)
     {
-        $whereUser = "WHERE 1";
-        $isPremium = 1;
-        $params = [];
-        // NEED TO FIX THIS
-        // if (!$user->isAdmin() && !$user->isTeacher()) {
-        //     $whereUser = "WHERE CU.user_id = ?";
-        //     $params[] = $user->id;
-        //     $isPremium = "CU.is_premium";
-        // }
-        $params[] = $lessonId;
-        $sql = '
-        SELECT P.id, P.name, P.lesson_id, P.problem_type_id, P.sequence_id, P.problem_text, P.display_type, P.credit_id, P.is_premium, P.active, ' . $isPremium . ' AS has_access
-        FROM problems P
-        INNER JOIN lessons L ON L.id = P.lesson_id
-        INNER JOIN lesson_sets LS ON LS.id = L.lesson_set_id
-        INNER JOIN courses C ON C.id = LS.course_id
-        LEFT JOIN courses_users CU ON CU.course_id = C.id
-        ' . $whereUser . '
-        AND L.id = ?
-        ORDER BY P.sequence_id, P.id
-        ';
-
-        return DB::select($sql, $params);
+        return DB::table('problems as P')
+            ->select([
+                'P.id',
+                'P.name',
+                'P.lesson_id',
+                'P.problem_type_id',
+                'P.sequence_id',
+                'P.problem_text',
+                'P.display_type',
+                'P.credit_id',
+                'P.is_premium',
+                'P.active',
+            ])
+            ->selectRaw('1 AS has_access')
+            ->join('lessons as L', 'L.id', '=', 'P.lesson_id')
+            ->join('lesson_sets as LS', 'LS.id', '=', 'L.lesson_set_id')
+            ->join('courses as C', 'C.id', '=', 'LS.course_id')
+            ->leftJoin('courses_users as CU', 'CU.course_id', '=', 'C.id')
+            ->where('L.id', $lessonId)
+            ->orderBy('P.sequence_id')
+            ->orderBy('P.id')
+            ->get();
     }
 
     public function saveKeywords($kw)

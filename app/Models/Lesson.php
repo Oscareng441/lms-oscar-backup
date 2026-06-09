@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\LessonSet;
+use App\Models\Problem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +19,29 @@ class Lesson extends Model
         'sequence_id',
         'active',
     ];
+
+    /**
+     * Relationship: Parent lesson set for this lesson.
+     * Supports eager-loading sidebar optimization (Phase 1).
+     */
+    public function lessonSet()
+    {
+        return $this->belongsTo(LessonSet::class, 'lesson_set_id');
+    }
+
+    /**
+     * Relationship: Active problems in this lesson.
+     * Used by eager-loading sidebar optimization (Phase 1, 2026-06-08).
+     * Filters to active=1 and orders by sequence_id, then id.
+     * Essential for reducing N+1 queries in sidebar generation.
+     */
+    public function problems()
+    {
+        return $this->hasMany(Problem::class, 'lesson_id')
+            ->where('active', 1)
+            ->orderBy('sequence_id')
+            ->orderBy('id');
+    }
 
     function getNeighboringLessonIds()
     {

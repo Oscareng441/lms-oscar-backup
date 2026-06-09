@@ -90,7 +90,6 @@ class LessonController extends Controller implements HasMiddleware
         }
         $userScores = [];
         foreach ($problems as $p) {
-            OmniHelper::log($p->is_premium);
             $userScores[$p->id] = $user->getProblemScore($p->id);
         }
 

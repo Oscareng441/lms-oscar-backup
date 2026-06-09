@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\LessonSet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\OmniHelper;
@@ -14,6 +15,20 @@ class Course extends Model
         'description',
         'active',
     ];
+
+    /**
+     * Relationship: Active lesson sets for this course.
+     * Used by eager-loading sidebar optimization (Phase 1, 2026-06-08).
+     * Filters to active=1 and orders by sequence_id, then id.
+     * Essential for reducing N+1 queries in sidebar generation.
+     */
+    public function lessonSets()
+    {
+        return $this->hasMany(LessonSet::class, 'course_id')
+            ->where('active', 1)
+            ->orderBy('sequence_id')
+            ->orderBy('id');
+    }
 
     public function getMyChapters($activeOnly = true)
     {
