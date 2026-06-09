@@ -30,3 +30,7 @@ database/240526u682985581_esf.sql
 database/*.sql
 database/*.gz
 !database/u682985581_esf.sql
+assets/
+build/
+lms.zip
+storage/tmp/
