@@ -59,13 +59,16 @@ export default function TopMenu(props) {
             </a>
         </div>
     );
-    let problemsLink = (
-        <div className="mx-1" title="haz los problemas">
-            <a href={`/lesson/${props.lessonId}/start`}>
-                <BiMath />
-            </a>
-        </div>
-    );
+    let problemsLink = null;
+    if (props.lessonId) {
+        problemsLink = (
+            <div className="mx-1" title="haz los problemas">
+                <a href={route('problemset.start', { id: props.lessonId })}>
+                    <BiMath />
+                </a>
+            </div>
+        );
+    }
     let duplicateProblemLink = (
         <div className="mx-1" title="duplica problema">
             <a href={`/problem/${props.problemId}/duplicate`}>

@@ -40,7 +40,7 @@ const StudentProblemSet = ({
             courseId={course.id}
             lessonId={lesson.id}
             chapterId={lesson.lesson_set_id}
-            show={["home", "lesson", "chapter", "prob-edit", "prob-add", "prob-set-edit"]}
+            show={["home", "lesson", "chapter", "prob-set", "prob-edit", "prob-add", "prob-set-edit"]}
             breadcrumbs={breadcrumbs}
         />
     );

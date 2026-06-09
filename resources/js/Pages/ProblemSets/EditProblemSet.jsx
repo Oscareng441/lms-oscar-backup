@@ -62,7 +62,7 @@ const EditProblemSet = ({ auth, problems, lesson, answers, hints }) => {
             auth={auth}
             title={title}
             lessonId={lesson.id}
-            show={["home", "lesson", "prob-add"]}
+            show={["home", "lesson", "prob-set", "prob-add"]}
         />
     );
 

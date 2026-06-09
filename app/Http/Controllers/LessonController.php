@@ -24,7 +24,8 @@ class LessonController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(CheckEditorPermission::class, except:['show', 'lessonScore', 'showStudentProblemSet', 'videos', 'getHierarchy']),
+            // Allow all authenticated users to view lessons, student problem sets, and start problem practice.
+            new Middleware(CheckEditorPermission::class, except:['show', 'lessonScore', 'showStudentProblemSet', 'firstProblem', 'videos', 'getHierarchy']),
         ];
     }
 
@@ -55,7 +56,10 @@ class LessonController extends Controller implements HasMiddleware
 
     public function firstProblem(Request $request, $id)
     {
-        $problem = Problem::where(['lesson_id' => $id,])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->first();
+        $problem = Problem::where(['lesson_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->first();
+        if (!$problem) {
+            return redirect()->route('lesson.show', $id);
+        }
         return redirect()->route('problem.show', $problem->id);
     }
 
