@@ -24,7 +24,7 @@ class LessonController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(CheckEditorPermission::class, except:['show', 'lessonScore', 'showStudentProblemSet', 'videos', 'getHierarchy']),
+            new Middleware(CheckEditorPermission::class, except:['show', 'lessonScore', 'showStudentProblemSet', 'firstProblem', 'videos', 'getHierarchy']),
         ];
     }
 
